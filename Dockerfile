@@ -2,7 +2,9 @@ FROM swipl:stable
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl unzip xsltproc \
-        && rm -rf /var/lib/apt/lists/*
+        && rm -rf /var/lib/apt/lists/* 
+
+RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
 
 RUN useradd -ms /bin/bash -u 1088 cetonio
 USER cetonio:users

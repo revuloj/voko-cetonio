@@ -43,7 +43,7 @@
 %:- use_module(xslt_trf).
 :- use_module(xslt_proc).
 %:- use_module(ekzfnt).
-:- use_module(relaxng).
+%%:- use_module(relaxng).
 
 :- debug(redaktilo(_)).
 :- debug(http(request)).
@@ -308,9 +308,10 @@ revo_kontrolo(Request) :-
     http_parameters(Request,
 		    [
 			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
-		    ]),
-    relaxng_json(Xml,Json),
-    reply_json(Json).
+		    ]).
+%% KOREKTU: necesas voki kontrol-servon nun anstataŭ rekte Javon/Jing
+    %relaxng_json(Xml,Json),
+    %reply_json(Json).
 
 
 % HTML-antaurigardo de la artikolo
