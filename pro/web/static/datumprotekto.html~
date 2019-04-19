@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../css/redaktilo.css" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<title>Redaktilo &dash; Datumprotekta Deklaro</title>
+</head>
+
+<body>
+<h1>Redaktilo &dash; Datumprotekta Deklaro</h1>
+
+<p>
+Redaktilo por Reta Vortaro uzas personajn informojn por ensalutado kaj subskribado de senditaj redaktoj:
+</p>
+
+<ul>
+  <li>Vi povas ensaluti per Yahoo-konto aŭ Google-konto. 
+   Redaktilo uzas vian nomon kaj se eble retadreson el tiu konto por rekoni vin kaj permesi ensalutadon al
+   la aplikaĵo.
+  <li>Atentu, ke per uzado de via konto Yahoo aŭ Google ekscias, ke vi uzas la Redaktilon ĉe revaj.steloj.de
+  <li>Se la retadreso de la salutokonto ne estas uzebla, Redaktilo demandas vin pri via retadreso.
+  <li>Via retadreso estas uzata por subskribi redaktojn senditajn al Revo-Redaktoservo. Per tiu 
+     retadreso la redaktoservo rekonas vin kiel redaktanto kaj subskribas la redakton per via nomo 
+     registrita kun tiu retadreso.
+  <li>Redaktilo uzas kuketon per kiu ĝi povas identigi vin dum redaktado kaj ankaŭ ĉe reveno post kelkaj tagoj. 
+    La kuketo estas kreata el identiga numero ligita kun via nomo kaj retadreso, sed ĝi mem ne enhavas 
+    vian retadreson kaj nomon. Aldone la identiga numero estas ĉifrita per sekreto, tiel ke sen scii la sekreton,
+    ĝi ne povas esti malĉifrita sen granda peno.
+    Ĝi estas konservata en via krozilo, restas valida dum kelkaj tagoj kaj ĉiufoje 
+    kiam vi iras al revaj.steloj.de sendiĝas al tiu servilo (kaj nur tien).
+</ul>
+
+<p>
+Sen la supre menciitaj informoj Redaktilo ne povas funkcii por 
+redakti artikolojn de Revo kaj sendi ilin kun subskribo.
+</p>
+<p>
+Vi povas ekscii pli pri kiel Google uzas viajn datumojn ĉe:
+<a href="http://www.google.com/intl/eo/policies/privacy">http://www.google.com/intl/eo/policies/privacy</a>.
+</p>
+<p>
+Vi povas ekscii pli pri kiel Yahoo uzas viajn datumojn ĉe:
+<a href="https://policies.yahoo.com/ie/en/yahoo/privacy">https://policies.yahoo.com/ie/en/yahoo/privacy</a>.
+</p>
+
+Per premado sur la butono "Mi konsentas" vi konsentas uzi viajn personajn informojn kiel supre priskribita.
+Per premado su butono "Mi rifuzas" vi malkonsentas kaj ne povas uzi la redaktilon.
+
+<form>
+  <input type="button" value="Mi rifuzas"></input>
+  <input type="submit" value="Mi konsentas"></input>
+</form>
+
+</html>
+

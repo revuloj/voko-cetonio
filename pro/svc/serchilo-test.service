@@ -1,0 +1,22 @@
+# kopiu al /etc/systemd/system
+# kaj aktivigu per:
+#   sudo systemctl enable serchilo-test.service
+# kaj lanĉu per:
+#   sudo systemctl start serchilo-test.service
+# haltigu per:
+#   sudo systemctl stop serchilo-test.service
+# kontrolu per:
+#   sudo systemctl status serchilo-test.service
+
+[Unit]
+Description=Teksto-Sercho-Servo por testado
+
+[Service]
+# Type=simple
+Type=forking
+Restart=on-abnormal
+ExecStart=/home/revo-test/voko/swi/run-search.sh
+ExecStop=/home/revo-test/voko/swi/stop-search.sh
+
+[Install]
+WantedBy=multi-user.target

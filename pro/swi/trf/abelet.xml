@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">
+
+<vortaro>
+<art mrk="$Id: abel.xml,v 1.67 2015/07/04 08:37:29 revo Exp $">
+<kap>
+  <ofc>*</ofc><rad>abel</rad>/o
+</kap>
+
+<drv mrk="abel.labor0o">
+  <kap>labor<tld/>o</kap>
+  <snc>
+    <uzo tip="fak">ZOO</uzo>
+    <dif>
+      En <tld/>a familio, <tld/>ino sen la reprodukta funkcio, kiu
+sen&ccirc;ese laboras:
+      <ekz>
+        interesa aspekto de la evoluado estas, ke la distingo
+        inter labor<tld/>oj kaj <tld/>re&gcirc;inoj bazi&gcirc;as nur sur
+nutra&jcirc;o
+        <fnt><aut>John Adcock, tr. Donald Rogers</aut>:
+        <vrk><url ref="http://www.esperanto.org.nz/kiekiel.html"
+        >De kie? Kien? Kaj kiel?</url></vrk></fnt>.
+      </ekz>
+    </dif>
+  </snc>
+  <trd lng="br">labourerez<klr tip="ind"> (gwenanenn)</klr></trd>
+  <trd lng="ca">abella <klr tip="ind">obrera</klr></trd>
+  <trd lng="de">Arbeiterin<klr tip="ind"> (Biene)</klr></trd>
+  <trd lng="en">worker<klr tip="ind"> (bee)</klr></trd>
+  <trd lng="es"><klr tip="ind">(abeja) </klr>obrera</trd>
+  <trd lng="fr">ouvri&egrave;re<klr tip="ind"> (abeille)</klr></trd>
+  <trd lng="hu">dolgoz&oacute;<klr tip="ind"> (m&eacute;h)</klr></trd>
+  <trd lng="it"><ind>ape</ind> operaia</trd>
+  <trd lng="nl">werkster<klr tip="ind"> (bij)</klr></trd>
+  <trd lng="pl">pszczo&lstroke;a <ind>robotnica</ind></trd>
+</drv>
+</art>
+
+</vortaro>

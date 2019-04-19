@@ -1,0 +1,167 @@
+<html>
+
+<head>
+    
+    <script>
+        
+var sxblj =
+{  
+fnt1: 
+` 
+           :<fnt>
+aut        :  <aut>{aut}</aut>
+vrk && url :  <vrk url="{url}">{vrk}</vrk>
+           :</fnt>
+`
+}
+
+function fnt(fnt) {
+    var sx = sxblj.fnt1.split("\n");
+    var resultstr = '';
+    for (i=0; i<sx.length; i++) {
+        var line = sx[i].split(':',2);
+        if (line.length==2) {
+            if (eval_condition(line[0],fnt)) resultstr += eval_varstring(line[1],fnt) + "\n";
+        }
+    }
+    
+    return resultstr;
+}
+        
+function apliku_sxablonon(sxbl,args) {
+    var sx = sxbl.split("\n");
+    var resultstr = '';
+    for (i=0; i<sx.length; i++) {
+        var line = sx[i].split(':',2);
+        if (line.length==2) {
+            if (eval_condition(line[0],args)) 
+                resultstr += eval_varstring(line[1],args) + "\n";
+        }
+    }
+    return resultstr;
+}
+                
+        
+function eval_condition(cond,args) {
+    var c = cond.trim();
+    //var cf = new Function(c? "return " + c.replace(/\$/g,"this.") : "return true");
+    //return cf.call(args);
+    return c? new Function("return " + c.replace(/(\w+)/g,"this.$1")).call(args) : true;
+}
+        
+function eval_varstring(str,args) {
+    return str.replace(/\{([a-z]+)\}/g, (_m,$1)=>args[$1]);
+}
+        
+var s = apliku_sxablonon(sxblj.fnt1,{aut: "M.B."});
+        console.log(s);
+        
+var s1 = apliku_sxablonon(sxblj.fnt1,{vrk: "Grava", url:"http://grava.com/gr"});
+        console.log(s1);        
+
+/**        
+        function fnt(fnt) {
+            var s = '';
+            //var bib,aut,vrk,url;
+            let {bib} = fnt;
+            if (bib) {
+return `
+      <fnt>
+         <bib>${bib}</bib>
+      </fnt>    
+`;
+            } else{
+              let {aut,vrk,url} = fnt;
+             if ( aut && vrk) {
+return `
+      <fnt>
+        <aut>${aut}</aut>
+        <vrk url="${url}">${vrk}</vrk>
+      </fnt>    
+`           }    
+            }
+//return s;            
+        }
+        
+        function assign_fields(fields, variables) {
+            var result = Array();
+            for (var i=0; i++; i<fields.length) {
+                var f = fields[i];
+                if (f in variables) {
+                    result.push(variables[f])
+                } else {
+                    result.push(undefined);
+                }
+            }
+            return result;
+        }
+            
+        function fnt2(fnt) {
+            if (fnt.bib && !fnt.vrk) {
+    return `
+      <fnt>
+         <bib>${fnt.bib}</bib>
+      </fnt>    
+`;         
+                
+            }
+            
+        };
+        
+        console.info(fnt({bib: 'XYZ'}));
+        console.info(fnt2({bib: 'abc', vrk: "v"}));
+        console.info(fnt({aut: 'Zam', vrk: "FdE", url: "http://host/dir"}));
+***/        
+/*
+
+// for(var k in firstObject) secondObject[k]=firstObject[k];
+
+    //alpliku_sxablonon("fnt",{bib:'XYZ'});
+
+// eval, Destructuring and parameter handling
+// http://2ality.com/2015/01/es6-destructuring.html
+
+function selectEntries({ start=0, end=-1, step=1 } = {}) {
+    ···
+};
+
+let items = [
+    { word:'foo', count:3 },
+    { word:'bar', count:9 },
+];
+items.forEach(({word, count}) => {
+    console.log(word+' '+count);
+});
+
+
+function alpliku_sxablonon(sxbl_nom,variabloj) {
+    
+    let {bib: b} = variabloj;
+    console.debug(b);
+    var sxbl = sxablonoj2[sxbl_nom];
+    for (var i=0; i++; sxbl.length) {
+        console.debug(sxbl[i]);
+    }
+}
+
+var sxablonoj2 =
+{
+  "fnt": [{bib},
+`
+      <fnt>
+         <bib>${bib}</bib>
+      </fnt>    
+`],
+ "fnt": [{vrk,aut,url},
+`
+      <fnt>
+        <aut>${aut}</aut>
+        <vrk url="${url}">${vrk}</vrk>
+      </fnt>    
+`],
+}
+*/
+        
+        </script>
+    </head>
+    </html>

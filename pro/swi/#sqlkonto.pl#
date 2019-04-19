@@ -1,0 +1,81 @@
+/* -*- Mode: Prolog -*- */
+:- module(sqlrevo,[
+	      search_eo/2,
+	      search_trd/2,
+	      search_eo_html/2,
+	      search_eo_json/2,
+	      search_trd_html/2
+	  ]).
+
+:- use_module(library(prosqlite)).
+:- use_module(agordo).
+
+%revodb('/home/revo/tmp/inx_tmp/sql/revo.db').
+
+:- initialization(connect).
+
+connect :-
+    agordo:get_config(revodb,RvDBFile),
+    sqlite_connect(RvDBFile,_,[ext(''),alias(revodb)]),
+    agordo:get_config(kontodb,KtDBFile),
+    sqlite_connect(KtDBFile,_,[ext(''),alias(kontodb)]). 
+
+search_eo(Kion,Row) :-
+    check_search(Kion),
+    format(atom(Query),'select kap,num,art,mrk from nodo where kap like ''~w%'' order by kap, num',[Kion]),
+     debug(sqlrevo,'query=~q',[Query]),
+    sqlite_query(revodb,Query,Row).
+%    sqlite_disconnect().
+
+search_eo_limit(Kion,Row,Limit) :-
+    check_search(Kion),
+    format(atom(Query),
+	   'select kap,num,art,mrk from nodo where kap like ''~w%'' order by kap collate nocase, num limit ''~d''',[Kion,Limit]),
+    debug(sqlrevo,'query=~q',[Query]),
+    sqlite_query(revodb,Query,Row).
+
+search_trd(Kion,Row) :-
+    check_search(Kion),
+    format(atom(Query),'select traduko.trd,nodo.kap,traduko.lng,nodo.art,traduko.mrk from traduko,nodo where traduko.trd like ''~w%'' and traduko.mrk = nodo.mrk;',[Kion]),
+    debug(sqlrevo,'query=~q',[Query]),
+    sqlite_query(revodb,Query,Row).
+%    sqlite_disconnect().
+
+search_eo_html(Kion,Html) :-
+    search_eo(Kion,row(Kap,Num,Art,Mrk)),
+    format(atom(Html),'<a href="~w.html#~w">~w ~w</a>',[Art,Mrk,Kap,Num]).
+
+search_eo_json(Kion,json([kap=Kap,num=Num,art=Art,mrk=Mrk])) :-
+    search_eo_limit(Kion,row(Kap,Num,Art,Mrk),100).
+
+
+search_trd_html(Kion,Html) :-
+    search_trd(Kion,row(Trd,Eo,Lng,Art,Mrk)),
+    format(atom(Html),'<a href="~w.html#~w">~w: ~w (~w)</a>',[Art,Mrk,Lng,Trd,Eo]).
+
+
+editor_by_OpenId(OpenId,Editor) :-
+    check_url(OpenId),
+    format(atom(Query),'select red_id,nomo,retposhto from redaktanto_poshto_unu where openid=''~w'';',[OpenId]),
+    sqlite_query(kontodb,Query,Editor).
+
+editor_by_Email(Email,Editor) :-
+    check_url(OpenId),
+    format(atom(Query),'select red_id,nomo,openid,retposhto from redaktanto_poshto_unu where retposhto=''~w'';',[Email]),
+    sqlite_query(kontodb,Query,Editor).
+
+editor_add(Nomo,[Adr|Adresoj]) :-
+    
+    
+
+%check_eo(Word) :-
+%    wildcard_match([a-zA-zĉĝĥĵŝŭĈĜĤĴŜŬ],Word)
+
+check_search(Kion) :-
+    atom_codes(Kion,Codes),
+    \+ memberchk(39,Codes), % apostroph: '
+    \+ memberchk(92,Codes), % backslash: \
+    \+ memberchk(59,Codes)  % semicolon: ;
+    -> true
+    ;
+    throw(invalid_sql_search_param(Kion)).

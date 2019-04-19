@@ -1,0 +1,47 @@
+
+# TODO:
+
+/ how to log http_daemon (--debug=Topic --output=File)
+- how to see open sessions
+- run as nobody (--user=nobody --group=nobody)
+/ more then 5 workers (--workers=20)
+
+- refresh redaktantoj
+   -> update email
+- refresh revodb
+   -> inside httpd process... admin port: disconnect db, replace, reconnect
+- script refreshes... (ant?)
+
+- <sncref/> - necesas loka kopio de ĉiuj artikoloj por tio(?)
+
+- admin port:
+  - statistics: http_current_worker, http_current_session...
+
+- traktu postfix-eventojn status=bounced, status 550 5.7.1 (klasifikita de Strato kie SPAM)
+
+mail.log (3a linio status=bounced)
+Oct 19 21:44:08 h2181216 postfix/smtp[30031]: 931A9BE0535: to=<revo@retavortaro.de>, relay=smtp.strato.de[81.169.145.133]:587, delay=0.47, delays=0.22/0.05/0.15/0.06, dsn=2.0.0, status=sent (250 2.0.0 queued as Z0583at9JJi74l5)
+Oct 19 21:44:08 h2181216 postfix/qmgr[500]: 931A9BE0535: removed
+Oct 19 21:44:08 h2181216 postfix/smtp[30032]: B89F1BE054C: to=<wolfram@steloj.de>, relay=smtp.strato.de[81.169.145.133]:587, delay=0.32, delays=0.08/0.02/0.13/0.09, dsn=5.7.1, status=bounced (host smtp.strato.de[81.169.145.133] said: 550 5.7.1 Refused by local policy. Sending of SPAM is not permitted! (#241) see https://www.strato.de/faq/article/2304 (in reply to end of DATA command))
+Oct 19 21:44:08 h2181216 postfix/cleanup[30030]: 34D99BE0535: message-id=<20171019194408.34D99BE0535@h2181216.stratoserver.net>
+Oct 19 21:44:08 h2181216 postfix/qmgr[500]: 34D99BE0535: from=<>, size=22535, nrcpt=1 (queue active)
+Oct 19 21:44:08 h2181216 postfix/bounce[30033]: B89F1BE054C: sender non-delivery notification: 34D99BE0535
+Oct 19 21:44:08 h2181216 postfix/qmgr[500]: B89F1BE054C: removed
+Oct 19 21:44:08 h2181216 postfix/smtp[30031]: 34D99BE0535: to=<revo@steloj.de>, relay=smtp.strato.de[81.169.145.133]:587, delay=0.19, delays=0.03/0/0.11/0.04, dsn=2.0.0, status=sent (250 2.0.0 queued as Z0583at9JJi84l8)
+Oct 19 21:44:08 h2181216 postfix/qmgr[500]: 34D99BE0535: removed
+
+redakt-tst.log
+Oct 19 21:44:06 h2181216 redak-tst[501]: shangho='dif chirkau dif-ref, ekz-oj, modifetoj por pliklarigi'
+Oct 19 21:44:06 h2181216 redak-tst[501]: to = 'revo@retavortaro.de', reply-to = 'wolfram@steloj.de'
+Oct 19 21:44:07 h2181216 redak-tst[501]: to = 'wolfram@steloj.de'
+Oct 19 21:44:07 h2181216 redak-tst[501]: [904] 200 OK (0.330 seconds; 14 bytes)
+
+
+http://www.postfix.org/postconf.5.html
+notify_classes = bounce
+bounce_notice_recipient = bounces@example.com
+
+krome plibonigu protokolon: kiu artikolo estas sendita, laueble la mesagho-ID de postfix
+uzu VERP por tio: http://cr.yp.to/proto/verp.txt http://www.postfix.org/VERP_README.html
+MAIL FROM:<sender@domain> XVERP
+MAIL FROM:<sender@domain> XVERP=+=

@@ -1,0 +1,12 @@
+
+genroj(eleagn, [elagn,hipofe]).
+
+genr(hipofe,
+	[ la('Hippophae'), de('Sanddorn') ],
+	[ (arbedo;arbo(alta(ĝis(6m)))) ],
+	[
+	    tre(dorna),
+	    floraroj(globaj),
+	    frukto((oranĝruĝa;malofte(flava))),
+	    kreskanta_ĉe(bordoj)
+	]).

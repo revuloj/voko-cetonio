@@ -1,0 +1,36 @@
+vortaro>
+  art:$Id: abel.xml,v 1.67 2015/07/04 08:37:29 revo Exp $>
+    kap>{ofc>*}{rad>abel}/o <kap
+    
+    drv:labor0o>
+      kap>labor~o<kap
+      snc>
+        {fak>ZOO}
+        dif>
+           En ~a familio, ~ino sen la reprodukta funkcio, kiu senĉese laboras: 
+          ekz>
+             interesa aspekto de la evoluado estas, ke la distingo inter
+             labor~oj kaj ~reĝinoj baziĝas nur sur nutraĵo 
+            fnt>
+              {aut>John Adcock, tr. Donald Rogers}:
+              {vrk>{url:http://www.esperanto.org.nz/kiekiel.html>De kie? Kien? Kaj kiel?}}
+            <fnt
+            . 
+          <ekz          
+        <dif        
+      <snc
+      [[trdj>
+        br: labourerez{klr:ind> (gwenanenn)}
+        ca: abella {klr:ind>obrera}
+        de: Arbeiterin{klr:ind> (Biene)}
+        en: worker{klr:ind> (bee)}
+        es: {klr:ind>(abeja) }obrera
+        fr: ouvrière{klr:ind> (abeille)}
+        hu: dolgozó{klr:ind> (méh)}
+        it: {ind>ape} operaia
+        nl: werkster{klr:ind> (bij)}
+        pl: pszczoła {ind>robotnica}
+      ]]
+    <drv    
+  <art  
+<vortaro

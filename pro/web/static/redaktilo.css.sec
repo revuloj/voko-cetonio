@@ -1,0 +1,625 @@
+html {
+    height: 100%
+}
+
+body {
+    // la artikolo.css de la antaurigardo shanghus la atributojn, 
+    // tial uzi !important
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+
+    font-family: segoe ui,Arial,sans-serif;
+    font-size: 1.1em;
+    
+    display: flex;
+    -webkit-display: flex;
+}
+
+.ui-dialog {
+    max-height: 95% !important;
+    overflow: auto !important;
+}
+
+.ui-tooltip {
+    max-width: 30em;
+}
+   
+
+@media only screen and (max-width: 768px) {
+    .ui-menu-item {
+        font-size: 120% !important;
+    }
+    .ui-dialog {
+        max-width: 95% !important;
+        max-height: 95% !important;
+        overflow: auto !important;
+    }
+    #positions {
+        font-size: 100% !important;
+        overflow-x: visible
+    }
+    #xml_text {
+        font-size: 110%
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    #sidebar {
+        width: 30% !important;
+    }
+    .ui-dialog {
+        max-width: 95% !important;
+        max-height: 95% !important;
+        overflow: auto !important;
+    }    
+    .ui-menu-item {
+        font-size: 100% !important;
+    }
+    #positions {
+        font-size: 90% !important;
+        overflow-x: visible
+    }
+    #xml_text {
+        font-size: 110%
+    }
+}
+
+textarea {
+    resize: none;
+    overflow: auto;
+}
+
+fieldset {
+    border: 1px solid #327e04;
+}
+
+dd {
+    margin-top: 0.1em;
+    margin-bottom: 0.2em;
+    padding: 0.5em;
+}
+
+#sercho_trovoj dt {
+   padding: 0.5em; 
+}
+
+#sercho_trovoj dt:hover {
+   background-color: #e5e3d5;  
+   //border: 1px solid black;
+}
+
+#sercho_trovoj dt:hover button {
+   visibility: visible !important;  
+}
+
+#sercho_error {
+   margin: 0 !important;
+}
+
+#sidebar {
+    display: inline-block;
+    float: left;
+    vertical-align: top;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    top: 0;
+    height: 100%;
+    flex: 0.1 0.1 10em;
+    -webkit-flex: 0.1 0.1 10em;
+    min-width: 8em;
+    width: 15%;
+    border: 0px solid red
+}
+#tabs {
+    display: flex; //inline-block;
+    -webkit-display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    //width: 80%;
+    flex: 1;
+    -webkit-flex: 1;
+    border: 0px solid blue
+}
+
+#menu {
+   height: 99.8%
+}
+.ui-menu-item {
+    border-bottom: 1px solid silver;
+    font-size: 85%
+}
+
+.ui-state-error {
+    max-height: 10em;
+    overflow: auto
+}
+
+#elekto_menuo {
+    position: absolute;
+    top: 4em;
+    right: 2em;
+}
+
+#dock {
+    //max-height: 40%;
+    //overflow: auto;
+    position: relative;
+    justify-content: stretch;
+    -webkit-justify-content: stretch;
+}
+
+#dock_fermu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.2em !important;
+    height: 1em !important;
+    padding: 0 !important;
+}
+
+#re_antaurigardo {
+   height: 1.6em !important;
+   width: 1.6em !important;
+   font-size: 1.2em;
+   color: #004400;
+   margin-top: 0.1em !important;
+   padding: 0 !important;
+}
+
+#dock_klavaro {
+    overflow: visible;
+}
+#dock_kontrolo {
+  max-height: 20ex;
+  overflow: auto
+}
+
+#kontroli_eraroj {
+    border-bottom: 1px solid #7f2f2f;
+    margin: 0;
+    background: #ffedad;
+    color: #7f2f2f;
+    //overflow: auto;
+}
+
+#kontroli_vortoj {
+    border-bottom: 1px solid #7f2f2f;
+    margin: 0;
+    background: #fff5b5;
+    color: #7f2f2f;
+    //overflow: auto;
+}
+
+#kontroli_eraroj ul, #kontroli_vortoj ul {
+    margin: 0;
+    padding-left: 0.4em;
+}
+
+#kontroli_eraroj li, #kontroli_vortoj_list li {
+    list-style-type: none;
+    font-size: 80%;
+    padding: .1em;
+    border-top: 1px solid #e3a345;
+    //margin-left: 10em;
+}
+
+#kontroli_eraroj li:hover, #kontroli_vortoj_list li:hover {
+    background-color: #e5e3d5; 
+}
+
+#kontroli_eraroj li:active, #kontroli_vortoj_list li:active {
+    background-color: #c5c3b5; 
+    color: white;
+}
+
+#kontroli_eraroj li::before, #kontroli_vortoj_list li::before {
+    content: attr(value) ": ";
+    font-weight: bold
+}
+
+
+#elekto_indikoj {
+    max-height: 27ex;
+    overflow: auto;
+  
+    margin: 1px;
+    padding: 0px;
+    // forigu spacon inter linioj uzante inline-block
+    font-size: 0;
+    line-height: 0;
+}
+
+#elekto_indikoj div {
+    display: inline-block; //float; //inline-block; inline-block aldonas spaceton inter la linioj
+    float: left;
+    height: 3em;
+    max-height: 3em;
+    width: 4em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0;
+    //font-size: 70%;
+    font-size: small;
+    line-height: 1em;
+    text-align: center;
+}
+
+#elekto_indikoj .stl {
+  font-stretch: condensed;
+  background-color: #e5e3c5;  
+}
+
+#elekto_indikoj .fak {
+  background-color: #d5e3d5;  
+}
+
+#elekto_indikoj .ofc {
+  background-color: #d5d3e5;  
+}
+
+#elekto_indikoj .gra {
+  background-color: #e5d3e5;  
+}
+
+
+#elekto_indikoj div:hover {
+   background-color: #f5f3e5; 
+   cursor: pointer
+}
+
+#elekto_indikoj div:active {
+   background-color: #c5c3b5; 
+   color: white;  
+   cursor: pointer
+}
+
+#elekto_indikoj div span {
+    line-height: 1.5em
+}
+
+
+#elekto_indikoj img {
+    height: 1.7em;
+    max-height: 1.7em;
+    overflow: hidden;
+}
+
+.butonoj {
+    text-align: center;
+    margin-top: 0.5em
+}
+
+.butonoj div {
+    display: inline-block; //float; //inline-block; inline-block aldonas spaceton inter la linioj
+    float: left;
+    height: 1.3em;
+    max-height: 1.6em;
+    min-width: 1.6em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0;
+    padding-top: 0.5em;
+    //font-size: 70%;
+    //font-size: 1.2em;
+    line-height: 1em;
+    text-align: center;
+    //vertical-align: text-bottom;
+    background-color: #e5e3c5;  
+}
+
+.butonoj div:hover {
+    background-color: #f5f3e5; 
+    cursor: pointer
+}
+
+.butonoj div:active {
+   background-color: #c5c3b5; 
+   color: white;  
+   cursor: pointer
+}
+
+.elm_btn {
+    background-color: #d5e3d5 !important;
+}
+
+.reghim_btn {
+   border-color: #327E04 !important;
+   background-color: #459e00 !important;
+   color: white !important;    
+   font-weight: bold !important;
+}
+
+#vrt, #xml, #html, #sercho {
+    //display: block;
+    display: flex;
+    flex-direction: column;
+    -webkit-display: flex;
+    -webkit-flex-direction: column;
+    
+    //border: 1px solid red;
+    
+    border-bottom: 1px solid silver;
+    //height: 80%; 
+    flex: 1;
+    -webkit-flex: 1;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0;
+    overflow: hidden;
+    //overflow: auto;
+}
+
+#rigardo {
+    margin-left: 1em;
+    margin-top: 0.1 em;
+    margin-bottom: 0.5 em;
+    margin-right: 0.5 em;
+
+    //border: 1px solid blue;
+    
+    //width: 100%;
+    height: 100%;
+    flex: 1;
+    -webkit-flex: 1;
+    align-content: stretch;
+    -webkit-align-content: stretch;
+    
+    overflow: auto;
+}
+
+#xml_text {
+    //width: 100%;
+    flex: 1;
+    -webkit-flex: 1;
+    font-family: monospace;
+    margin: 1px;
+    //height: 100%
+}
+
+#sercho_fono {
+    //border: 1px solid blue;
+    display: flex;
+    -webkit-display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    
+    //border: 1px solid red;
+    
+    flex: 1;
+    -webkit-flex: 1;
+    margin-left: 1em;
+    margin-right: 1em;
+    
+    overflow: hidden;
+    //height: 400px;
+}
+
+
+#sercho_form {
+    border: 1px solid #f5f3e5;
+    margin-top: 0.5em;
+}
+
+#sercho_form p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#sercho_form .ui-button {
+    font-size: 88%;
+    padding: 0.3em;
+}
+
+#sercho_trovoj {
+    border: 1px solid silver;
+    border-radius: 6px;
+    //padding: 1em;
+    margin-top: 0;
+    
+    //border: 1px solid blue;
+    
+    flex: 1;
+    -webkit-flex: 1;
+    
+    margin-bottom: 0.5em;
+    overflow: auto;
+}
+
+.perc_bar {
+    color: #327e04;
+}
+
+.trovo_titolo {
+    font-weight: bold;
+    font-size: 90%;
+}
+
+#versio {
+    position: absolute;
+    top: 0;
+    right:0;
+    margin: 0.2em;
+    font-family: sans-serif;
+    font-size: small;
+    color: teal
+}
+
+
+#positions {
+    position: absolute;
+    max-height: 90%;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 0.2em;
+    font-size: small;
+    border-right: none;
+    border-bottom: none;
+}
+
+/*
+#collapse_outline {
+    //overflow: auto !important;
+    // max-height: 90% !important;
+}
+*/
+
+#art_outline {
+    margin-bottom: 0.3em;
+    padding: 0.1em !important;
+}
+
+#art_outline ol {
+    padding-top: 0;
+    margin-top: 0;
+    margin-right: 0.1em;
+    //padding-bottom: 0;
+    //margin-bottom: 0
+}
+
+#art_outline li:hover {
+   background-color: #e5e3d5;  
+}
+
+#art_outline li {
+  //  list-style-type: none
+}
+
+#edit_position {
+    //border-top: 1px solid #327e04;
+    font-weight: bold;
+    text-align: center
+}
+
+#ekzemplo_sercho_rezultoj {
+  max-height: 15em;
+  overflow: auto;  
+}
+
+
+//#traduko_dlg {
+//    max-height: 85%;
+//    overflow: auto
+//}
+
+.dlg_tab_div {
+//    max-height: 80%;
+    overflow-y: auto;
+    overflow-x: visible;
+}
+
+.dlg_tabelo {
+    border-collapse: collapse;
+    border: 1px solid #e3a345;
+    margin-left: 1em;
+    margin-right: 1em;
+    //height: 900px;
+    //border-radius: 4px;
+}
+
+.dlg_tabelo td {
+    border: 1px solid #e3a345;
+    //border-radius: 4px;
+    padding: 0.2em;
+    vertical-align: top
+}
+
+#traduko_dlg {
+    padding-left: 0;
+}
+
+#traduko_sidebar {
+    display: inline-block;
+    float: left;
+    vertical-align: top;
+    height: 100%;
+    flex: 0.1 0.1 10em;
+    -webkit-flex: 0.1 0.1 10em;
+    min-width: 8em;
+/*    
+    overflow-y: auto;
+    //overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    top: 0;
+    width: 15%;
+    */
+    border: 0px solid red
+}
+
+#traduko_menuo {
+    height: 100%
+}
+
+#traduko_tabelo {
+    display: flex; //inline-block;
+    -webkit-display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    vertical-align: top;
+    flex: 1;
+    -webkit-flex: 1;
+/*    
+    padding: 0;
+    margin: 0;
+    //height: 100%;
+    //width: 80%;
+    */
+    border: 0px solid blue
+}
+
+
+#sxablono_xml {
+    background-color: #e5e3d5;
+}
+
+pre.line {
+    margin: 0;
+}
+
+.sxbl {
+    /* margin: 0; */
+    background-color: #ffedad; /*darkseagreen; */
+}
+
+.sxbl:hover {
+    /* margin: 0; */
+    background-color: #e3a345; /* #e5e3d5; */
+    cursor: pointer;
+}
+
+.hom_art {
+    background-color: #ffedad; /*darkseagreen; */
+}
+
+.hom_art:hover {
+    background-color: #e3a345; /* #e5e3d5; */
+    cursor: pointer;
+}
+
+#hom_dos_div {
+    border-top: 1px solid #327e04;
+}
+
+// stiloj por analizo (vort-kontrolo)
+.malstrikte { color: black }
+.neanalizebla { color:red; font-weight: bold}
+.dubebla { color: #bb2222 }
+.verda { color: rgb(211, 51, 12) }
+.kuntirita { color: black }
+.redakti {font-size: larger; color: black}
+.mlg {font-weight: bold}
