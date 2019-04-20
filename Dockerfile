@@ -20,9 +20,11 @@ RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
 FROM swipl:stable
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    xsltproc && rm -rf /var/lib/apt/lists/* 
+    xsltproc unzip && rm -rf /var/lib/apt/lists/* 
+# ĉu jam enestas? libsqlite3-0 libsqlite3-dev
 
 RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
+# jam enestas en swipl:stable: RUN swipl -g "pack_install(prosqlite,[interactive(false)]),halt" -t "halt(1)"
 
 RUN useradd -ms /bin/bash -u 1088 cetonio
 USER cetonio:users
@@ -32,6 +34,10 @@ ADD . ./
 
 COPY --from=builder redaktilo-gen.js /home/cetonio/pro/web/
 COPY --from=builder voko-iloj-master/ /home/cetonio/voko/
+
+RUN mkdir tmp && mkdir sql \
+  && swipl -s pro/sqlrevo.pl -g "sqlrevo:download,halt" -t "halt(1)" \
+  && unzip tmp/revo-inx.db.tmp.zip -d sql
 
 USER root
 

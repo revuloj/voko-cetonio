@@ -12,7 +12,7 @@
 	xml_unquote_cdata/2
     ]).
 
-:- use_module(library(http/dcg_basics)).
+:- use_module(library(dcg/basics)).
 %:- dynamic entity/1.
 :- use_module(entities).
 :- encoding(utf8).
