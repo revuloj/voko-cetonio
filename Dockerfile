@@ -14,7 +14,7 @@ RUN java -jar closure-compiler*.jar --dependency_mode LOOSE --js_module_root js_
 
 RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
   && unzip master.zip voko-iloj-master/xsl/* voko-iloj-master/dtd/* voko-iloj-master/cfg/* \
-  && rm master.zip && ls voko-iloj-master/* 
+  && rm master.zip 
 
 # Nun ni kreos la propran procesumon por la redaktilo...
 FROM swipl:stable
@@ -37,6 +37,6 @@ USER root
 
 CMD ["swipl",\
     "-s","pro/redaktilo-servo.pl",\
-    "-g","daemon","-t","halt",\
+    "-g","redaktilo_servo:daemon","-t","halt",\
     "-p","agordo=etc","--",\
-    "--workers=10","--user=cetonio","--port=8081","--no-fork"]
+    "--workers=10","--user=cetonio","--port=8080","--no-fork"]

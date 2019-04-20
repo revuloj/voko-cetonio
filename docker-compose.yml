@@ -5,6 +5,10 @@ services:
     image: voko/cetonio
     build: .
     # restart: always
+    depends_on:
+      - cikado
+      - akrido
+      - grilo
     ports:
       - 8080:8080
     environment:
@@ -32,23 +36,23 @@ services:
     image: voko/cikado
     build: https://github.com/revuloj/voko-cikado.git
     #restart: always
-    ports:
-      - 9090:9090      
+    expose:
+      - 9090      
 
   # servo por vortanalizo
   akrido:
     image: voko/akrido
     build: https://github.com/revuloj/voko-akrido.git
     # restart: always
-    ports:
-      - 8081:8081
+    expose:
+      - 8081
 
   # servo por sintakskontrolo per RelaxNG (Jing)
   grilo:
     image: voko/grilo
     build: https://github.com/revuloj/voko-grilo.git
-    ports:
-      - 8787:8787
+    expose:
+      - 8787
 
 #  retpoŝtservilo, necesas nur se pluraj uzantoj uzas la redaktilon samtempe
 #  heliko:
