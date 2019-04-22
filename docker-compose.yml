@@ -1,14 +1,11 @@
-version: '3.1'
-
-#volumes:
-#  etc:
-#    external: true
-#    name: $HOME/etc
+version: '3.7'
 
 services:
   cetonio:
-    image: voko/cetonio
-    build: .
+    image: voko/cetonio-2
+    build: 
+      context: .
+      dockerfile: Dockerfile-2
     # restart: always
     depends_on:
       - cikado
@@ -17,55 +14,83 @@ services:
     ports:
       - 8080:8080
     volumes:
-       # en ~/etc/ estu dosieroj redaktilo.cfg kaj redaktantoj
-       - $HOME/etc:/home/cetonio/etc
-#    environment:
-#      http_app_scheme: http
-#      http_app_host: example.com
-#      http_app_port: 8080
-#      http_cit_url: http://localhost:9090/citajhoj
-#      http_ana_url: http://localhost:8081/
-#      http_rng_url: http://localhost:8787/
-#      mail_from: <retadreso de redaktilo>
-#      mail_addr: <retadreso de redaktoservo>
-#      mail_smtp: <retadreso de poŝtservo>
-#      mail_security: starttls
-#      mail_user: <uzanto de sendanta poŝtfako>
-#      mail_pw: <pasvorto de sendanta poŝtfako>
-#      # auth: unu el plain, login, none, default
-#      mail_auth: login 
-#      ajax_secret: <iom longa arbitra_signaro>
-#      client_id: <google_client_id>.apps.googleusercontent.com
-#      client_secret: <google_client_secret>
-#      revodb_zip: http://retavortaro.de/tgz/revosql-inx_~w.zip
+      # en ~/etc/ estu dosieroj redaktilo.cfg kaj redaktantoj
+      # 1) la unuan oni povas kopii de cfg/redaktilo.cfg kaj agordi
+      # aldonante vian retpoŝtan konton. Por uzi Google-saluton vi
+      # bezonas registri vian propran ŝlosilon kun via retnomo (domajno)
+      # krome adaptu la posedanton al cetonio:
+      #   chown 1088 ~/etc/redaktilo.cfg
+      # 2) la duan (redaktantoj) vi povas krei malplena per komando
+      #   sqlite3 etc/redaktantoj -init voko/sql/konto-skemo.sql
+      # La skemon vi povas trovi en Voko-Iloj. La dosiero estos
+      # kopiita al sql/redaktantoj.db ĉe lanĉo de Cetonio    
+      - type: bind
+        source: $HOME/etc
+        target: /home/cetonio/etc
+        read_only: true
+      - type: volume
+        source: sql
+        target: /home/cetonio/sql
+        #read_only: false
+        #volume:
+        #  nocopy: true
+
+  cetonio-db:
+    image: voko/cetonio-2
+    build: 
+      context: .
+      dockerfile: Dockerfile-2
+    # FARU: metu la komandon en ŝelskripton pli bone...
+    command: download-inx-db.sh
+    deploy:
+      # aktualigu la datumbazon ĉiutage (kvankam en Revo ĝi momente estas malpli ofte renovigita)
+      restart_policy:
+        delay: 24h
+    volumes:
+      # en ~/etc/ estu dosieroj redaktilo.cfg
+      # La skemon vi povas trovi en Voko-Iloj.
+      - type: bind
+        source: $HOME/etc
+        target: /home/cetonio/etc
+        read_only: false
+      - type: volume
+        source: sql
+        target: /home/cetonio/sql
+        #read_only: false
+        #volume:
+        #  nocopy: true
 
   # servo por citaĵo-serĉo
   cikado:
     image: voko/cikado
-    build: https://github.com/revuloj/voko-cikado.git
+    build: https:/mydata/github.com/revuloj/voko-cikado.git
     #restart: always
-    expose:
-      - 9090      
+    #expose:
+    #  - 9090      
 
   # servo por vortanalizo
   akrido:
     image: voko/akrido
     build: https://github.com/revuloj/voko-akrido.git
     # restart: always
-    expose:
-      - 8081
+    #expose:
+    #  - 8081
 
   # servo por sintakskontrolo per RelaxNG (Jing)
   grilo:
     image: voko/grilo
     build: https://github.com/revuloj/voko-grilo.git
-    expose:
-      - 8787
+    # restart: always
+    #expose:
+    #  - 8787
 
 #  retpoŝtservilo, necesas nur se pluraj uzantoj uzas la redaktilon samtempe
 #  heliko:
 #    image: voko/heliko
 #    build: ./heliko
+
+volumes:
+  sql:
 
 
   

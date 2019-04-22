@@ -1,5 +1,6 @@
 # Ni bezonas Javon kaj Closure-Compiler por kompili la Javo-skript-dosieron
 FROM openjdk:jre-slim as builder
+MAINTAINER <diestel@steloj.de>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl && rm -rf /var/lib/apt/lists/* 
@@ -35,14 +36,14 @@ ADD . ./
 COPY --from=builder redaktilo-gen.js /home/cetonio/pro/web/
 COPY --from=builder voko-iloj-master/ /home/cetonio/voko/
 
-RUN mkdir tmp && mkdir sql \
-  && swipl -s pro/sqlrevo.pl -g "sqlrevo:download,halt" -t "halt(1)" \
-  && unzip tmp/revo-inx.db.tmp.zip -d sql
+#RUN mkdir tmp && mkdir sql \
+#  && swipl -s pro/sqlrevo.pl -g "sqlrevo:download,halt" -t "halt(1)" \
+#  && unzip tmp/revo-inx.db.zip -d sql
 
-USER root
-
-CMD ["swipl",\
-    "-s","pro/redaktilo-servo.pl",\
-    "-g","redaktilo_servo:daemon","-t","halt",\
-    "-p","agordo=etc","--",\
-    "--workers=10","--user=cetonio","--port=8080","--no-fork"]
+#USER root
+#
+#CMD ["swipl",\
+#    "-s","pro/redaktilo-servo.pl",\
+#    "-g","redaktilo_servo:daemon","-t","halt",\
+#    "-p","agordo=etc","--",\
+#    "--workers=10","--user=cetonio","--port=8080","--no-fork"]

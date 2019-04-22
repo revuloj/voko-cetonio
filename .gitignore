@@ -2,6 +2,8 @@
 \#*
 .\#*
 tmp/
+sql/
 dtd/
 *.log
+
 

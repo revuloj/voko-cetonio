@@ -1,0 +1,33 @@
+FROM cetonio:latest
+
+WORKDIR /home/cetonio
+USER cetonio:users
+
+RUN mkdir -p tmp && mkdir -p sql 
+#  && swipl -s pro/sqlrevo.pl -g "sqlrevo:download,halt" -t "halt(1)" \
+#  && unzip tmp/revo-inx.db.zip -d sql
+#
+
+USER root
+
+COPY do*.sh ./
+
+RUN chown cetonio.users ./do*.sh && chmod 750 ./do*.sh
+
+
+USER cetonio:users
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
+CMD ["swipl",\
+    "-s","pro/redaktilo-servo.pl",\
+    "-g","redaktilo_servo:daemon","-t","halt",\
+    "-p","agordo=etc","--",\
+    "--workers=10","--port=8080","--no-fork"]
+
+#CMD ["swipl",\
+#    "-s","pro/redaktilo-servo.pl",\
+#    "-g","redaktilo_servo:daemon","-t","halt",\
+#    "-p","agordo=etc","--",\
+#    "--workers=10","--user=cetonio","--port=8080","--no-fork"]
+
