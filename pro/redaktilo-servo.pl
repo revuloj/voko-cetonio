@@ -67,7 +67,8 @@ thread_init :-
 init :-
     set_prolog_flag(encoding,utf8),
     agordo:get_config([
-	 http_app_root(AppRoot),
+     http_app_root(AppRoot),
+     root_dir(RootDir),
 	 web_dir(WebDir),
 	 voko_dir(VokoDir),
 	 http_app_scheme(Scheme),
@@ -86,9 +87,11 @@ init :-
 	  path(AppRoot)
 	]),
     % la lokaj dosierujoj el kiuj servi dosierojn
-    assert(user:file_search_path(web,WebDir)),
+    atom_concat(RootDir,WebDir,WD),
+    atom_concat(RootDir,VokoDir,VD),
+    assert(user:file_search_path(web,WD)),
     assert(user:file_search_path(static,web(static))),
-    assert(user:file_search_path(voko,VokoDir)),
+    assert(user:file_search_path(voko,VD)),
     assert(user:file_search_path(cfg,voko(cfg))),
     assert(user:file_search_path(stl,voko(stl))),
     assert(user:file_search_path(smb,voko(smb))).
@@ -333,7 +336,9 @@ revo_rigardo(Request) :-
     catch(
 	    (
             agordo:get_config(voko_xsl,VokoXslUri),
-            sub_atom(VokoXslUri,7,_,0,VokoXsl),
+            agordo:get_config(root_dir,RootDir),
+            %sub_atom(VokoXslUri,7,_,0,VokoXsl),
+            atom_concat(RootDir,VokoXslUri,VokoXsl),
             set_stream(current_output,encoding(utf8)),
             xslt_proc(VokoXsl,Quoted,Html),
             format('Content-type: text/html~n~n'),
