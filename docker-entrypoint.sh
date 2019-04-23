@@ -3,11 +3,16 @@ set -e
 set -x
 
 if [ "$1" = 'swipl' ]; then
-    if [ -z "$(ls -A sql)" ]; then
+    # elŝutu index-datumbazon, se ankoraŭ mankas
+    if [ ! -e sql/revo-inx.db ]; then
         swipl -s pro/sqlrevo.pl -g "sqlrevo:download,halt" -t "halt(1)"
         unzip tmp/revo-inx*.zip -d sql
-        cp etc/redaktantoj sql/redaktantoj.db
     fi
-    # exec "$@"
+    # kreu konto-datumbazon, se ankoraŭ mankas
+    if [ ! -e sql/redaktantoj.db ]; then
+        sqlite3 sql/redaktantoj.db -init konto-skemo.sql
+        # importi el etc/redaktantoj al sql/redaktantoj.db
+        swipl -s pro/redaktantoj.pl -g "redaktantoj:update_redaktantoj,halt" -t "halt(1)"
+    fi
 fi
 exec "$@"

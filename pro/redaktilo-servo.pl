@@ -68,7 +68,7 @@ init :-
     set_prolog_flag(encoding,utf8),
     agordo:get_config([
      http_app_root(AppRoot),
-     root_dir(RootDir),
+     %root_dir(RootDir),
 	 web_dir(WebDir),
 	 voko_dir(VokoDir),
 	 http_app_scheme(Scheme),
@@ -335,10 +335,8 @@ revo_rigardo(Request) :-
     %agordo:get_config(voko_xsl,VokoXsl),
     catch(
 	    (
-            agordo:get_config(voko_xsl,VokoXslUri),
-            agordo:get_config(root_dir,RootDir),
+            agordo:get_path(root_dir,voko_xsl,VokoXsl),
             %sub_atom(VokoXslUri,7,_,0,VokoXsl),
-            atom_concat(RootDir,VokoXslUri,VokoXsl),
             set_stream(current_output,encoding(utf8)),
             xslt_proc(VokoXsl,Quoted,Html),
             format('Content-type: text/html~n~n'),

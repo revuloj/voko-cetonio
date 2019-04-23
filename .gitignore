@@ -2,7 +2,7 @@
 \#*
 .\#*
 tmp/
-sql/
+sql/*.db
 dtd/
 *.log
 

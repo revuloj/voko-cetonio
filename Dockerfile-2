@@ -1,14 +1,20 @@
 FROM cetonio:latest
 
 WORKDIR /home/cetonio
+
+
+### faru tion pli bone en "builder"
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    sqlite3 && rm -rf /var/lib/apt/lists/* 
+
 USER cetonio:users
 
-RUN mkdir -p tmp && mkdir -p sql 
-#  && swipl -s pro/sqlrevo.pl -g "sqlrevo:download,halt" -t "halt(1)" \
-#  && unzip tmp/revo-inx.db.zip -d sql
-#
+RUN mkdir -p tmp && mkdir -p sql
+#  && sqlite3 sql/redaktantoj.db -init sql/konto-skemo.sql
 
-COPY pro/redaktilo-servo.pl ./pro/
+COPY pro/*.pl ./pro/
+COPY *.sql ./
 
 USER root
 

@@ -50,14 +50,14 @@ WHERE r.red_id=p.red_id
 ***/
 
 connect :-
-    agordo:get_config(revodb,RvDBFile),
+    agordo:get_path(root_dir,revodb,RvDBFile),
     sqlite_connect(RvDBFile,revodb,[ext(''),alias(revodb)]),
-    agordo:get_config(kontodb,KtDBFile),
+    agordo:get_path(root_dir,kontodb,KtDBFile),
     sqlite_connect(KtDBFile,kontodb,[ext(''),alias(kontodb)]).
 
 download :-
     agordo:get_config(revodb_zip,UrlPattern),
-    agordo:get_config(revodb_tmp,TmpFile),
+    agordo:get_path(root_dir,revodb_tmp,TmpFile),
     get_time(Time),
     once((
 	    member(Diff,[0,1,2,3,4,5,6,7]),

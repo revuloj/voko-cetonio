@@ -36,3 +36,8 @@ get_config([Opt|KVs]) :-
     %    call(agordo:Key,Value),
     call(Opt),
     get_config(KVs).
+
+get_path(RootKey,PathKey,Value) :-
+	get_config(RootKey,Root),
+	get_config(PathKey,Path),
+	atom_concat(Root,Path,Value).

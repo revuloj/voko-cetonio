@@ -18,7 +18,7 @@ update_redaktantoj([Nomo-Emails|Redoj]) :-
 
 
 parse_redaktantoj(Redoj) :-
-    agordo:get_config(redaktantoj_import,InFile),
+    agordo:get_path(root_dir,redaktantoj_import,InFile),
     read_file_to_codes(InFile,Codes,[encoding(text)]),
     phrase(redaktantoj(Redoj),Codes).
 
