@@ -68,9 +68,6 @@ init :-
     set_prolog_flag(encoding,utf8),
     agordo:get_config([
      http_app_root(AppRoot),
-     %root_dir(RootDir),
-	 web_dir(WebDir),
-	 voko_dir(VokoDir),
 	 http_app_scheme(Scheme),
 	 http_app_host(Host),
 	 http_app_port(Port),
@@ -87,15 +84,14 @@ init :-
 	  path(AppRoot)
 	]),
     % la lokaj dosierujoj el kiuj servi dosierojn
-    atom_concat(RootDir,WebDir,WD),
-    atom_concat(RootDir,VokoDir,VD),
-    assert(user:file_search_path(web,WD)),
+    agordo:get_path(root_dir,web_dir,WebDir),
+    agordo:get_path(root_dir,voko_dir,VokoDir),
+    assert(user:file_search_path(web,WebDir)),
     assert(user:file_search_path(static,web(static))),
-    assert(user:file_search_path(voko,VD)),
+    assert(user:file_search_path(voko,VokoDir)),
     assert(user:file_search_path(cfg,voko(cfg))),
     assert(user:file_search_path(stl,voko(stl))),
     assert(user:file_search_path(smb,voko(smb))).
-
 		  
 http:location(red,root(red),[]).
 http:location(static,root(static),[]).
