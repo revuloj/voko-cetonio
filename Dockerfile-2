@@ -2,24 +2,15 @@ FROM cetonio:latest
 
 WORKDIR /home/cetonio
 
-
-### faru tion pli bone en "builder"
-USER root
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    sqlite3 && rm -rf /var/lib/apt/lists/* 
-
 USER cetonio:users
 
-RUN mkdir -p tmp && mkdir -p sql
-#  && sqlite3 sql/redaktantoj.db -init sql/konto-skemo.sql
-
-COPY pro/*.pl ./pro/
-COPY *.sql ./
+# COPY pro/*.pl ./pro/
+# COPY *.sql ./
 
 USER root
 
-COPY do*.sh ./
-RUN chown cetonio.users ./do*.sh && chmod 750 ./do*.sh
+# COPY do*.sh ./
+# RUN chown cetonio.users ./do*.sh && chmod 750 ./do*.sh
 
 
 USER cetonio:users

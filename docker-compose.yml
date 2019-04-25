@@ -2,10 +2,10 @@ version: '3.7'
 
 services:
   cetonio:
-    image: voko/cetonio-2
+    image: voko/cetonio
     build: 
       context: .
-      dockerfile: Dockerfile-2
+      dockerfile: Dockerfile
     # restart: always
     depends_on:
       - cikado
@@ -43,10 +43,10 @@ services:
         #  nocopy: true
 
   cetonio-db:
-    image: voko/cetonio-2
+    image: voko/cetonio
     build: 
       context: .
-      dockerfile: Dockerfile-2
+      dockerfile: Dockerfile
     # FARU: metu la komandon en ŝelskripton pli bone...
     command: ./download-inx-db.sh
     deploy:
