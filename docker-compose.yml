@@ -70,7 +70,7 @@ services:
   # servo por citaĵo-serĉo
   cikado:
     image: voko/cikado
-    build: https:/mydata/github.com/revuloj/voko-cikado.git
+    build: https://github.com/revuloj/voko-cikado.git
     #restart: always
     #expose:
     #  - 9090      
