@@ -27,7 +27,7 @@ RUN java -jar closure-compiler*.jar --js_module_root js_src --entry_point ui_kre
 
 RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
   && unzip master.zip voko-iloj-master/xsl/* voko-iloj-master/dtd/* voko-iloj-master/cfg/* \
-  && rm master.zip 
+     voko-iloj-master/stl/* voko-iloj-master/owl/voko.rdf && rm master.zip 
 
 
 ##### staĝo 3: Nun ni kreos la propran procesumon por la redaktilo...
@@ -35,23 +35,24 @@ FROM swipl:stable
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xsltproc sqlite3 unzip && rm -rf /var/lib/apt/lists/* 
-# ĉu jam enestas? libsqlite3-0 libsqlite3-dev
 
 RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
 # jam enestas en swipl:stable: RUN swipl -g "pack_install(prosqlite,[interactive(false)]),halt" -t "halt(1)"
 
 RUN useradd -ms /bin/bash -u 1088 cetonio
-USER cetonio:users
 WORKDIR /home/cetonio
 
 ADD . ./
 #  ??? --chown=root:root
-COPY --from=metapost voko-iloj-master/smb/ /home/cetonio/voko/smb/
-COPY --from=builder redaktilo-gen.js /home/cetonio/pro/web/
-COPY --from=builder voko-iloj-master/ /home/cetonio/voko/
+COPY --from=metapost --chown=root:root voko-iloj-master/smb/ /home/cetonio/voko/smb/
+COPY --from=builder --chown=root:root redaktilo-gen.js /home/cetonio/pro/web/
+COPY --from=builder --chown=root:root voko-iloj-master/ /home/cetonio/voko/
 
-RUN mkdir -p tmp && mkdir -p sql  
-  # && chmod 750 ./do*.sh
+RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml && \
+    xsltproc voko/xsl/cfg_klasoj.xsl voko/owl/voko.rdf > voko/cfg/klasoj.xml
+
+USER cetonio:users
+RUN mkdir -p tmp && mkdir -p sql
 
 CMD ["swipl",\
     "-s","pro/redaktilo-servo.pl",\
