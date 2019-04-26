@@ -1,4 +1,13 @@
-# Ni bezonas Javon kaj Closure-Compiler por kompili la Javo-skript-dosieron
+##### staĝo 1: Ni bezonas TeX kaj metapost por konverti simbolojn al png
+FROM silkeh/latex:small as metapost
+COPY mp2png.sh .
+RUN apk --update add curl unzip librsvg --no-cache && rm -f /var/cache/apk/* 
+RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
+  && unzip master.zip voko-iloj-master/smb/*.mp
+RUN cd voko-iloj-master && ../mp2png.sh # && cd ${HOME}
+
+
+##### staĝo 2: Ni bezonas Javon kaj Closure-Compiler por kompili la Javo-skript-dosieron
 FROM openjdk:jre-slim as builder
 MAINTAINER <diestel@steloj.de>
 
@@ -20,7 +29,8 @@ RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
   && unzip master.zip voko-iloj-master/xsl/* voko-iloj-master/dtd/* voko-iloj-master/cfg/* \
   && rm master.zip 
 
-# Nun ni kreos la propran procesumon por la redaktilo...
+
+##### staĝo 3: Nun ni kreos la propran procesumon por la redaktilo...
 FROM swipl:stable
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -36,6 +46,7 @@ WORKDIR /home/cetonio
 
 ADD . ./
 #  ??? --chown=root:root
+COPY --from=metapost voko-iloj-master/smb/ /home/cetonio/voko/smb/
 COPY --from=builder redaktilo-gen.js /home/cetonio/pro/web/
 COPY --from=builder voko-iloj-master/ /home/cetonio/voko/
 
