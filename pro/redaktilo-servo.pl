@@ -307,10 +307,20 @@ revo_kontrolo(Request) :-
     http_parameters(Request,
 		    [
 			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
-		    ]).
+		    ]),
 %% KOREKTU: necesas voki kontrol-servon nun anstataŭ rekte Javon/Jing
     %relaxng_json(Xml,Json),
     %reply_json(Json).
+    agordo:get_config(http_rng_url,Url),
+    %uri_components(Url,uri_components(Scheme,Auth,Path,_,_)),
+    %uri_components(Url1,uri_components(Scheme,Auth,Path,_,_)),
+    http_open(Url,Stream,[header(content_type,ContentType),post(Xml)]),
+    format('Content-type: ~w~n~n',[ContentType]),
+    set_stream(Stream,encoding(utf8)),
+    set_stream(current_output,encoding(utf8)),
+    copy_stream_data(Stream,current_output),
+    close(Stream).
+
 
 
 % HTML-antaurigardo de la artikolo
@@ -378,22 +388,19 @@ citajho_sercho(Request) :-
 	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj])]) 
 	    ]),
 
-    agordo:get_config([http_cit_scheme(CitScheme),http_cit_host(CitHost),http_cit_port(CitPort),http_cit_root(CitRoot)]),
+    % agordo:get_config([http_cit_scheme(CitScheme),http_cit_host(CitHost),http_cit_port(CitPort),http_cit_root(CitRoot)]),
     % ni bezonas validan AjaxID por fone demandi la citaĵo-serĉo-servon
-    request_ajax_id(Request,AjaxID),
-    once((ajax_id_time_valid(AjaxID), AxID1 = AjaxID ; new_ajax_id(Request,AxID1) )),
+    %request_ajax_id(Request,AjaxID),
+    %once((ajax_id_time_valid(AjaxID), AxID1 = AjaxID ; new_ajax_id(Request,AxID1) )),
     % kreu la URL por fona voko de la citaĵo-servo
-    uri_authority_components(Auth,uri_authority(_,_,CitHost,CitPort)),
-    atom_concat(CitRoot,'/citajho_sercho',Path),
-    uri_query_components(Search,[redaktilo_ajax(AxID1),sercho(Sercho),kie(Kie)]),
-    uri_components(Url,uri_components(CitScheme,Auth,Path,Search,_)),
-    http_open(Url,Stream,[header(content_type,ContentType)]),
-%    once((
-%	Kie = anaso,
-%	format('Content-type: text/html; charset=UTF-8~n~n')
-%      ;
-%        format('Content-type: application/json~n~n')
-    %      )),
+    %uri_authority_components(Auth,uri_authority(_,_,CitHost,CitPort)),
+
+    agordo:get_config(http_cit_url,Url),
+    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+    atom_concat(Root,'/citajho_sercho',Path),
+    uri_query_components(Search,[sercho(Sercho),kie(Kie)]),
+    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
+    http_open(Url1,Stream,[header(content_type,ContentType)]),
     format('Content-type: ~w~n~n',[ContentType]),
     set_stream(Stream,encoding(utf8)),
     set_stream(current_output,encoding(utf8)),
@@ -621,16 +628,18 @@ analizo(Request) :-
             teksto(Teksto, [length<150000])
             ]),
     
-        agordo:get_config([http_ana_scheme(AnaScheme),http_ana_host(AnaHost),http_ana_port(AnaPort),http_ana_root(AnaRoot)]),
+        %agordo:get_config([http_ana_scheme(AnaScheme),http_ana_host(AnaHost),http_ana_port(AnaPort),http_ana_root(AnaRoot)]),
         % ni bezonas validan AjaxID por fone demandi la citaĵo-serĉo-servon
         %request_ajax_id(Request,AjaxID),
         %once((ajax_id_time_valid(AjaxID), AxID1 = AjaxID ; new_ajax_id(Request,AxID1) )),
         % kreu la URL por fona voko de la citaĵo-servo
-        uri_authority_components(Auth,uri_authority(_,_,AnaHost,AnaPort)),
-        atom_concat(AnaRoot,'/analizo',Path),
+        %uri_authority_components(Auth,uri_authority(_,_,AnaHost,AnaPort)),
+        agordo:get_config(http_ana_url,Url),
+        uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+        atom_concat(Root,'/analizo',Path),
         uri_query_components(Query,[teksto(Teksto)]),
-        uri_components(Url,uri_components(AnaScheme,Auth,Path,Query,_)),
-        http_open(Url,Stream,[header(content_type,ContentType)]),
+        uri_components(Url1,uri_components(Scheme,Auth,Path,Query,_)),
+        http_open(Url1,Stream,[header(content_type,ContentType)]),
 
         format('Content-type: ~w~n~n',[ContentType]),
         set_stream(Stream,encoding(utf8)),

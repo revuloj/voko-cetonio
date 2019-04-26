@@ -73,7 +73,7 @@ services:
     build: https://github.com/revuloj/voko-cikado.git
     #restart: always
     #expose:
-    #  - 9090      
+    #  - 8082      
 
   # servo por vortanalizo
   akrido:

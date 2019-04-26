@@ -1,5 +1,6 @@
 ##### staĝo 1: Ni bezonas TeX kaj metapost por konverti simbolojn al png
 FROM silkeh/latex:small as metapost
+MAINTAINER <diestel@steloj.de>
 COPY mp2png.sh .
 RUN apk --update add curl unzip librsvg --no-cache && rm -f /var/cache/apk/* 
 RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
@@ -32,6 +33,7 @@ RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
 
 ##### staĝo 3: Nun ni kreos la propran procesumon por la redaktilo...
 FROM swipl:stable
+MAINTAINER <diestel@steloj.de>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xsltproc sqlite3 unzip && rm -rf /var/lib/apt/lists/* 
