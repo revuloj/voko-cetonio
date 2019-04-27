@@ -110,12 +110,17 @@ test6 :-
 xslt_proc(XsltFile,XmlCodes,HtmlCodes) :-
     setup_call_cleanup(
 
-        process_create('/usr/bin/xsltproc', ['--nowrite','--nomkdir',XsltFile,'-'], [
-            stdin(pipe(XmlStream)),
-            stdout(pipe(HtmlIn)),
-            stderr(pipe(ErrIn)),
-            process(PID)]),
+        (
+            % por trovi DTD en ../dtd/ ni iru al la dosierujo de Xsl
+            file_directory_name(XsltFile,XslDir),
+            working_directory(Pwd,XslDir),
 
+            process_create('/usr/bin/xsltproc', ['--nowrite','--nomkdir',XsltFile,'-'], [
+                stdin(pipe(XmlStream)),
+                stdout(pipe(HtmlIn)),
+                stderr(pipe(ErrIn)),
+                process(PID)])
+        ),
         (
             set_stream(XmlStream,encoding(utf8)),
             set_stream(HtmlIn,encoding(utf8)),
@@ -130,7 +135,7 @@ xslt_proc(XsltFile,XmlCodes,HtmlCodes) :-
                 ),
                 process_wait(PID, Status))
         ),
-        (close(HtmlIn), close(ErrIn))
+        (close(HtmlIn), close(ErrIn), working_directory(_,Pwd))
     ),
 
     debug(xslt(status),'xsltproc status: ~q',[Status]),
