@@ -314,7 +314,8 @@ revo_kontrolo(Request) :-
     agordo:get_config(http_rng_url,Url),
     %uri_components(Url,uri_components(Scheme,Auth,Path,_,_)),
     %uri_components(Url1,uri_components(Scheme,Auth,Path,_,_)),
-    http_open(Url,Stream,[header(content_type,ContentType),post(Xml)]),
+    debug(redaktilo(kontrolo),'url ~q',[Url]),
+    http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),
     format('Content-type: ~w~n~n',[ContentType]),
     set_stream(Stream,encoding(utf8)),
     set_stream(current_output,encoding(utf8)),
@@ -397,9 +398,10 @@ citajho_sercho(Request) :-
 
     agordo:get_config(http_cit_url,Url),
     uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-    atom_concat(Root,'/citajho_sercho',Path),
+    atom_concat(Root,'/cikado',Path),
     uri_query_components(Search,[sercho(Sercho),kie(Kie)]),
     uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
+    debug(redaktilo(citajho),'url ~q',[Url1]),
     http_open(Url1,Stream,[header(content_type,ContentType)]),
     format('Content-type: ~w~n~n',[ContentType]),
     set_stream(Stream,encoding(utf8)),
@@ -591,19 +593,23 @@ analinioj(Request) :-
 
         debug(redaktilo(analinioj),'ANA json ~q',[JSON]),
 
-        agordo:get_config([http_ana_scheme(AnaScheme),http_ana_host(AnaHost),http_ana_port(AnaPort),http_ana_root(AnaRoot)]),
+        %agordo:get_config([http_ana_scheme(AnaScheme),http_ana_host(AnaHost),http_ana_port(AnaPort),http_ana_root(AnaRoot)]),
         % ni bezonas validan AjaxID por fone demandi la citaĵo-serĉo-servon
         %request_ajax_id(Request,AjaxID),
         %once((ajax_id_time_valid(AjaxID), AxID1 = AjaxID ; new_ajax_id(Request,AxID1) )),
         % kreu la URL por fona voko de la citaĵo-servo
-        uri_authority_components(Auth,uri_authority(_,_,AnaHost,AnaPort)),
-        atom_concat(AnaRoot,'/analinioj',Path),
+        %uri_authority_components(Auth,uri_authority(_,_,AnaHost,AnaPort)),
+        %atom_concat(AnaRoot,'/analinioj',Path),
         %uri_query_components(Query,[teksto(Teksto)]),
-        uri_components(Url,uri_components(AnaScheme,Auth,Path,'',_)),
+        %uri_components(Url,uri_components(AnaScheme,Auth,Path,'',_)),
 
-        debug(redaktilo(analinioj),'ANA url ~q',[Url]),
+        agordo:get_config(http_ana_url,Url),
+        uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+        atom_concat(Root,'/analinioj',Path),
+        uri_components(Url1,uri_components(Scheme,Auth,Path,'',_)),
+        debug(redaktilo(analinioj),'url ~q',[Url1]),
 
-        http_post(Url, json(JSON), Reply, []),
+        http_post(Url1, json(JSON), Reply, []),
 
         %%http_open(Url,ResultStream,[output(PostStream),header(content_type,ContentType)]),
         % copy data from Request to proxy connection
@@ -639,6 +645,7 @@ analizo(Request) :-
         atom_concat(Root,'/analizo',Path),
         uri_query_components(Query,[teksto(Teksto)]),
         uri_components(Url1,uri_components(Scheme,Auth,Path,Query,_)),
+        debug(redaktilo(analizo),'url ~q',[Url]),
         http_open(Url1,Stream,[header(content_type,ContentType)]),
 
         format('Content-type: ~w~n~n',[ContentType]),

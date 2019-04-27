@@ -58,6 +58,6 @@ RUN mkdir -p tmp && mkdir -p sql
 
 CMD ["swipl",\
     "-s","pro/redaktilo-servo.pl",\
-    "-g","debug(http(_)),redaktilo_servo:daemon","-t","halt",\
+    "-g","redaktilo_servo:daemon","-t","halt",\
     "-p","agordo=etc","--",\
     "--workers=10","--port=8080","--no-fork"]
