@@ -3,9 +3,9 @@ FROM silkeh/latex:small as metapost
 MAINTAINER <diestel@steloj.de>
 COPY mp2png.sh .
 RUN apk --update add curl unzip librsvg --no-cache && rm -f /var/cache/apk/* 
-RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
-  && unzip master.zip voko-iloj-master/smb/*.mp
-RUN cd voko-iloj-master && ../mp2png.sh # && cd ${HOME}
+RUN curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
+  && unzip master.zip voko-grundo-master/smb/*.mp
+RUN cd voko-grundo-master && ../mp2png.sh # && cd ${HOME}
 
 
 ##### staĝo 2: Ni bezonas Javon kaj Closure-Compiler por kompili la Javo-skript-dosieron
@@ -26,9 +26,9 @@ RUN curl -LO https://dl.google.com/closure-compiler/compiler-latest.tar.gz \
 RUN java -jar closure-compiler*.jar --js_module_root js_src --entry_point ui_kreo \
            --js_output_file redaktilo-gen.js js_src/*.js
 
-RUN curl -LO https://github.com/revuloj/voko-iloj/archive/master.zip \
-  && unzip master.zip voko-iloj-master/xsl/* voko-iloj-master/dtd/* voko-iloj-master/cfg/* \
-     voko-iloj-master/stl/* voko-iloj-master/owl/voko.rdf && rm master.zip 
+RUN curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
+  && unzip master.zip voko-grundo-master/xsl/* voko-grundo-master/dtd/* voko-grundo-master/cfg/* \
+     voko-grundo-master/stl/* voko-grundo-master/owl/voko.rdf && rm master.zip 
 
 
 ##### staĝo 3: Nun ni kreos la propran procesumon por la redaktilo...
@@ -46,9 +46,9 @@ WORKDIR /home/cetonio
 
 ADD . ./
 #  ??? --chown=root:root
-COPY --from=metapost --chown=root:root voko-iloj-master/smb/ /home/cetonio/voko/smb/
+COPY --from=metapost --chown=root:root voko-grundo-master/smb/ /home/cetonio/voko/smb/
 COPY --from=builder --chown=root:root redaktilo-gen.js /home/cetonio/pro/web/
-COPY --from=builder --chown=root:root voko-iloj-master/ /home/cetonio/voko/
+COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
 
 RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml && \
     xsltproc voko/xsl/cfg_klasoj.xsl voko/owl/voko.rdf > voko/cfg/klasoj.xml

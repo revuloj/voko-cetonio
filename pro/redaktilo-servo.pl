@@ -37,6 +37,7 @@
 :- use_module(agordo).
 %:- use_module(redaktilo).
 :- use_module(redaktilo_auth).
+:- use_module(sercho).
 :- use_module(sendo).
 :- use_module(sqlrevo).
 :- use_module(xml_quote).
@@ -300,8 +301,7 @@ revo_sendo(Request) :-
 
 % sintaks-kontrolo de la artikolo per Jing
 revo_kontrolo(Request) :-
-%%    ajax_auth(Request),
-    
+%%    ajax_auth(Request),   
     debug(redaktilo(request),'~q',[Request]),
     % read post data
     http_parameters(Request,
@@ -316,13 +316,35 @@ revo_kontrolo(Request) :-
     %uri_components(Url1,uri_components(Scheme,Auth,Path,_,_)),
     debug(redaktilo(kontrolo),'url ~q',[Url]),
     http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),
-    format('Content-type: ~w~n~n',[ContentType]),
+    %format('Content-type: ~w~n~n',[ContentType]),
+    format('Content-type: application/json; charset=UTF-8~n~n'), % alternative sendu kiel teksto la la retumilo
+            % kaj traktu tie per Javoskripto...
     set_stream(Stream,encoding(utf8)),
     set_stream(current_output,encoding(utf8)),
-    copy_stream_data(Stream,current_output),
+    write('['),
+    %copy_stream_data(Stream,current_output),
+    err_text_json(Stream,current_output),
+    write(']'),
     close(Stream).
 
+err_text_json(In,Out) :-
+    repeat,
+    read_line_to_codes(In, Codes),
+    (   Codes == end_of_file
+    ->  !
+    ;   atom_codes(Line, Codes),
+        err_line_json(Line,Json),
+        json_write(Out,Json),
+        fail
+    ).
 
+err_line_json(Line,_{line: L, pos: Pos, msg: Msg}) :-
+    atomic_list_concat([_,L,P|Rest],':',Line),
+    once((
+        atom_number(P,_), Pos=P, atomic_list_concat(Rest,':',Msg)
+        ;
+        Pos=0, atomic_list_concat([P|Rest],':',Msg)
+    )).
 
 % HTML-antaurigardo de la artikolo
 revo_rigardo(Request) :-
@@ -359,66 +381,14 @@ revo_rigardo(Request) :-
         )
     ).
 
-    /**
-    atom_codes(XmlAtom,Quoted),
-    %format('Content-type: text/html~n~n'),
-    catch(
-	    (
-		agordo:get_config(voko_xsl,VokoXsl),
-		xsl_transform(XmlAtom,VokoXsl,Out),
-		format('Content-type: text/html~n~n'),
-		write(Out)
-	    ),
-	    error(java_exception(Exc),Class), % java_exception( classname, reference_to_exception_object),
-	    (
-		xsl_exception(Exc,Text),
-		debug(redaktilo(rigardo),'~q: ~q',[Class,Text]),
-		format('Status: ~d~n~n',[400]),
-		write(Text)
-	    )
-	).
-**/
-
-
 citajho_sercho(Request) :-
-%%    ajax_auth(Request),
-    
+%%    ajax_auth(Request),   
     http_parameters(Request,
 	    [
 	    sercho(Sercho, [length>1,length<500]),
 	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj])]) 
 	    ]),
-
-    % agordo:get_config([http_cit_scheme(CitScheme),http_cit_host(CitHost),http_cit_port(CitPort),http_cit_root(CitRoot)]),
-    % ni bezonas validan AjaxID por fone demandi la citaĵo-serĉo-servon
-    %request_ajax_id(Request,AjaxID),
-    %once((ajax_id_time_valid(AjaxID), AxID1 = AjaxID ; new_ajax_id(Request,AxID1) )),
-    % kreu la URL por fona voko de la citaĵo-servo
-    %uri_authority_components(Auth,uri_authority(_,_,CitHost,CitPort)),
-
-    agordo:get_config(http_cit_url,Url),
-    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-    atom_concat(Root,'/cikado',Path),
-    uri_query_components(Search,[sercho(Sercho),kie(Kie)]),
-    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
-    debug(redaktilo(citajho),'url ~q',[Url1]),
-    http_open(Url1,Stream,[header(content_type,ContentType)]),
-    format('Content-type: ~w~n~n',[ContentType]),
-    set_stream(Stream,encoding(utf8)),
-    set_stream(current_output,encoding(utf8)),
-    copy_stream_data(Stream,current_output),
-    close(Stream).
-
-
-% see https://commons.wikimedia.org/wiki/Special:ApiSandbox
-%     https://commons.wikimedia.org/w/index.php
-%     https://commons.wikimedia.org/wiki/Commons:Commons_API
-%     https://commons.wikimedia.org/wiki/Commons:Credit_line
-%     https://wiki.creativecommons.org/wiki/License_Versions#Detailed_attribution_comparison_chart
-%     https://commons.wikimedia.org/wiki/Commons:Attribution_Generator
-% /w/api.php?action=query&format=json&list=search&srsearch=korvo&srnamespace=0%7C-2&srlimit=20&srinfo=totalhits%7Csuggestion%7Crewrittenquery&srprop=size%7Cwordcount%7Ctimestamp%7Csnippet
-
-wikimedia_pagho_limo(50).
+    sercho(Kie,Sercho).
 
 bildo_sercho(Request) :-
     %%    ajax_auth(Request),
@@ -430,47 +400,7 @@ bildo_sercho(Request) :-
         ]),
         debug(sercho(what),'<<< VIKIMEDIO: ~w',[Sercho]),
         format('Content-type: application/json~n~n'),
-        bildo_sercho_(Sercho,_).
-
-bildo_sercho_(Sercho,JList) :-        
-        uri_encoded(query_value,Sercho,SerchoEnc),
-        UrlBase = 'https://commons.wikimedia.org/w/api.php?action=query&format=json',
-        % kreu serĉo-URL-on 
-        wikimedia_pagho_limo(Max),
-        % namespaces 0,6,14, see https://commons.wikimedia.org/wiki/Help:Namespaces
-        format(atom(Url),'~w&list=search&srnamespace=0%7C6%7C14&srlimit=~d&srprop=snippet&srsearch=~w',[UrlBase,Max,SerchoEnc]),
-        time(http_open(Url,Stream,[])),
-        json_read(Stream,json(JList)),
-        close(Stream),
-        debug(wikimedia(search),'Url: ~w~n',[Url]),
-        json_write(current_output,json(JList)).
-        % kontinuus nur se venus malpli ol Max trovoj, kvankam estas pli...., verŝajne tio ne okazus
-        % bildo_sercho_continuation(Url,JList).
-       
-
-% continue=json([sroffset=50,continue='-||'])
-bildo_sercho_continuation(Url,JList) :-
-    member(continue=json(Continue),JList) ->
-        % estas pli por legi.., faru novan demandon
-        wikiapi_continuation_params(Continue,ContParEnc),
-        atom_concat(Url,ContParEnc,CUrl),
-        time(http_open(CUrl,CStream,[])),
-        % copy_stream_data(CStream,current_output)
-        json_read(CStream,json(CJList)),
-        close(CStream),    
-        debug(wikimedia(search),'CUrl: ~w~n',[CUrl]),
-        json_write(current_output,json(CJList)),
-        bildo_sercho_continuation(Url,CJList) 
-    ; true.
-
-wikiapi_continuation_params([],'').    
-wikiapi_continuation_params([Name=Value|Cont],ParamEnc) :-
-    uri_encoded(query_value,Value,ValEnc),
-    wikiapi_continuation_params(Cont,ParEnc),
-    format(atom(ParamEnc),'&~w=~w~w',[Name,ValEnc,ParEnc]).
-
-
-% /w/api.php?action=query&format=json&prop=imageinfo%7Cpageimages&pageids=513470%7C513472&iiprop=user%7Ccomment%7Cparsedcomment%7Ccanonicaltitle%7Ccommonmetadata%7Cextmetadata&piprop=thumbnail%7Cname%7Coriginal
+        sercho:bildo_sercho(Sercho,_).
 
 bildo_info(Request) :-
     %%    ajax_auth(Request),       
@@ -481,39 +411,8 @@ bildo_info(Request) :-
         ]),
         debug(sercho(what),'<<< VIKIMEDIO: ~w',[Paghoj]),
         format('Content-type: application/json~n~n'),
-        bildo_info_(Paghoj).
+        sercho:bildo_info(Paghoj).
 
-bildo_info_(Paghoj) :-    
-        uri_encoded(query_value,Paghoj,PaghojEnc),
-        UrlBase = 'https://commons.wikimedia.org/w/api.php?action=query&format=json',
-        % unue faru serĉon 
-        % namespaces 0,6,14, see https://commons.wikimedia.org/wiki/Help:Namespaces
-        format(atom(Url),'~w&prop=imageinfo%7Cpageimages%7Cimages%7Cinfo&inprop=url&piprop=thumbnail%7Cname%7Coriginal&pithumbsize=120&iiprop=extmetadata&pageids=~w',[UrlBase,PaghojEnc]),
-        time(http_open(Url,Stream,[])),
-        json_read(Stream,json(JList)),!,
-        close(Stream),
-        debug(wikimedia(info),'Url: ~w~n',[Url]),
-        write("["),
-        json_write(current_output,json(JList)),!,
-        bildo_info_continuation(Url,JList),
-        write("]").
-
-bildo_info_continuation(Url,JList) :-   
-    member(continue=json(Continue),JList) ->
-        % estas pli por legi.., faru novan demandon
-        wikiapi_continuation_params(Continue,ContParEnc),
-        ContParEnc \= '',
-        atom_concat(Url,ContParEnc,CUrl),
-        time(http_open(CUrl,CStream,[])),
-        % copy_stream_data(CStream,current_output)
-        json_read(CStream,json(CJList)),
-        close(CStream),
-        debug(wikimedia(info),'CUrl: ~w~n',[CUrl]),
-        write(","), flush_output,
-        json_write(current_output,json(CJList)),
-        bildo_info_continuation(Url,CJList)
-    ; true.
-   
 bildo_info_2(Request) :-
     %%    ajax_auth(Request),        
         http_parameters(Request,
@@ -523,20 +422,7 @@ bildo_info_2(Request) :-
         ]),
         debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosiero]),
         format('Content-type: application/json~n~n'),
-        bildo_info_2_(Dosiero).
-
-bildo_info_2_(Dosiero) :-    
-        uri_encoded(query_value,Dosiero,DosieroEnc),
-        UrlBase = 'https://commons.wikimedia.org/w/api.php?action=query&format=json',
-        format(atom(Url),'~w&prop=imageinfo%7Cpageimages%7Cinfo&inprop=url&piprop=thumbnail%7Cname%7Coriginal&pithumbsize=120&iiprop=extmetadata&titles=~w',[UrlBase,DosieroEnc]),
-        time(http_open(Url,Stream,[])),
-        json_read(Stream,json(JList)),
-        close(Stream),
-        debug(wikimedia(info),'Url: ~w~n',[Url]),!,
-        %write("["),
-        json_write(current_output,json(JList)).
-        %bildo_info_continuation(Url,JList),
-        %write("]").   
+        sercho:bildo_info_2(Dosiero).
 
 bildeto_info(Request) :-
     %%    ajax_auth(Request),        
@@ -547,38 +433,7 @@ bildeto_info(Request) :-
         ]),
         debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosieroj]),
         format('Content-type: application/json~n~n'),
-        bildeto_info_(Dosieroj).
-
-bildeto_info_(Dosieroj) :-    
-        uri_encoded(query_value,Dosieroj,DosierojEnc),
-        UrlBase = 'https://commons.wikimedia.org/w/api.php?action=query&format=json',
-        format(atom(Url),'~w&prop=pageimages&piprop=thumbnail%7Cname%7Coriginal&pithumbsize=120&titles=~w',[UrlBase,DosierojEnc]),
-        time(http_open(Url,Stream,[])),
-        json_read(Stream,json(JList)),
-        close(Stream),
-        debug(wikimedia(info),'Url: ~w~n',[Url]),!,
-        %write("["),
-        json_write(current_output,json(JList)).
-        %bildo_info_continuation(Url,JList),
-        %write("]").       
-
-test_wikimedia_api(Sercho) :-
-    bildo_sercho_(Sercho,JList),
-    member(query=json(Query),JList),
-    member(search=SList,Query),
-    findall(PId,
-        (
-          member(json(J),SList),
-          member(pageid=PId,J)
-        ),
-        PIds
-    ),
-    atomic_list_concat(PIds,'|',PageIds),
-    format('pageids: ~q~n',[PageIds]),
-    bildo_info_(PageIds).
-
-test_wikimedia_api_1(Paghoj) :-
-    bildo_info_(Paghoj).
+        sercho:bildeto_info(Dosieroj).    
 
 analinioj(Request) :-
     %%    ajax_auth(Request),
