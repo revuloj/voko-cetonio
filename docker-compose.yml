@@ -20,21 +20,18 @@ services:
       # anakŭ vi povas aldoni en la gastiganto /etc/hosts
       #   127.0.0.1  example.com
       - 8080:8080
+    secrets:
+      # farenda: dividu agordon nesekretan kaj sekretan kaj uzu configs + secrets
+      - source: redaktilo.cfg
+        target: /home/cetonio/etc/redaktilo.cfg
+      - source: redaktantoj
+        target: /home/cetonio/etc/redaktantoj
     volumes:
-      # en ~/etc/ estu dosieroj redaktilo.cfg kaj redaktantoj
-      # 1) la unuan oni povas kopii de cfg/redaktilo.cfg kaj agordi
-      # aldonante vian retpoŝtan konton. Por uzi Google-saluton vi
-      # bezonas registri vian propran ŝlosilon kun via retnomo (domajno)
-      # krome adaptu la posedanton al cetonio:
-      #   chown 1088 ~/etc/redaktilo.cfg
-      # 2) la duan (redaktantoj) vi povas krei malplena per komando
-      #   sqlite3 etc/redaktantoj -init voko/sql/konto-skemo.sql
-      # La skemon vi povas trovi en Voko-Iloj. La dosiero estos
-      # kopiita al sql/redaktantoj.db ĉe lanĉo de Cetonio    
-      - type: bind
-        source: $HOME/etc
-        target: /home/cetonio/etc
-        read_only: true
+      # ŝanĝita: ni nun uzas secrets anstatŭ bind 
+      #- type: bind
+      #  source: $HOME/etc
+      #  target: /home/cetonio/etc
+      #  read_only: true
       - type: volume
         source: sql
         target: /home/cetonio/sql
@@ -47,19 +44,23 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    # FARU: metu la komandon en ŝelskripton pli bone...
     command: ./download-inx-db.sh
     deploy:
       # aktualigu la datumbazon ĉiutage (kvankam en Revo ĝi momente estas malpli ofte renovigita)
       restart_policy:
         delay: 24h
+    secrets:
+      # farenda: dividu agordon nesekretan kaj sekretan kaj uzu configs + secrets
+      - source: redaktilo.cfg
+        target: /home/cetonio/etc/redaktilo.cfg
     volumes:
       # en ~/etc/ estu dosieroj redaktilo.cfg
       # La skemon vi povas trovi en Voko-Iloj.
-      - type: bind
-        source: $HOME/etc
-        target: /home/cetonio/etc
-        read_only: false
+      # ni uzas sekreton "redaktilo.cfg" anstataŭ bind
+      #- type: bind
+      #  source: $HOME/etc
+      #  target: /home/cetonio/etc
+      #  read_only: false
       - type: volume
         source: sql
         target: /home/cetonio/sql
@@ -92,9 +93,35 @@ services:
     #  - 8787
 
 #  retpoŝtservilo, necesas nur se pluraj uzantoj uzas la redaktilon samtempe
-#  heliko:
-#    image: voko/heliko
-#    build: ./heliko
+#  tomocero:
+#    image: voko-tomocero
+#    build: https://github.com/revuloj/voko-tomocero.git
+
+# en ~/etc/ estu dosieroj redaktilo.cfg kaj redaktantoj
+# 1) la unuan oni povas kopii de cfg/redaktilo.cfg kaj agordi
+# aldonante vian retpoŝtan konton. Por uzi Google-saluton vi
+# bezonas registri vian propran ŝlosilon kun via retnomo (domajno)
+# krome adaptu la posedanton al cetonio:
+#   chown 1088 ~/etc/redaktilo.cfg
+# 2) la dua (redaktantoj) estas listo de redaktanto-nomoj kaj retadresoj
+# normale ni ricevos ĝin el la centra mysql-datumbazo poer aparta
+# elŝuto-skripto, sed vi povas anstataŭe meti nur linion
+#
+# Via Nomo <via@retadre.so> <via@dua.retadre.so>
+
+secrets:
+  redaktilo.cfg:
+    # adaptu redaktilo.cfg laŭ viaj bezonoj kaj 
+    # a) registru per
+    #   docker secret create ./redaktilo.cfg
+    # uzante external: true
+    # aŭ 
+    # b) kopiu al ${HOME}/etc/redaktilo.cfg
+    #external: true
+    file: ${HOME}/etc/redaktilo.cfg
+  redaktantoj:
+    #external: true
+    file: ${HOME}/etc/redaktantoj
 
 volumes:
   sql:
