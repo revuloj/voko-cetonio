@@ -5,5 +5,6 @@ tmp/
 sql/*.db
 dtd/
 *.log
+*.zip
 
 
