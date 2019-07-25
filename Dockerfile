@@ -30,7 +30,7 @@ RUN curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
   && unzip master.zip voko-grundo-master/xsl/* voko-grundo-master/dtd/* voko-grundo-master/cfg/* \
      voko-grundo-master/stl/* voko-grundo-master/owl/voko.rdf && rm master.zip 
 
-RUN curl -Lo googleclient-0.5.2.zip https://github.com/JanWielemaker/googleclient/archive/V0.5.2.zip
+# RUN curl -Lo googleclient-0.5.2.zip https://github.com/JanWielemaker/googleclient/archive/V0.5.2.zip
 
 ##### staĝo 3: Nun ni kreos la propran procesumon por la redaktilo...
 FROM swipl:stable
@@ -39,8 +39,9 @@ MAINTAINER <diestel@steloj.de>
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xsltproc sqlite3 unzip && rm -rf /var/lib/apt/lists/* 
 
-COPY --from=builder googleclient*.zip /tmp/
-RUN swipl -g "pack_install('/tmp/googleclient-0.5.2.zip',[interactive(false)]),halt" -t "halt(1)"
+#COPY --from=builder googleclient*.zip /tmp/
+#RUN swipl -g "pack_install('/tmp/googleclient-0.5.2.zip',[interactive(false)]),halt" -t "halt(1)"
+RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
 # jam enestas en swipl:stable: RUN swipl -g "pack_install(prosqlite,[interactive(false)]),halt" -t "halt(1)"
 
 RUN useradd -ms /bin/bash -u 1088 cetonio
