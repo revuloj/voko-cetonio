@@ -201,7 +201,8 @@ revo_artikolo(Request) :-
     (Status = 200
      ->
 	 set_stream(XmlStream,encoding(utf8)),
-	 set_stream(current_output,encoding(utf8)),
+     set_stream(current_output,encoding(utf8)),
+     active_sessions_header,
 	 format('Content-type: text/plain; charset=UTF-8~n~n'),
 	 %copy_stream_data(XmlStream,current_output),
 	 unquote_stream(XmlStream,current_output),
@@ -252,7 +253,8 @@ revo_sercho(Request) :-
 	check_param_none(Sercho,quote),
 	check_param_none(Sercho,punct,[0'-]),
 	
-	set_stream(current_output,encoding(utf8)),
+    set_stream(current_output,encoding(utf8)),
+    active_sessions_header,    
 	
 	% format('Content-type: application/json~n~n'),
 	findall(Json,sqlrevo:search_eo_json(Sercho,Json),ResultList)
@@ -285,6 +287,7 @@ revo_sendo(Request) :-
     xml_quote_cdata(Codes,Quoted,ReverseEntInx,EntVal1Inx,utf8),
 
     % respondu kaj sendu
+    active_sessions_header,
     format('Content-type: text/html~n~n'),
     % FIXME: pli bone havu apartan funkcion por sendi novan artikolon?
     once((
@@ -317,6 +320,7 @@ revo_kontrolo(Request) :-
     debug(redaktilo(kontrolo),'url ~q',[Url]),
     http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),
     %format('Content-type: ~w~n~n',[ContentType]),
+    active_sessions_header,
     format('Content-type: application/json; charset=UTF-8~n~n'), % alternative sendu kiel teksto la la retumilo
             % kaj traktu tie per Javoskripto...
     set_stream(Stream,encoding(utf8)),
@@ -368,6 +372,7 @@ revo_rigardo(Request) :-
             %sub_atom(VokoXslUri,7,_,0,VokoXsl),
             set_stream(current_output,encoding(utf8)),
             xslt_proc(VokoXsl,Quoted,Html),
+            active_sessions_header,
             format('Content-type: text/html~n~n'),
             format('~s',[Html])
         ),
@@ -399,6 +404,7 @@ bildo_sercho(Request) :-
             kie(_, [oneof([vikimedio])]) 
         ]),
         debug(sercho(what),'<<< VIKIMEDIO: ~w',[Sercho]),
+        active_sessions_header,
         format('Content-type: application/json~n~n'),
         sercho:bildo_sercho(Sercho,_).
 
@@ -575,3 +581,15 @@ preferataj_lingvoj(AccLng,Lingvoj) :-
 	      )),
 	      Lingvo \= eo
 	  ), Lingvoj).
+
+active_sessions_header :-
+        bagof(S,
+            Idle^(
+                http_current_session(S,idle(Idle)),Idle<3600
+            ),Sessions),
+        length(Sessions,Cnt),!,
+        format('Revo-Seancoj: ~d~n',Cnt).
+    
+    % kaze ke ne ekzistas seancoj, evitu malsukcesi per false...
+    active_sessions_header :- true.
+    
