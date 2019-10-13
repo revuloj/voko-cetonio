@@ -79,6 +79,7 @@ var xml_sxablonoj = {
   '!vrk && !lok && url:  <lok><url ref="{url}"\n' +
   '!vrk && !lok && url:      >{url}</url></lok>\n' +
   'lok && !url        :  <lok>{lok}</lok>\n' +
+  'lok && vrk && url  :  <lok>{lok}</lok>\n' +
   '                   :</fnt>;\n',
 
   ekz:
