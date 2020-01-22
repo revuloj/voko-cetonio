@@ -105,7 +105,7 @@ oauth2:login(_Request, Server, TokenInfo) :-
     debug(oauth, 'UserInfo: ~p', [UserInfo]),
     http_open_session(_SessionID, []),
     http_session_assert(oauth2(Server, TokenInfo)),
-    reply_logged_in([ identity_provider('Server'),
+    reply_logged_in([ identity_provider(Server),
                       email(UserInfo.email), %%%!!!
                       user_info(UserInfo)
                     ]).
