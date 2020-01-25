@@ -80,6 +80,7 @@ Using this module requires the user to define two _hooks_:
 :- multifile
 	server_attribute/3,		% +ServerID, +Attribute, -Value
 	login/3,			% +Request, +ServerID, +TokenInfo
+	login/4,			% +Request, +ServerID, +TokenInfo, +UserInfo
 	login_failed/2.			% +Request, +Message
 
 :- multifile http:location/3.
@@ -259,6 +260,10 @@ oauth2_reply(Request, Options) :-
 call_login(Request, ServerID, TokenInfo) :-
 	login(Request, ServerID, TokenInfo),
 	!.
+call_login(Request, ServerID, TokenInfo) :-
+	oauth2_user_info(ServerID, TokenInfo, UserInfo),
+	login(Request, ServerID, TokenInfo, UserInfo),
+	!.
 call_login(_Request, ServerID, TokenInfo) :-
 	oauth2_user_info(ServerID, TokenInfo, UserInfo),
 	format('Content-type: text/plain~n~n'),
@@ -361,7 +366,7 @@ oauth2_token_details(ServerID, AuthCode, Dict) :-
 				    client_secret(ClientSecret)
 				  ])),
 			request_header('Accept'='application/json;q=1.0,\c
-					         */*;q=0.1'),
+					         */*;q=0.1'),          % */
 			header(content_type, ContentType),
 			status_code(Code)
 		      | Options
@@ -381,6 +386,8 @@ read_reply(Code, ContentType, In, Dict) :-
 %	string.
 
 read_reply2(200, media(application/json, _Attributes), In, Dict) :- !,
+	json_read_dict(In, Dict).
+read_reply2(200, media(text/javascript, _Attributes), In, Dict) :- !,
 	json_read_dict(In, Dict).
 read_reply2(200, media(text/plain, _Attributes), In, Dict) :- !,
 	read_string(In, _, Reply),

@@ -73,9 +73,9 @@ using configuration hooks. The various login options are accompagnied by
 configuration files in =config-available=.
 */
 
-% wd: aldonita por testi, poste uzu la radikon de redaktilo...
+% tio estas en redaktilo_auth
 %http:location(auth, red(auth), []).
-http:location(auth, '/', []).
+%http:location(auth, '/', []).
 
 :- http_handler(auth('login'), server_login,  [id(login)]).
 :- http_handler(auth(user_info), user_info,    [id(user_info)]).

@@ -43,6 +43,7 @@
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_session)).
 :- use_module(library(http/http_json)).
+:- use_module(library(http/json)).
 :- use_module(library(http/http_path)).
 :- use_module(library(debug)).
 
@@ -77,6 +78,7 @@ for Facebook see isntructions at:
 
 :- multifile
     oauth2:login/3,
+    oauth2:login/4,
     oauth2:server_attribute/3,
     auth_config:login_item/2,          % -Server, -HTML_DOM
     auth_config:login/2,               % +Server, +Request
@@ -102,13 +104,25 @@ auth_config:login(Server, Request) :-
 
 oauth2:login(_Request, Server, TokenInfo) :-
     token_info_to_user_info(TokenInfo, Server, UserInfo),
-    debug(oauth, 'UserInfo: ~p', [UserInfo]),
+    debug(oauth, '(3) UserInfo: ~p', [UserInfo]),
     http_open_session(_SessionID, []),
     http_session_assert(oauth2(Server, TokenInfo)),
     reply_logged_in([ identity_provider(Server),
-                      email(UserInfo.email), %%%!!!
+                      %%email(UserInfo.email), %%%!!!
                       user_info(UserInfo)
                     ]).
+
+oauth2:login(_Request, Server, TokenInfo, UserInfo) :-
+    debug(oauth, '(4) UserInfo: ~p', [UserInfo]),
+    http_open_session(_SessionID, []),
+    TokenInfo1 = TokenInfo.put(_{ user_info:UserInfo }),
+    http_session_assert(oauth2(Server,TokenInfo1)),
+    reply_logged_in([ identity_provider(Server),
+                    %%  email(UserInfo.email), %%%!!!
+                      user_info(UserInfo)
+                    ]).
+
+
 
 %!  server_logout(+Request)
 %
@@ -129,7 +143,7 @@ auth_config:user_info(_Request, Server, UserInfo) :-
 
 token_info_to_user_info(TokenInfo, Server, UserInfo) :-
     oauth2_claim(TokenInfo, Claim),
-    map_user_info(Claim, Claim1),
+    map_user_info(Claim, Server, Claim1),
     http_link_to_id(server_logout, [], LogoutURL),
     UserInfo = Claim1.put(_{ auth_method:oauth2,
                              logout_url:LogoutURL,
@@ -140,7 +154,7 @@ token_info_to_user_info(TokenInfo, Server, UserInfo) :-
 %
 %   u{user:User, group:Group, name:Name, email:Email}
 
-map_user_info(Dict, Dict) :-
+map_user_info(Dict, _, Dict) :-
     debug(oauth, 'Got: ~p', [Dict]).
 
 %!  oauth2:server_attribute(?ServerID, ?Attribute, ?Value)
