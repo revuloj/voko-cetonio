@@ -5,13 +5,13 @@
 	      search_eo_html/2,
 	      search_eo_json/2,
 	      search_trd_html/2,
-	      editor_by_openid/2,
-	      editor_by_subid/2,
+	      %%editor_by_openid/2,
+	      editor_by_subid/3,
 	      editor_by_email/2,
 	      editor_add/2,
 	      editor_update/2,
-	      editor_update_openid/2,
-	      editor_update_subid/2
+	      %editor_update_openid/2,
+	      editor_update_subid/3
 	  ]).
 
 :- use_module(library(sha)).
@@ -30,34 +30,43 @@ CREATE TABLE redaktanto (
   red_id VARCHAR(20) PRIMARY KEY NOT NULL,
   nomo VARCHAR(100) NOT NULL,
   openid TEXT,
-  subid TEXT
+  subid_gg TEXT,
+  subid_yh TEXT,
+  subid_fb TEXT,
+  subid_gh TEXT
 );
+
 CREATE TABLE retposhto (
   red_id VARCHAR(20) NOT NULL,
   numero INTEGER NOT NULL,
   retposhto VARCHAR(100) NOT NULL,
   PRIMARY KEY (red_id, numero)
 );
+
 CREATE VIEW _redaktanto_poshto_unu AS
 SELECT
   r.red_id as red_id,
   r.nomo as nomo,
-  r.openid as openid,
+  r.subid_gg as subid_gg,
+  r.subid_yh as subid_yh,
+  r.subid_fb as subid_fb,
+  r.subid_gh as subid_gh,
   p.retposhto as retposhto
 FROM redaktanto r, retposhto p
 WHERE r.red_id=p.red_id
   AND p.numero = 1;
+
 ***/
 
 connect :-
-    agordo:get_path(root_dir,revodb,RvDBFile),
+    agordo:get_config(revodb,RvDBFile),
     sqlite_connect(RvDBFile,revodb,[ext(''),alias(revodb)]),
-    agordo:get_path(root_dir,kontodb,KtDBFile),
+    agordo:get_config(kontodb,KtDBFile),
     sqlite_connect(KtDBFile,kontodb,[ext(''),alias(kontodb)]).
 
 download :-
     agordo:get_config(revodb_zip,UrlPattern),
-    agordo:get_path(root_dir,revodb_tmp,TmpFile),
+    agordo:get_config(revodb_tmp,TmpFile),
     get_time(Time),
     once((
 	    member(Diff,[0,1,2,3,4,5,6,7]),
@@ -146,26 +155,34 @@ homonimoj_sen_ref_json(json([kap=Kap,art1=Art1,art2=Art2])) :-
 
 /**** serĉoj en redaktanto-datumbazo ***/
 
-editor_by_openid(OpenId,Editor) :-
-    check_url(OpenId),
-    format(atom(Query),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where openid=''~w'';',[OpenId]),
-    sqlite_query(kontodb,Query,Editor).
+%% editor_by_openid(OpenId,Editor) :-
+%%     check_url(OpenId),
+%%     format(atom(Query),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where openid=''~w'';',[OpenId]),
+%%     sqlite_query(kontodb,Query,Editor).
 
-editor_by_subid(SubId,Editor) :- % openId Conenct
-    check_int(SubId),
-    format(atom(Query),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where subid=''~w'';',[SubId]),
+col_suffix(google,gg).
+col_suffix(yahoo,yh).
+col_suffix(facebook,fb).
+col_suffix(github,gh).
+
+editor_by_subid(SubId,Provider,Editor) :- % Oauth2 / OpenId Connect
+    %% ĉe yahoo ĝi enhavas literojn! check_int(SubId),
+    check_search(SubId),
+    col_suffix(Provider,Sfx),
+    format(atom(Query),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where subid_~w=''~w'';',[Sfx,SubId]),    
+    debug(sqlrevo,'query=~q',[Query]),
     sqlite_query(kontodb,Query,Editor).
 
 editor_by_email(Email,Editor) :-
     check_email(Email,EmailChecked),
     format(atom(Sel1),'select red_id from retposhto where retposhto=''~w'';',[EmailChecked]),
     sqlite_query(kontodb,Sel1,row(RedId)),
-    format(atom(Sel2),'select red_id,nomo,openid,retposhto from _redaktanto_poshto_unu where red_id=''~w'';',[RedId]),
+    format(atom(Sel2),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where red_id=''~w'';',[RedId]),
     sqlite_query(kontodb,Sel2,Editor).
 
 editor_by_redid(RedId,Editor) :-
     check_hash(RedId),
-    format(atom(Query),'select red_id,nomo,openid,retposhto from _redaktanto_poshto_unu where red_id=''~w'';',[RedId]),
+    format(atom(Query),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where red_id=''~w'';',[RedId]),
     sqlite_query(kontodb,Query,Editor).
 
 editor_emails(RedId,Emails) :-
@@ -199,7 +216,7 @@ editor_update(Nomo,[Email|Emails]) :-
     email_redid(Email,RedId),
     once((
 	% jam ekzistas -> aktualigu
-	editor_by_redid(RedId,row(RedId,_,_,_)),
+	editor_by_redid(RedId,row(RedId,_,_)),
 	editor_update_nomo(RedId,Nomo),
 	editor_update_emails(RedId,[Email|Emails])
 	;
@@ -234,16 +251,19 @@ num_emails_add(RedId,[No-Email|MoreToBeAdded]) :-
    num_emails_add(RedId,MoreToBeAdded).
 num_emails_add(_,[]).		   
 
-editor_update_openid(Email,OpenId) :-
-    format(atom(Sel),'select red_id from retposhto where retposhto=''~w'';',[Email]),
-    sqlite_query(kontodb,Sel,row(RedId)),
-    format(atom(Upd),'update redaktanto set openid=''~w'' where red_id = ''~w'';',[OpenId,RedId]),
-    sqlite_query(kontodb,Upd,row(1)).
+%% editor_update_openid(Email,OpenId) :-
+%%     format(atom(Sel),'select red_id from retposhto where retposhto=''~w'';',[Email]),
+%%     sqlite_query(kontodb,Sel,row(RedId)),
+%%     format(atom(Upd),'update redaktanto set openid=''~w'' where red_id = ''~w'';',[OpenId,RedId]),
+%%     sqlite_query(kontodb,Upd,row(1)).
 
-editor_update_subid(Email,SubId) :-
+editor_update_subid(Email,Provider,SubId) :-
+    %% ĉe yahoo ĝi enhavas literojn! check_int(SubId),
+    check_search(SubId),
+    col_suffix(Provider,Sfx),
     format(atom(Sel),'select red_id from retposhto where retposhto=''~w'';',[Email]),
     sqlite_query(kontodb,Sel,row(RedId)),
-    format(atom(Upd),'update redaktanto set subid=''~w'' where red_id = ''~w'';',[SubId,RedId]),
+    format(atom(Upd),'update redaktanto set subid_~w=''~w'' where red_id = ''~w'';',[Sfx,SubId,RedId]),
     sqlite_query(kontodb,Upd,row(1)).
 
 
@@ -258,55 +278,13 @@ email_redid(Email,RedId) :-
 
 email_redid(Email,RedId) :-
     var(Email),
-    editor_by_redid(RedId,row(_,_,_,Email)).
+    editor_by_redid(RedId,row(_,_,Email)).
 
 number_key_emails([Email|MoreMails],No,[No-Email|MoreNumbered]) :-
     No_1 is No+1,
     number_key_emails(MoreMails,No_1,MoreNumbered).
 number_key_emails([],_,[]).
 
-/*
-%check_eo(Word) :-
-%    wildcard_match([a-zA-zĉĝĥĵŝŭĈĜĤĴŜŬ],Word)
-
-check_url(Url) :-
-   parse_url(Url,_) -> true
-   ;
-   throw(invalid_sql_search_param(Url)).
-
-% FIXME: * ne rilatas al anaŭa signo, sed funkcias kiel en uniksa ŝelo (dosiernomoj)!
-
-check_email(Email) :-
-    once((
-	wildcard_match('<[a-zA-Z_.0-9]*@[a-zA-Z_.0-9]*>',Email) 
-	;
-	wildcard_match('[a-zA-Z_.0-9]*@[a-zA-Z_.0-9]*',Email)
-	;
-	throw(invalid_sql_search_param(Email))
-    )).
-
-check_int(Integer) :-
-    once((
-	wildcard_match('[0-9]*',Integer) 
-        ;
-	throw(invalid_sql_search_param(Integer))
-    )).
-
-check_hash(Hash) :-
-    atom_length(Hash,20),
-    wildcard_match('[0-9a-f]*',Hash)
-    -> true
-    ; throw(invalid_sql_search_param(Hash)).
-
-check_search(Kion) :-
-    atom_codes(Kion,Codes),
-    \+ memberchk(39,Codes), % apostroph: '
-    \+ memberchk(92,Codes), % backslash: \
-    \+ memberchk(59,Codes)  % semicolon: ;
-    -> true
-    ;
-    throw(invalid_sql_search_param(Kion)).
-*/
     
 replace_apos(In,Out) :-
     replace_atom(In,'''','''''',Out).

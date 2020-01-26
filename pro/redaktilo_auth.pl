@@ -13,15 +13,13 @@
 :- use_module(library(http/http_parameters)). % reading post data
 :- use_module(library(http/http_session)).
 :- use_module(library(http/http_header)).
-:- use_module(library(http/http_openid)).
 :- use_module(library(http/http_host)).
 :- use_module(library(http/html_write)).
+:- use_module(library(http/json)).
 :- use_module(library(settings)).
-:- use_module(library(google_client)).
 
-:- multifile
-        google_client:login_existing_user/1,
-        google_client:create_user/1.
+:- use_module(auth/oauth2).
+:- use_module(auth/server_auth).
 
 :- multifile http:location/3, user:body//2.
 :- dynamic   http:location/3.
@@ -32,127 +30,106 @@
 :- use_module(sqlrevo).
 :- use_module(param_checks).
 
-% iel aŭtomata utf8 ne funkcias kiam redaktilo-test lanĉiĝas kiel systemd servo (per sistemestro "root")
+% iel aŭtomata utf8 ne funkcias kiam redaktilo-test 
+% lanĉiĝas kiel systemd servo (per sistemestro "root")
+% eble pro LC_LANG medio-variablo aŭ simile?
 :- encoding(utf8).
 
+:- multifile http:authenticate/3.
+http:authenticate(oauth,Request,[user(User)]) :-  page_auth(Request,User).
+http:authenticate(ajaxid,Request,[user(User)]) :-  ajax_auth(Request,User).
+
+
+http:location(auth, root(auth), []).
 http:location(reg,root(reg),[]).
 
+% saltuo-paĝoj
+:- http_handler(auth(login_page), revo_login_page, [id(login_page)]).
 %:- http_handler(root(redaktilo_saluto), redaktilo_saluto, []).
 
-% openid-paĝoj
-:- http_handler(openid(login), revo_login, []).
-:- http_handler(openid(oauth2_login), oauth2_login, []).
-
-:- http_handler(openid(verify), openid_verf,
-	 [priority(10)]).
-%%%
-:- http_handler(openid(authenticate), openid_auth, []).
-
 % registro-paĝoj
-:- http_handler(reg(revo_registro), revo_registro, []).
+:- http_handler(reg(revo_registro), revo_registro, [id(register_page)]).
 :- http_handler(reg(revo_registro1), revo_registro1, []).
 
 user:body(saluto, Body) -->  html(body([onload='checkCookieConsent()'],Body)).
 
 
-/************* OpenId salutoj ********************/
+/************* Saluto kaj registrado ********************/
 
-openid_auth(Request) :-
-  entry_no_cache(Request),
-  http_openid:openid_authenticate(Request).
-
-openid_verf(Request) :-
-    http_openid:openid_verify([ax([email(_,[])])],Request).
-
-http:location(openid, root(openid), []).
-
-:- multifile
-	http_openid:openid_hook/1.
-
-http_openid:openid_hook(trusted(_OpenID, Server)) :-
-    uri_components(Server,uri_components(Scheme, Authority, _Path, _Search, _Fragment)),
-    memberchk(Scheme,[http,https]),
-    memberchk(Authority,
-	      [ %% 'localhost:8000',
-	       'open.login.yahooapis.com'
-	      ]),
-    debug(openid(test), 'Trusting server ~q', [Server]).
-
-%%'https://open.login.yahooapis.com/openid/op/1.1/auth'
-%%'http://kardo:8000/openid/server'
-
-revo_login(Request) :-
-%    setting(http:prefix,Root),
-%    atom_concat(Root,'/',ReturnTo),
-    %atomic_list_concat(['https://revaj.steloj.de',Root,'/'],'',ReturnTo),
-
-    return_to_url(Request,ReturnTo),
+revo_login_page(_Request) :-
+	debug(auth, 'revo_login_page >>',[]),
     
     reply_html_page(saluto,
 		    [ title('Saluto al Redaktilo'),
-		      link([rel="stylesheet",type="text/css",href="../css/openid.css"],[]),
+%		      link([rel="stylesheet",type="text/css",href="../css/openid.css"],[]),
 		      link([rel="stylesheet",type="text/css",href="../static/static-pages.css"],[]),
 		      script([src="../static/kuketoj.js"],[]),
 		      script([src="https://code.jquery.com/jquery-3.2.1.js"],[])
 		    ],
-		    [\redaktilo_saluto([return_to(ReturnTo)])]).
-
-oauth2_login(Request) :-
-    oauth_authenticate(Request, 'google.com', [client_data(Request)]).
+			[\redaktilo_saluto([return_to([])])]),
+	debug(auth, '<< revo_login_page',[]).
 
     
 revo_registro(_Request) :-
 	once((
-		http_session_data(openid(OpenId)),
-		atom(OpenId)
-		;    
-		http_session_data(oauth2id(OpenId)),
-		debug(redaktilo(auth),'OAuth2 id: ~q',[OpenId]),
-		string(OpenId)
-	)),
-	reply_html_page([ title('OpenID registro')
+		http_in_session(_),
+		http_session_data(oauth2id(SubId)),
+		debug(redaktilo(auth),'registro, oauth2id: ~q',[SubId]),
+		string(SubId),
+		reply_html_page([ title('Registrado de via konto')
 		    ],
-		    [ \register_email_form(OpenId,[]) ]).
-
+			[ \register_email_form(SubId,[]) ])
+		;
+		throw(http_reply(forbidden(location_by_id(register_page))))
+	)).
 
 revo_registro1(Request) :-
     http_parameters(Request,
 		    [
 			retposhto(Retadreso,[length>0,length<100])
-		    ]),
-	once((
+			]),
+	(\+ http_in_session(_) 
+		-> throw(http_reply(forbidden(location_by_id(register_page))))
+		; true),
+
+	once((		
+		% ni uzas la retadreson, kiun donis la uzanto, kiu povas
+		% devii de tiu ĉe la salut-provizanto, sed devas esti registrata
+		% en la listo de redaktantoj
+
 		check_email(Retadreso,RetadresoChecked),
-		http_session_data(openid(OpenId)),
-		editor_update_openid(RetadresoChecked,OpenId),
-		http_session_assert(retadreso(RetadresoChecked)),
-		setting(http:prefix,Root),
-		http_redirect(moved_temporary,Root,Request)
+		% http_session_data(oauth2id(SubId)),
+		user_info(Provider,UserInfo),
+
+		debug(auth,'registro1, user_info: ~q',[UserInfo]),
+		user_info_sub(Provider,UserInfo,SubId),
+
+		% registri SubId por la al ni konata redaktanto
+		% kaj memoru lian RedId kaj preferatan retpoŝton en la seanco
+		editor_update_subid(RetadresoChecked,Provider,SubId),
+		editor_by_subid(SubId,Provider,row(RedID,_,RetadresoPreferata)),
+		session_assert_user(RedID,RetadresoPreferata),			
+
+		http_redirect(moved_temporary,location_by_id(landing),_)
 		;
-		check_email(Retadreso,RetadresoChecked),
-		http_session_data(oauth2id(SubId)),
-		editor_update_subid(RetadresoChecked,SubId),
-		http_session_assert(retadreso(RetadresoChecked)),
-		setting(http:prefix,Root),
-		http_redirect(moved_temporary,Root,Request)
-        ;
-        % FARENDA: ĉu funkcis jam se la redaktanto havas plurajn retadresojn...?
+		
+        % FARENDA: ĉu funkciis jam se la redaktanto havas plurajn retadresojn...?
         % Se la retadreso ne funkcias, avertu la uzanton...
 		format('Content-type: text/html; charset=UTF-8~n'),
 		format('Status: ~d~n~n',[302]),
 		set_stream(current_output,encoding(utf8)),
 		write("<html><body><h1>Retadreso ne valida!</h1>"),
-		write("<p>Via retadreso ne estas valida aŭ ne jam registrita. Bv. turniĝi al la administrantoj de Reta Vortaro."),
+		write("<p>Pardonu, tio ne funkciis: via retadreso ne estas valida aŭ ne jam registrita kiel redakta redadreso. "),
+		write("Bv. turniĝi al la administrantoj de Reta Vortaro."),
 		write("</body></html>")
     )).	    
-%   http_status_reply(forbidden('/'),current_output,
 
-register_email_form(OpenId,Options) -->
+register_email_form(SubId,Options) -->
     {
 	http_link_to_id(revo_registro1, [], Registro), % /redaktilo/reg/revo_registro1
 	option(action(Action), Options, Registro)
     },
-    html(div([ class('openid-login')
-		 ],
+    html(div([],
 		 [ %\openid_title,
 		   form([ name(register),
 			  id(register),
@@ -160,29 +137,27 @@ register_email_form(OpenId,Options) -->
 			  method('GET')
 			],
 			[
-			    h1(['OpenID - registro de retpoŝtadreso']),
+			    h1(['Registrado de via retpoŝtadreso']),
 			    div(
 			      [style='background-color: #f5f3e5; padding: 2em'],
 			      [
-			       p(['Vi sukcese salutis per OpenID.']),
-			       p(['Necesas ligi vian OpenId kun la retpoŝtadreso ',
-				  'uzata de vi kiel redaktanto. ',
-				  'Bonvolu doni retpoŝtadreson per kiu vi ',
-				  'registriĝis ĉe Reta Vortaro.'
+			       p(['Vi sukcese salutis.']),
+			       p(['Necesas ligi vian konton kun la retpoŝtadreso uzata de vi kiel redaktanto. ',
+				  'Bonvolu doni retpoŝtadreson per kiu vi registriĝis ĉe Reta Vortaro.'
 				 ]),
 			       p([
-					span('Via OpenID:'), br(''),
-	     				input([ class('openid-input'),
-						name(openid_url),
-						id(openid_url),
-						value(OpenId),
-						readonly(readonly),
-						size(50)
+					span('Via subskribanto-numero:'), br(''),
+	     				input([ 
+							name(openid_url),
+							id(openid_url),
+							value(SubId),
+							readonly(readonly),
+							size(50)
 					      ])
 				    ]),
 			       p([
 					span('Via repoŝtadreso por redaktado:'), br(''),
-					input([ class('openid-input'),
+					input([ 
 						name(retposhto),
 						id(retposhto),
 						size(50),
@@ -192,52 +167,50 @@ register_email_form(OpenId,Options) -->
 			       input([ type(submit),
 				       value('Registru!')
 				     ])
-				   ])%,
-%			  \buttons(Options),
-%			  \stay_logged_on(Options)
+				   ])
 			])
 		 ])).
 
 
-redaktilo_saluto(Options) -->
-    {
-	option(return_to(ReturnTo), Options, '/redaktilo/')
-    },
-    html(div([class="openid-login"],
-	     [div([class="openid-title",style="background-image: linear-gradient(90deg, white, transparent);padding: 1em"],
-	          [a([href="http://openid.net/"],
-	             [img([src="../icons/openid-logo-square.png",alt="OpenID"],[])]),
-		   span('Saluto per OpenID')]),
+redaktilo_saluto(_Options) -->	
+    html(div([],
+	     [
+		  h2('Saluto al Redaktilo'),
 
-	      p(['Per ensalutado al Redaktilo tra via Yahoo- aŭ Google-konto vi konsentas uzi viajn personajn informojn kiel priskribita detale en la ',
+	      p(['Per ensalutado al Redaktilo tra via konto ĉe unu el la malspuraj retprovizantoj vi konsentas uzi ',
+			  'viajn personajn informojn kiel priskribita detale en la ',
 		  a([href="../static/datumprotekto.html"],['Datumprotekta Deklaro']),'.']),
 
-	      form([name="oauth2",id="oauth2",action="oauth2_login",method="GET"],
-		   div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 2em; margin-bottom: 1em"],
-		       [p(['Se vi havas konton ĉe Guglo:']),
-		        input([type="image",id=google_login,src="../static/btn_google_signin_light_normal_web.png",disabled=disabled,
-			       alt="Saluto per Google",title="Salutu per Google-konto",value="Google",style="margin-left:1em"])])),
-	      
-	      form([name="login",id="login",action="verify",method="GET"],
-		   [input([type="hidden",id="return_to",name="openid.return_to",value=ReturnTo],[]),
-		    input([type="hidden",name="openid_url",id="openid_url",value="https://me.yahoo.com"],[]),
-		    div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 2em"],
-			[p(['Se vi havas konton ĉe Yahoo:']),
-			 input([type="image",id=yahoo_login,src="../static/btn_yahoo_signin.png",onclick="javascript:{$('form#login').submit();}",disabled=disabled,
+	      form([name="google",id="google",action="login",method="GET"],
+ 		    [input([type="hidden",name="server",value="google"]),
+		     div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 1em; margin-bottom: 1em"],
+		       [ %p(['Se vi havas konton ĉe Google:']),
+		        input([type="image",id="google_login",src="../static/btn_google_signin_light_normal_web.png",disabled=disabled,
+			       alt="Saluto per Google",title="Salutu per Google-konto",value="Google",style="margin-left:1em"])])]),
+
+		 form([name="facebook",id="facebook",action="login",method="GET"],
+			[input([type="hidden",name="server",value="facebook"]),
+			div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 1em; margin-bottom: 1em"],
+				[ %p(['Se vi havas konton ĉe Facebook:']),
+				input([type="image",id="facebook_login",src="../static/btn_facebook_signin.png",disabled=disabled,
+					alt="Saluto per Facebook",title="Salutu per Facebook-konto",value="Facebook",style="margin-left:1em"])])]),
+
+	      form([name="yahoo",id="yahoo",action="login",method="GET"],		    
+		   [input([type="hidden",name="server",value="yahoo"]),
+		    div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 1em"],
+			[ %p(['Se vi havas konton ĉe Yahoo:']),
+			 input([type="image",id="yahoo_login",src="../static/btn_yahoo_signin.png",onclick="javascript:{$('form#login').submit();}",disabled=disabled,
 				alt="Saluto per Yahoo",title="Salutu per Yahoo-konto",style="margin-left:1em"],[])
 			])]),
 	      
-	      div([p(['Mi rekomendas informiĝi per ',a([href="../static/notoj-pri-versio.html"],['"Notoj kaj konsiloj"']),
+	      div([p(['Mi rekomendas informiĝi per ',a([href="../static/notoj-pri-versio.html"],['Notoj kaj konsiloj']),
 		     ' pri uzado de la redaktilo kaj konataj eraroj.']),
 		   p(['Aktuale estas jenaj antaŭkondiĉoj por povi saluti al la redaktilo:',
-		      ul([li('Vi devas esti registrita redaktanto ĉe Reta Vortaro.'),
-			  li('Vi havas konton ĉe Google aŭ Yahoo, permesanta saluti.'),
-			  li(['Salutante per Yahoo: via havas OpenId (vd. ',
-			     a([href="https://me.yahoo.com"],['https://me.yahoo.com']),
-			     ', vi povas registri ĝin dum unua saluto).'])
-			 ]),
-		      'Identigiloj de aliaj OpenId-provizantoj ankoraŭ ne estas subtenataj. ',
-		      'Sed vi povas peti ĉe la administranto de Reta Vortaro por la sekva versio se vi bezonas.'])
+		      ul([
+				li('Vi devas esti antaŭregistrita redaktanto ĉe Reta Vortaro.'),
+			    li('Vi havas konton ĉe unu el la supraj provizantoj, permesanta saluti.')
+			  ])
+			])
 		  ]),
 	      div([class='kuketoaverto',id='kuketoaverto'],
 			  [table([tr([
@@ -249,104 +222,113 @@ redaktilo_saluto(Options) -->
 				 ])]),
 				 td([img([src='../static/kaefer2.png'])])
 				])])]
-		)])
+		)]) 
 	 ).
 
 
-% a) kontrolu, ĉu la uzanto jam salutis tra Google (OAuth2)
-% b) se ne, voku openid_saluto, tio kontrolas, ĉu salutis per Yahoo (OpenId), se ne iras a saluto-paĝo
-% c) se salutis per OpenId kontrolu ĉu la retadreso jam estas kaj se ne provu akiri ĝin de Yahoo aŭ per registropaĝo
+/************* Kontrolu, ĉu uzanto jam salutis kaj rajtas uzi la paĝon ********************/
 
-page_auth(Request,RedID) :-
-   %%% http_open_session(_Id, []),
+% Kontrolu, ĉu la uzanto jam salutis tra Google, FB, Yahoo... (OAuth2)
+% kaj se ne, konduku lin al la saluto-paĝo
 
+page_auth(_Request,RedID) :-
+	debug(auth,'>> page_auth',[]),	
     once((
 		oauth2_id(RedID)
 		;
-		openid_saluto(Request,RedID)
+		http_redirect(moved_temporary, location_by_id(login_page), _)
     )).
 
-% se jam sukcese salutis per OAuth2 -> bone
-% se ne kontroliĝos ĉu sukcese salutis per OpenId (vd. page_auth, dua opcio)
-% se tute ne jam salutis openid_user transiros al saluto-pago, kaj tie oni povas saluti
-% kaj per Yahoo (OpenId) kaj per Google (OAuth2)
 
 oauth2_id(RedID) :-
-    % salutinta per OpenId Connect (OAuth2)
-    http_session_data(oauth2id(_UserOAuthId)),
-    % kaj retpoŝtadreso jam eltrovita
-    http_session_data(retadreso(_)),
-    http_session_data(red_id(RedID)).
+	% ni havas seancon
+	http_in_session(_SessionID),
 
-google_client:login_existing_user(Claim) :-
-    SubId = Claim.sub,
+	% salutinta per OpenId Connect (OAuth2)
+    http_session_data(oauth2id(_UserOAuthId)),
+
+	% ni havas jam redaktanton-identigilon kaj retadreson en la seanco, 
+	% ne nepre la saman, kiun posedas la provizanto!
+	session_data_user(RedID,_Retadreso).
+
+
+auth_config:reply_logged_in(Options) :-
+	% malpaku la informojn akiritajn dum la saluto
+	debug(auth,'reply_logged_in, opts: ~q',[Options]),
+	option(identity_provider(Provider), Options),
+	option(user_info(UserInfo), Options),
+	user_info_sub(Provider,UserInfo,SubId),
     http_session_assert(oauth2id(SubId)),
 		  
     % trovu uzanton per subid aŭ email,
     % se ambau ne funkcias necesas registri lin/ŝin (per create_user)		  
     once((
-	% trovu tiun ĉi uzanton inter la redaktantoj per UserOpenId
-	editor_by_subid(SubId,row(RedID,_,Retadreso))
-	%http_session_assert(retadreso(Retadreso))
-	;
-	% se ne trovita, ĉu ni ricevis konatan retadreson per Claim?
-	Claim.email_verified = 'true',
-        editor_by_email(Claim.email,row(RedID,_,_,Retadreso)) % preferata retadreso povas devii de Claim.email
-        % , fail % por testi registradon...
-	%http_session_assert(retadreso(Retadreso))
-    )),
-    
-    %http_session_assert(oauth2id(Claim.sub)),
-    http_session_assert(retadreso(Retadreso)),
-    http_session_assert(red_id(RedID)),
-    http_redirect(moved_temporary, '../red/', Claim.client_data).
-
-
-% se ankoraŭ ne trovita demandu la retadreson per retpaĝo
-
-google_client:create_user(Profile) :-
-    http_redirect(moved_temporary, '../reg/revo_registro', Profile.client_data).
-
-openid_saluto(Request,RedID) :-
-    % debug(redaktilo(auth),'~q',[Request]),
-    openid_user(Request, UserOpenId, []),
-    % debug(redaktilo(auth),'openid: ~q',[UserOpenId]),
-	once((
-		% retpoŝtadreso jam eltrovita
-		http_session_data(retadreso(_)),
-			http_session_data(red_id(RedID))
+		% ni rekonas la uzanton per lia SubId
+		editor_by_subid(SubId,Provider,row(RedID,_,Retadreso)),
+		session_assert_user(RedID,Retadreso),		
+		http_redirect(moved_temporary, location_by_id(landing), _)		
 		;
-		% trovu tiun ĉi uzanton inter la redaktantoj per UserOpenId
-		editor_by_openid(UserOpenId,row(RedID,_,Retadreso)),
-		http_session_assert(retadreso(Retadreso))
-		;							
-		% se ne trovita, ĉu ni ricevis konatan retadreson per ax-atributo?
-		http_session_data(ax(Values)),
-		memberchk(email(Email),Values),
-		editor_by_email(Email,row(RedID,_,_,Retadreso)), % preferata retadreso povas devii de Email
-		http_session_assert(retadreso(Retadreso)),
-		http_session_assert(red_id(RedID))
+
+		% ni ne rekonas lin, ĉar li unuafoje salutis per tiu provizanto,
+		% sed la provizanto donis al ni jam registritan retpoŝtadrson
+		is_dict(UserInfo),
+		% se ne trovita, ĉu ni ricevis konatan retadreson per Claim?
+		UserInfo.get(email_verified) = 'true',
+		% option(email(Email), Options),
+		Email = UserInfo.get(email),
+		editor_by_email(Email,row(RedID,_,Retadreso)), % preferata retadreso povas devii de Claim.email
+		session_assert_user(RedID,Retadreso),	
+
+		% memoru tiun SubId
+		debug(auth,'konata retposhto, aktualigi subid: ~q',[SubId]),		
+		editor_update_subid(Retadreso,Provider,SubId),
+		http_redirect(moved_temporary, location_by_id(landing), _)
 		;
-		% se ankoraŭ ne trovita demandu la retadreson per retpaĝo
-		%	throw(http_redirect(moved_temporary, 'revo_registro.html', Request))
-		http_redirect(moved_temporary, '../reg/revo_registro', Request)
+
+		% se ankoraŭ ne trovita demandu la retadreson per registro-paĝo
+		revo_registro(_)
     )).
-    
+
+
+user_info(Provider,UserInfo) :- 
+	(var(Provider) ; Provider \= facebook), !,
+	auth_config:user_info(_, Provider, UserInfo).
+
+user_info(facebook,UserInfo) :- 
+	http_in_session(_SessionID),
+	http_session_data(oauth2(facebook, TokenInfo)),
+	UserInfo = TokenInfo.get(user_info).
+
+user_info_sub(facebook, UserInfo, UserInfo.id) :- !.
+user_info_sub(_, UserInfo, UserInfo.sub).
+
+auth_config:reply_logged_out(_Options) :-
+	catch(http_session_retractall(oauth2id(_)), _, true),
+	catch(http_session_retractall(red_id(_)), _, true),
+  	catch(http_session_retractall(retadreso(_)), _, true),
+	revo_login_page(_).
+
+session_assert_user(RedID,Retadreso) :-
+	http_session_assert(retadreso(Retadreso)),
+	http_session_assert(red_id(RedID)).
+
+session_data_user(RedID,Retadreso) :-
+	http_session_data(retadreso(Retadreso)),
+	http_session_data(red_id(RedID)).
+
 ajax_auth(Request,RedID) :-
-    once((
-	ajax_user(Request,RedID,ClientIP),
-	debug(redaktilo(ajaxid),'AjaxAuth: ~q ~q',[RedID,ClientIP])
-	;
-	% kreu AjaxID el session+request
-	new_ajax_id_cookie(Request,RedID,Cookie),
-	debug(redaktilo(ajaxid),'AjaxID: ~q',[Cookie]),
-	format('Set-Cookie: ~w\r\n',[Cookie])
-	      %user_auth(Request)
-	; % Ajax-hash ne (plu) valida, necesas resaluto
-%	memberchk(path(Path), Request),
-%	throw(http_reply(forbidden(Path))) %,'Tro longa tempo pasis post saluto, necesas resaluti nun.')))
-	format('Status: ~d~n~n',[401]),
-	throw(http_reply(html([': Tro longa tempo pasis post saluto, necesas resaluti nun.\n'])))
+	once((
+		ajax_user(Request,RedID,ClientIP),
+		debug(redaktilo(ajaxid),'AjaxAuth: ~q ~q',[RedID,ClientIP])
+		;
+		% kreu AjaxID el session+request
+		new_ajax_id_cookie(Request,RedID,Cookie),
+		debug(redaktilo(ajaxid),'AjaxID: ~q',[Cookie]),
+		format('Set-Cookie: ~w\r\n',[Cookie])
+		; 
+		% Ajax-hash ne (plu) valida, necesas resaluto
+		format('Status: ~d~n~n',[401]),
+		throw(http_reply(html([': Tro longa tempo pasis post saluto, necesas resaluti nun.\n'])))
     )). 
 
 % identigo per kuketo AjaxID, kiu konsistas el redaktanto ID kaj kuketo-kreo-tempo signitaj per HMAC
@@ -356,7 +338,7 @@ ajax_auth(Request,RedID) :-
 ajax_user(Request,RedID,ClientIP) :-
     %debug(redaktilo(ajaxid),'AjaxRequest ~q',[Request]),
     member(peer(ip(A,B,C,D)),Request),
-    %debug(redaktilo(ajaxid),'AjaxID_a ~q',[Cookies]),
+    % debug(redaktilo(ajaxid),'AjaxID_a ~q',[Cookies]),
     atomic_list_concat([A,B,C,D],'.',ClientIP),
     %debug(redaktilo(ajaxid),'AjaxID_b ~q',[ClientIP]),
     request_ajax_id(Request,AjaxID),
@@ -370,11 +352,17 @@ ajax_user(Request,RedID,ClientIP) :-
     % is the hmac hash valid?
     ajax_hmac(RedID,ClientIP,HexTime,HexMac),
     % save in session if already closed
-    sqlrevo:email_redid(Retadreso,RedID),
-    (http_session_data(retadreso(Retadreso))
-     -> true
-     ;  http_session_assert(retadreso(Retadreso))
-    ).
+	sqlrevo:email_redid(Retadreso,RedID),
+	once((
+		http_in_session(_),
+		(
+		  http_session_data(retadreso(Retadreso)) -> true
+		  ;  http_session_assert(retadreso(Retadreso))
+		)
+	  ; % por fonaj (Ajax) petoj ni ne bezonas seancon kaj retadreson, sufiĉas, ke
+	    % ajax_id estas valida
+    	true
+	)).
 
 ajax_id_time_valid(AjaxID) :-
     sub_atom(AjaxID,20,8,_,HexTime), 
@@ -385,41 +373,38 @@ ajax_id_time_valid(AjaxID) :-
 
 request_ajax_id(Request,AjaxID) :-
     once((
-	% normale AjaxID estu en la kuketo
-	member(cookie(Cookies),Request),
-	member(redaktilo_ajax=AjaxID,Cookies)
-	;
-	% permesu AjaxID ankaŭ kiel URL-parametro, ekz. por elprovi la citajho-serchon     
-        member(search(Search),Request),
-	member(redaktilo_ajax=AjaxID,Search)
+		% normale AjaxID estu en la kuketo
+		member(cookie(Cookies),Request),
+		member(redaktilo_ajax=AjaxID,Cookies)
+		;
+		% permesu AjaxID ankaŭ kiel URL-parametro, ekz. por elprovi la citajho-serchon     
+		member(search(Search),Request),
+		member(redaktilo_ajax=AjaxID,Search)
     )).
 
 /******************************* helpopredikatoj **********************/
 
-entry_no_cache(_Request) :-
-%  http_clean_location_cache,
-%  member(path(Path),Request),
-%  sub_atom(Path,_,1,0,'/'),
-  writeln('Cache-Control: no-cache, no-store,  must-revalidate'),
-  writeln('Pragma: no-cache'),
-  writeln('Expires: 0'), !.
+%% entry_no_cache(_Request) :-
+%% %  http_clean_location_cache,
+%% %  member(path(Path),Request),
+%% %  sub_atom(Path,_,1,0,'/'),
+%%   writeln('Cache-Control: no-cache, no-store,  must-revalidate'),
+%%   writeln('Pragma: no-cache'),
+%%   writeln('Expires: 0'), !.
 
-return_to_url(_Request,Url) :-
-%    setting(http:prefix,AppRoot),
-%    atom_concat(AppRoot,'/',Url).
-%     http_openid:public_url(Request,Url).
-	agordo:get_config([
-		http_app_root(AppRoot),
-		http_app_scheme(Scheme),
-		http_app_host(Host),
-		http_app_port(Port)
-	 ]),
-    (scheme_port(Scheme,Port)
-    -> format(atom(Url),'~w://~w~w',[Scheme,Host,AppRoot])
-    ; format(atom(Url),'~w://~w:~w~w',[Scheme,Host,Port,AppRoot])).
-
-scheme_port(http,80).
-scheme_port(https,443).
+%% return_to_url(_Request,Url) :-
+%% 	agordo:get_config([
+%% 		http_app_root(AppRoot),
+%% 		http_app_scheme(Scheme),
+%% 		http_app_host(Host),
+%% 		http_app_port(Port)
+%% 	 ]),
+%%     (scheme_port(Scheme,Port)
+%%     -> format(atom(Url),'~w://~w~w',[Scheme,Host,AppRoot])
+%%     ; format(atom(Url),'~w://~w:~w~w',[Scheme,Host,Port,AppRoot])).
+%% 
+%% scheme_port(http,80).
+%% scheme_port(https,443).
 
 hex_value(Hex,Val) :-
 	atom_codes(Hex,Codes),
@@ -452,7 +437,6 @@ new_ajax_id(Request,RedId,AjaxID,Time) :-
     atomic_list_concat([RedId,HexTime,HexMac20],'',AjaxID).
     %debug(redaktilo(ajaxid),'AjaxID_6 ~q ~q',[String,AjaxID]),
  
-
 new_ajax_id_cookie(Request,RedID,Cookie) :-
     new_ajax_id(Request,RedID,AjaxID,Time),	
     setting(http:prefix,Prefix),
@@ -469,24 +453,4 @@ ajax_hmac(RedId,ClientIP,HexTime,HexMac20) :-
     hmac_sha(AjaxSecret,String,HMac,[algorithm(sha256)]),
     hash_atom(HMac,Hex), sub_atom(Hex,0,20,_,HexMac20).
 
-/*
-% FIXME: necesas korekti tion, ĉar "*" ne rilatas al la antaŭa signo kiel en regex, sed funkcias kiel sur uniksa komandlinio (dosiernomoj)
-% same en sqlrevo
-% krome forigu laŭbezone " " (normalize_space) kaj "<" ">" ĉirkaŭ la retadreso - aŭ en JS aŭ tie ĉi....
-% krome necesas taŭga eraromesaĝo se la retpoŝtadreso sintakse estas neĝusta (revo_registro1)
 
-check_email(Email) :-
-    once((
-	wildcard_match('[a-zA-Z_.0-9]*@[a-zA-Z_.0-9]*',Email)
-      ;
-      throw(invalid_email_param(Email))
-	    )).
-*/
-
-:- multifile
-        http:authenticate/3.
-
-http:authenticate(openid,Request,[User]) :-
-    page_auth(Request,User).
-http:authenticate(ajaxid,Request,[User]) :-
-    ajax_auth(Request,User).
