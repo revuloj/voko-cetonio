@@ -1,25 +1,19 @@
 /* -*- Mode: Prolog -*- */
-:- module(sqlrevo,[
-	      search_eo/2,
-	      search_trd/2,
-	      search_eo_html/2,
-	      search_eo_json/2,
-	      search_trd_html/2,
-	      %%editor_by_openid/2,
+:- module(db_redaktantoj,[
 	      editor_by_subid/3,
 	      editor_by_email/2,
 	      editor_add/2,
 	      editor_update/2,
-	      %editor_update_openid/2,
-	      editor_update_subid/3
+          editor_update_subid/3,
+          email_redid/2
 	  ]).
 
 :- use_module(library(sha)).
-:- use_module(library(http/http_open)).
 :- use_module(library(prosqlite)).
 
-:- use_module(agordo).
-:- use_module(param_checks).
+:- use_module(pro(cfg/agordo)).
+:- use_module(pro(param_checks)).
+:- use_module(pro(db/util)).
 
 %revodb('/home/revo/tmp/inx_tmp/sql/revo.db').
 
@@ -59,98 +53,8 @@ WHERE r.red_id=p.red_id
 ***/
 
 connect :-
-    agordo:get_config(revodb,RvDBFile),
-    sqlite_connect(RvDBFile,revodb,[ext(''),alias(revodb)]),
     agordo:get_config(kontodb,KtDBFile),
     sqlite_connect(KtDBFile,kontodb,[ext(''),alias(kontodb)]).
-
-download :-
-    agordo:get_config(revodb_zip,UrlPattern),
-    agordo:get_config(revodb_tmp,TmpFile),
-    get_time(Time),
-    once((
-	    member(Diff,[0,1,2,3,4,5,6,7]),
-	    (
-		TimeD is Time - Diff * 24 * 3600,
-		format_time(atom(DateStr),'%Y-%m-%d',TimeD),
-		format(atom(Url),UrlPattern,[DateStr]),
-		download_file(Url,TmpFile)%,
-		%! % exit after first success
-	    )
-	)).
-
-
-download_file(Url,File) :-
-    setup_call_cleanup(
-	    (
-		catch(
-			http_open(Url,InStream,[encoding(octet)]),
-			_E,
-			(format('~w not found.~n',[Url]), fail)),
-		open(File,write,OutStream,[encoding(octet)])
-	    ),
-	    (
-		debug(redaktilo(download),'downloading ~q to ~q',[Url,File]),
-                format('downloading ~q to ~q',[Url,File]),
-		copy_stream_data(InStream,OutStream)
-	    ),
-	    (
-		close(InStream),
-		close(OutStream)
-	    )
-	).
-
-/******** serĉoj en Revo-datumbazo ***/
-
-search_eo(Kion,Row) :-
-    check_search(Kion),
-    format(atom(Query),'select kap,num,art,mrk from nodo where kap like ''~w%'' collate nocase order by kap collate nocase, num',[Kion]),
-     debug(sqlrevo,'query=~q',[Query]),
-    sqlite_query(revodb,Query,Row).
-%    sqlite_disconnect().
-
-search_eo_limit(Kion,Row,Limit) :-
-    check_search(Kion),
-    format(atom(Query),
-	   'select kap,num,art,mrk from nodo where kap like ''~w%'' order by kap collate nocase, num limit ''~d''',[Kion,Limit]),
-    debug(sqlrevo,'query=~q',[Query]),
-    sqlite_query(revodb,Query,Row).
-
-search_trd(Kion,Row) :-
-    check_search(Kion),
-    format(atom(Query),'select traduko.trd,nodo.kap,traduko.lng,nodo.art,traduko.mrk from traduko,nodo where traduko.trd like ''~w%'' and traduko.mrk = nodo.mrk;',[Kion]),
-    debug(sqlrevo,'query=~q',[Query]),
-    sqlite_query(revodb,Query,Row).
-%    sqlite_disconnect().
-
-search_eo_html(Kion,Html) :-
-    search_eo(Kion,row(Kap,Num,Art,Mrk)),
-    format(atom(Html),'<a href="~w.html#~w">~w ~w</a>',[Art,Mrk,Kap,Num]).
-
-search_eo_json(Kion,json([kap=Kap,num=Num,art=Art,mrk=Mrk])) :-
-    search_eo_limit(Kion,row(Kap,Num,Art,Mrk),100).
-
-
-search_trd_html(Kion,Html) :-
-    search_trd(Kion,row(Trd,Eo,Lng,Art,Mrk)),
-    format(atom(Html),'<a href="~w.html#~w">~w: ~w (~w)</a>',[Art,Mrk,Lng,Trd,Eo]).
-
-art_trd(Artikolo,Lng,Tradukoj) :-
-    check_search(Artikolo),
-    format(atom(Query),'select nodo.mrk,nodo.kap,nodo.num,traduko.trd from nodo left outer join traduko on traduko.mrk=nodo.mrk and traduko.lng=''~w'' where art = ''~w'';',[Lng,Artikolo]),
-    debug(sqlrevo,'query=~q',[Query]),
-    sqlite_query(revodb,Query,Tradukoj).
-
-art_trd_json(Artikolo,Lng,json([mrk=Mrk,kap=Kap,num=Num,trd=Trd])) :-
-    art_trd(Artikolo,Lng,row(Mrk,Kap,Num,Trd)).
-
-homonimoj_sen_ref(Homonimoj) :-
-   % format(atom(Query),'select distinct a.kap, a.art, b.art from nodo a, nodo b where a.kap=b.kap and a.art <> b.art and not exists (select * from referenco r where r.tip=''hom'' and r.mrk = a.mrk and r.cel = b.mrk) order by a.kap;',[]),
-   format(atom(Query),'select distinct a.kap, a.art, b.art from nodo a, nodo b where a.kap=b.kap collate nocase and a.art <> b.art and not exists (select * from referenco r where r.tip=''hom'' and max(instr(r.mrk,a.mrk),instr(a.mrk,r.mrk))=1 and max(instr(r.cel,b.mrk),instr(b.mrk,r.cel))=1) order by a.kap;',[]),
-  sqlite_query(revodb,Query,Homonimoj).
-
-homonimoj_sen_ref_json(json([kap=Kap,art1=Art1,art2=Art2])) :-
-    homonimoj_sen_ref(row(Kap,Art1,Art2)).
 
 
 /**** serĉoj en redaktanto-datumbazo ***/
@@ -284,25 +188,3 @@ number_key_emails([Email|MoreMails],No,[No-Email|MoreNumbered]) :-
     No_1 is No+1,
     number_key_emails(MoreMails,No_1,MoreNumbered).
 number_key_emails([],_,[]).
-
-    
-replace_apos(In,Out) :-
-    replace_atom(In,'''','''''',Out).
-
-replace_atom(In,From,To,Out) :-
-    atom_codes(From,FromList),
-    atom_codes(To,ToList),
-    atom_codes(In,InList),
-    replace(InList,FromList,ToList,OutList),
-    atom_codes(Out,OutList).
-
-replace(InList,From,To,OutList) :-
-    append(From,Rest,InList),!,
-    replace(Rest,From,To,RestOut),
-    append(To,RestOut,OutList).
-
-replace([X|RestIn],From,To,[X|RestOut]) :-
-    replace(RestIn,From,To,RestOut).
-
-replace([],_,_,[]).
-

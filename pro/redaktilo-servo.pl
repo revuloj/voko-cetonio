@@ -29,19 +29,23 @@
 
 :- use_module(library(debug)).
 
+user:file_search_path(pro, '.'). % aŭ: current_prolog_flag(home, Home). ...
+
 % difinu la aplikaĵon "redaktilo"
 /***
 :- use_module(redaktilo:library(pengines)).
 :- use_module(redaktilo:redaktilo).
 ***/
 %:- use_module(redaktilo).
-:- use_module(redaktilo_auth).
+:- use_module(pro(auth/auth_page)).
+:- use_module(pro(auth/auth_local)).
+:- use_module(pro(auth/auth_ajax)).
 % legu post redaktilo_auth, por difini oauth2:server_attribute (multifile)
-:- use_module(agordo).
+:- use_module(pro(cfg/agordo)).
 
 :- use_module(sercho).
 :- use_module(sendo).
-:- use_module(sqlrevo).
+:- use_module(pro(db/revo)).
 :- use_module(xml_quote).
 %:- use_module(xslt_trf).
 :- use_module(xslt_proc).
@@ -102,7 +106,7 @@ http:location(static,root(static),[]).
 % redirect from / to /redaktilo/red, when behind a proxy, this is a task for the proxy
 :- http_handler('/', http_redirect(moved,root(red)),[]).
 :- http_handler(root(.), http_redirect(moved,root('red/')),[]).
-:- http_handler(red(.), reply_files, [prefix, authentication(oauth), id(landing)]).
+:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
 :- http_handler(static(.), reply_static_files, [prefix]).
 
 :- http_handler(red(revo_preflng), revo_preflng, [authentication(ajaxid)]).
@@ -273,8 +277,8 @@ revo_sendo(Request) :-
     debug(redaktilo(request),'shangho=~q',[Shangho_au_Nomo]),
 
      % http_session_data(retadreso(Retadreso)),
-    member(user(RedID),Request),
-    sqlrevo:email_redid(Retadreso,RedID),
+    member(email(Retadreso),Request),
+    %sqlrevo:email_redid(Retadreso,RedID),
 
     % kodigu specialajn literojn ktp. per unuoj
     get_entity_index(ReverseEntInx,_EntValLenInx,EntVal1Inx),
@@ -313,7 +317,7 @@ revo_kontrolo(Request) :-
     %uri_components(Url,uri_components(Scheme,Auth,Path,_,_)),
     %uri_components(Url1,uri_components(Scheme,Auth,Path,_,_)),
     debug(redaktilo(kontrolo),'url ~q',[Url]),
-    http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),
+    http_open(Url,Stream,[header(content_type,_ContentType),post(atom(Xml))]),
     %format('Content-type: ~w~n~n',[ContentType]),
     active_sessions_header,
     format('Content-type: application/json; charset=UTF-8~n~n'), % alternative sendu kiel teksto la la retumilo

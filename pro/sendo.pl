@@ -8,7 +8,7 @@
 
 :- consult(library(ssl)).
 :- use_module(smtp).
-:- use_module(agordo).
+:- use_module(pro(cfg/agordo)).
 
 
 xml_file_test('abel.xml').
