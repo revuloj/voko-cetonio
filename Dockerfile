@@ -41,7 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 #COPY --from=builder googleclient*.zip /tmp/
 #RUN swipl -g "pack_install('/tmp/googleclient-0.5.2.zip',[interactive(false)]),halt" -t "halt(1)"
-RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
+#RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
 # jam enestas en swipl:stable: RUN swipl -g "pack_install(prosqlite,[interactive(false)]),halt" -t "halt(1)"
 
 RUN useradd -ms /bin/bash -u 1088 cetonio

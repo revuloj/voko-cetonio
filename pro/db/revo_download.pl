@@ -3,7 +3,10 @@
     ]).
 
 :- use_module(library(http/http_open)).
+
+user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 :- use_module(pro(cfg/agordo)).
+
 
 download :-
     agordo:get_config(revodb_zip,UrlPattern),

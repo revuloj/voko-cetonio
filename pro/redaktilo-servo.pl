@@ -29,7 +29,7 @@
 
 :- use_module(library(debug)).
 
-user:file_search_path(pro, '.'). % aŭ: current_prolog_flag(home, Home). ...
+user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 
 % difinu la aplikaĵon "redaktilo"
 /***
@@ -73,6 +73,7 @@ thread_init :-
 
 init :-
     set_prolog_flag(encoding,utf8),
+    agordo:read_auth_cfg,
     agordo:get_config([
      http_app_root(AppRoot),
 	 http_app_scheme(Scheme),
