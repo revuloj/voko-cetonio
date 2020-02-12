@@ -1,7 +1,7 @@
 // (c) 2016 - 2019 Wolfram Diestel
 // laŭ GPL 2.0
 
-import { vortokontrolo, xmlkontrolo, surmetita_dialogo } from './ui_err.js';
+import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
 //var sercho_focused_button = null;
@@ -53,12 +53,23 @@ export default function() {
                 art.Artikolo("goto",span.parent().attr("value"),4);
                 art.Artikolo("elekto","<snc mrk=\"" + a.text() + "\"","<snc");
                 span.parent().remove();
+            } else if (span.hasClass('klr_ppp')) {
+                var art = $("#xml_text");
+                art.Artikolo("goto",span.parent().attr("value"),14);
+                art.Artikolo("elekto",a.text(),"<klr>...</klr>");
+                span.parent().remove();
             } else {
                 surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.attr("data-takso"));
             }
         }
     });
 
+    // Adiaŭ-butono
+    $( "#logout_btn" ).button({});
+    $( "#logout_btn" ).on( "click", function( event, ui ) {
+        location.href='../auth/logout';
+    });
+    
     // ekrana klavaro
     $("#dock_klavaro").Klavaro({
         artikolo: artikolo,
@@ -192,6 +203,7 @@ export function kontroli_artikolon(){
     $("#dock_avertoj").empty();
 
     xmlkontrolo();
+    klrkontrolo();
     vortokontrolo();
 
     switch_dock_klavaro_kontrolo()
