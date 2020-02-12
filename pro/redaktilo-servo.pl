@@ -12,7 +12,7 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(http/http_header)).
 :- use_module(library(http/http_unix_daemon)).
-:- use_module(library(http/http_openid)).
+%%:- use_module(library(http/http_openid)).
 :- use_module(library(http/http_path)).
 :- use_module(library(http/html_write)).
 :- use_module(library(http/http_open)).
@@ -29,17 +29,23 @@
 
 :- use_module(library(debug)).
 
+user:file_search_path(pro, '.'). % aŭ: current_prolog_flag(home, Home). ...
+
 % difinu la aplikaĵon "redaktilo"
 /***
 :- use_module(redaktilo:library(pengines)).
 :- use_module(redaktilo:redaktilo).
 ***/
-:- use_module(agordo).
 %:- use_module(redaktilo).
-:- use_module(redaktilo_auth).
+:- use_module(pro(auth/auth_page)).
+:- use_module(pro(auth/auth_local)).
+:- use_module(pro(auth/auth_ajax)).
+% legu post redaktilo_auth, por difini oauth2:server_attribute (multifile)
+:- use_module(pro(cfg/agordo)).
+
 :- use_module(sercho).
 :- use_module(sendo).
-:- use_module(sqlrevo).
+:- use_module(pro(db/revo)).
 :- use_module(xml_quote).
 %:- use_module(xslt_trf).
 :- use_module(xslt_proc).
@@ -48,7 +54,7 @@
 
 :- debug(redaktilo(_)).
 :- debug(http(request)).
-:- debug(openid(_)).
+%% :- debug(openid(_)).
 :- debug(sendo).
 
 revo_url('http://retavortaro.de/revo/').
@@ -58,7 +64,7 @@ revo_url('http://retavortaro.de/revo/').
 thread_init :-
     debug(redaktilo(_)),
     debug(http(request)),
-    debug(openid(ax)), % yadis, authenticate, verify, resolve, check_authentication, crypt, associate...
+    %% debug(openid(ax)), % yadis, authenticate, verify, resolve, check_authentication, crypt, associate...
     debug(sendo).
 
 :- initialization(init).
@@ -100,7 +106,7 @@ http:location(static,root(static),[]).
 % redirect from / to /redaktilo/red, when behind a proxy, this is a task for the proxy
 :- http_handler('/', http_redirect(moved,root(red)),[]).
 :- http_handler(root(.), http_redirect(moved,root('red/')),[]).
-:- http_handler(red(.), reply_files, [prefix, authentication(openid)]).
+:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
 :- http_handler(static(.), reply_static_files, [prefix]).
 
 :- http_handler(red(revo_preflng), revo_preflng, [authentication(ajaxid)]).
@@ -146,22 +152,22 @@ help :-
 /*******************************************/
 
 entry_no_cache(Request) :-
-  member(path(Path),Request),
-  sub_atom(Path,_,1,0,'/'),
-  writeln('Cache-Control: no-cache, no-store,  must-revalidate'),
-  writeln('Pragma: no-cache'),
-  writeln('Expires: 0'), !.
+    member(path(Path),Request),
+    sub_atom(Path,_,1,0,'/'),
+    writeln('Cache-Control: no-cache, no-store,  must-revalidate'),
+    writeln('Pragma: no-cache'),
+    writeln('Expires: 0'), !.
 
 entry_no_cache(_).
 
 reply_files(Request) :-
     % evitu reveni al saluto-paĝo ĉiam denove
-%%%   %%% entry_no_cache(Request),
-
-%%    page_auth(Request),
-    
+%%%    entry_no_cache(Request),
+   
     debug(redaktilo(request),'handler reply_files',[]),
-    http_reply_from_files(web(.), [indexes(['redaktilo.html'])], Request).
+    http_reply_from_files(web(.), [indexes(['redaktilo.html'])], Request),
+    debug(redaktilo(request),'<< reply_files',[]).
+
 
 reply_static_files(Request) :-
     % ne protektitaj publikaj dosieroj
@@ -169,25 +175,19 @@ reply_static_files(Request) :-
     http_reply_from_files(static(.), [indexes(['notoj-pri-versio.html'])], Request).
 
 % preferataj lingvoj
-revo_preflng(Request) :-
-%%    ajax_auth(Request),
-    
-    once((
-	member(accept_language(AccLng),Request),
-	preferataj_lingvoj(AccLng,Lingvoj)
-	;
-	Lingvoj =''
+revo_preflng(Request) :-   
+        once((
+        member(accept_language(AccLng),Request),
+        preferataj_lingvoj(AccLng,Lingvoj)
+        ;
+        Lingvoj =''
 	)),
-
     reply_json(Lingvoj).
 
 % elŝutas artikolon el retavortaro.de kaj sendas al la krozilo
-revo_artikolo(Request) :-
-%%    ajax_auth(Request),
-    
+revo_artikolo(Request) :-   
     debug(redaktilo(request),'~q',[Request]),
-    % read post data
-    % member(method(post), Request), !,
+    % get art parameter
     http_parameters(Request,
 		   [art(Art, [length>0,length<50])]),
     debug(redaktilo(request),'art=~q',[Art]),
@@ -200,14 +200,15 @@ revo_artikolo(Request) :-
     xml_stream(Art,XmlStream,Status),
     (Status = 200
      ->
-	 set_stream(XmlStream,encoding(utf8)),
-	 set_stream(current_output,encoding(utf8)),
-	 format('Content-type: text/plain; charset=UTF-8~n~n'),
-	 %copy_stream_data(XmlStream,current_output),
-	 unquote_stream(XmlStream,current_output),
-	 close(XmlStream)
-     ;
-     format('Status: ~d~n~n',[Status])
+        set_stream(XmlStream,encoding(utf8)),
+        set_stream(current_output,encoding(utf8)),
+        active_sessions_header,
+        format('Content-type: text/plain; charset=UTF-8~n~n'),
+        %copy_stream_data(XmlStream,current_output),
+        unquote_stream(XmlStream,current_output),
+        close(XmlStream)
+      ;
+        format('Status: ~d~n~n',[Status])
      ).
 
 xml_stream(FileName,XmlStream,Status) :-
@@ -233,17 +234,15 @@ unquote_stream(InStream,OutStream) :-
 % serĉas en la sql-datumbazo laŭ kapvorto-komenco kaj redonas
 % informojn (marko, senco k.s. wn formo JSON 
 revo_sercho(Request) :-
-%%    ajax_auth(Request),
-
-    (
+(
 	debug(redaktilo(request),'~q',[Request]),
 	% read post data
 	% member(method(post), Request), !,
 	http_parameters(Request,
-		    [
+	    [
 			lng(Lng,[ oneof([eo]) ]),
 			sercho(Sercho,[length>0,length<100])
-		    ]),
+	    ]),
 	debug(redaktilo(request),'lng=~q, sercho=~q',[Lng,Sercho]),
 
 	% validate params
@@ -252,7 +251,8 @@ revo_sercho(Request) :-
 	check_param_none(Sercho,quote),
 	check_param_none(Sercho,punct,[0'-]),
 	
-	set_stream(current_output,encoding(utf8)),
+    set_stream(current_output,encoding(utf8)),
+    active_sessions_header,    
 	
 	% format('Content-type: application/json~n~n'),
 	findall(Json,sqlrevo:search_eo_json(Sercho,Json),ResultList)
@@ -261,23 +261,24 @@ revo_sercho(Request) :-
         -> reply_json(ResultList)
         ;
 	format('Status: ~d~n~n',[400])
-    ).
+).
 
 
 % forsendas artikolon senditan de la krozilo per retpoŝto
-revo_sendo(Request) :-
-%%    ajax_auth(Request),
-    
+revo_sendo(Request) :-    
     debug(redaktilo(request),'~q',[Request]),
     % read post data
     http_parameters(Request,
-		    [
+		[
 			shangho(Shangho_au_Nomo, [length>1,length<500]),
 			redakto(Redakto, [oneof([redakto,aldono]),default(redakto)]),
 			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
-		    ]),
-    http_session_data(retadreso(Retadreso)),
+		]),
     debug(redaktilo(request),'shangho=~q',[Shangho_au_Nomo]),
+
+     % http_session_data(retadreso(Retadreso)),
+    member(email(Retadreso),Request),
+    %sqlrevo:email_redid(Retadreso,RedID),
 
     % kodigu specialajn literojn ktp. per unuoj
     get_entity_index(ReverseEntInx,_EntValLenInx,EntVal1Inx),
@@ -285,29 +286,30 @@ revo_sendo(Request) :-
     xml_quote_cdata(Codes,Quoted,ReverseEntInx,EntVal1Inx,utf8),
 
     % respondu kaj sendu
+    active_sessions_header,
     format('Content-type: text/html~n~n'),
     % FIXME: pli bone havu apartan funkcion por sendi novan artikolon?
     once((
-	Redakto = redakto,
-	send_revo_redakto(Retadreso,Shangho_au_Nomo,Quoted)
-	;
-	Redakto = aldono,
-	send_revo_aldono(Retadreso,Shangho_au_Nomo,Quoted)
-	;
-	%format('Status: ~d~n~n',[401]),
-	throw(http_reply(html(['Neatendita eraro dum forsendo.\n'])))
+        Redakto = redakto,
+        send_revo_redakto(Retadreso,Shangho_au_Nomo,Quoted)
+        ;
+        Redakto = aldono,
+        send_revo_aldono(Retadreso,Shangho_au_Nomo,Quoted)
+        ;
+        %format('Status: ~d~n~n',[401]),
+        throw(http_reply(html(['Neatendita eraro dum forsendo.\n'])))
     )),
     format('Bone. Sendita.').
 
+
 % sintaks-kontrolo de la artikolo per Jing
 revo_kontrolo(Request) :-
-%%    ajax_auth(Request),   
     debug(redaktilo(request),'~q',[Request]),
     % read post data
     http_parameters(Request,
-		    [
+		[
 			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
-		    ]),
+		]),
 %% KOREKTU: necesas voki kontrol-servon nun anstataŭ rekte Javon/Jing
     %relaxng_json(Xml,Json),
     %reply_json(Json).
@@ -315,8 +317,9 @@ revo_kontrolo(Request) :-
     %uri_components(Url,uri_components(Scheme,Auth,Path,_,_)),
     %uri_components(Url1,uri_components(Scheme,Auth,Path,_,_)),
     debug(redaktilo(kontrolo),'url ~q',[Url]),
-    http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),
+    http_open(Url,Stream,[header(content_type,_ContentType),post(atom(Xml))]),
     %format('Content-type: ~w~n~n',[ContentType]),
+    active_sessions_header,
     format('Content-type: application/json; charset=UTF-8~n~n'), % alternative sendu kiel teksto la la retumilo
             % kaj traktu tie per Javoskripto...
     set_stream(Stream,encoding(utf8)),
@@ -347,27 +350,25 @@ err_line_json(Line,_{line: L, pos: Pos, msg: Msg}) :-
     )).
 
 % HTML-antaurigardo de la artikolo
-revo_rigardo(Request) :-
-%%    ajax_auth(Request),
-    
+revo_rigardo(Request) :-   
     debug(redaktilo(request),'~q',[Request]),
-    % read post data
+    % read parameters
     http_parameters(Request,
-		    [
+		[
 			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
-		    ]),
+		]),
     get_entity_index(ReverseEntInx,_EntValLenInx,EntVal1Inx),
     atom_codes(Xml,Codes),
     xml_quote_cdata(Codes,Quoted,ReverseEntInx,EntVal1Inx,utf8),
-    % Quoted -> HTML
 
-    %agordo:get_config(voko_xsl,VokoXsl),
+    % Quoted -> HTML
     catch(
 	    (
             agordo:get_path(root_dir,voko_xsl,VokoXsl),
             %sub_atom(VokoXslUri,7,_,0,VokoXsl),
             set_stream(current_output,encoding(utf8)),
             xslt_proc(VokoXsl,Quoted,Html),
+            active_sessions_header,
             format('Content-type: text/html~n~n'),
             format('~s',[Html])
         ),
@@ -382,136 +383,94 @@ revo_rigardo(Request) :-
     ).
 
 citajho_sercho(Request) :-
-%%    ajax_auth(Request),   
     http_parameters(Request,
-	    [
+    [
 	    sercho(Sercho, [length>1,length<500]),
 	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj])]) 
-	    ]),
+    ]),
     sercho(Kie,Sercho).
 
-bildo_sercho(Request) :-
-    %%    ajax_auth(Request),
-        
-        http_parameters(Request,
-            [
-            sercho(Sercho, [length>1,length<500]),
-            kie(_, [oneof([vikimedio])]) 
-        ]),
-        debug(sercho(what),'<<< VIKIMEDIO: ~w',[Sercho]),
-        format('Content-type: application/json~n~n'),
-        sercho:bildo_sercho(Sercho,_).
+bildo_sercho(Request) :-       
+    http_parameters(Request,
+    [
+        sercho(Sercho, [length>1,length<500]),
+        kie(_, [oneof([vikimedio])]) 
+    ]),
+    debug(sercho(what),'<<< VIKIMEDIO: ~w',[Sercho]),
+    active_sessions_header,
+    format('Content-type: application/json~n~n'),
+    sercho:bildo_sercho(Sercho,_).
 
 bildo_info(Request) :-
-    %%    ajax_auth(Request),       
-        http_parameters(Request,
-            [
-            paghoj(Paghoj, [length>1,length<500]),
-            kie(_, [oneof([vikimedio])]) 
-        ]),
-        debug(sercho(what),'<<< VIKIMEDIO: ~w',[Paghoj]),
-        format('Content-type: application/json~n~n'),
-        sercho:bildo_info(Paghoj).
+    http_parameters(Request,
+    [
+        paghoj(Paghoj, [length>1,length<500]),
+        kie(_, [oneof([vikimedio])]) 
+    ]),
+    debug(sercho(what),'<<< VIKIMEDIO: ~w',[Paghoj]),
+    format('Content-type: application/json~n~n'),
+    sercho:bildo_info(Paghoj).
 
 bildo_info_2(Request) :-
-    %%    ajax_auth(Request),        
-        http_parameters(Request,
-            [
-            dosiero(Dosiero, [length>1,length<500]),
-            kie(_, [oneof([vikimedio])]) 
-        ]),
-        debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosiero]),
-        format('Content-type: application/json~n~n'),
-        sercho:bildo_info_2(Dosiero).
+    http_parameters(Request,
+    [
+        dosiero(Dosiero, [length>1,length<500]),
+        kie(_, [oneof([vikimedio])]) 
+    ]),
+    debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosiero]),
+    format('Content-type: application/json~n~n'),
+    sercho:bildo_info_2(Dosiero).
 
 bildeto_info(Request) :-
-    %%    ajax_auth(Request),        
-        http_parameters(Request,
-            [
-            dosieroj(Dosieroj, [length>1,length<5000]),
-            kie(_, [oneof([vikimedio])]) 
-        ]),
-        debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosieroj]),
-        format('Content-type: application/json~n~n'),
-        sercho:bildeto_info(Dosieroj).    
+    http_parameters(Request,
+    [
+        dosieroj(Dosieroj, [length>1,length<5000]),
+        kie(_, [oneof([vikimedio])]) 
+    ]),
+    debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosieroj]),
+    format('Content-type: application/json~n~n'),
+    sercho:bildeto_info(Dosieroj).    
 
 analinioj(Request) :-
-    %%    ajax_auth(Request),
-        
-        %http_parameters(Request,
-        %    [
-        %    teksto(Teksto, [length<150000])
-        %    ]),
-        debug(redaktilo(analinioj),'ANA req ~q',[Request]),
+    debug(redaktilo(analinioj),'ANA req ~q',[Request]),
+    http_read_json(Request, JSON, [json_object(dict)]),
+    debug(redaktilo(analinioj),'ANA json ~q',[JSON]),
 
-        http_read_json(Request, JSON, [json_object(dict)]),
+    agordo:get_config(http_ana_url,Url),
+    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+    atom_concat(Root,'/analinioj',Path),
+    uri_components(Url1,uri_components(Scheme,Auth,Path,'',_)),
+    debug(redaktilo(analinioj),'url ~q',[Url1]),
 
-        debug(redaktilo(analinioj),'ANA json ~q',[JSON]),
+    http_post(Url1, json(JSON), Reply, []),
+    debug(redaktilo(analinioj),'ANA reply ~q',[Reply]),
 
-        %agordo:get_config([http_ana_scheme(AnaScheme),http_ana_host(AnaHost),http_ana_port(AnaPort),http_ana_root(AnaRoot)]),
-        % ni bezonas validan AjaxID por fone demandi la citaĵo-serĉo-servon
-        %request_ajax_id(Request,AjaxID),
-        %once((ajax_id_time_valid(AjaxID), AxID1 = AjaxID ; new_ajax_id(Request,AxID1) )),
-        % kreu la URL por fona voko de la citaĵo-servo
-        %uri_authority_components(Auth,uri_authority(_,_,AnaHost,AnaPort)),
-        %atom_concat(AnaRoot,'/analinioj',Path),
-        %uri_query_components(Query,[teksto(Teksto)]),
-        %uri_components(Url,uri_components(AnaScheme,Auth,Path,'',_)),
+    % la rezultojn el la proxy-konekto plusendu al la retumilo
+    reply_json(Reply).
 
-        agordo:get_config(http_ana_url,Url),
-        uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-        atom_concat(Root,'/analinioj',Path),
-        uri_components(Url1,uri_components(Scheme,Auth,Path,'',_)),
-        debug(redaktilo(analinioj),'url ~q',[Url1]),
-
-        http_post(Url1, json(JSON), Reply, []),
-
-        %%http_open(Url,ResultStream,[output(PostStream),header(content_type,ContentType)]),
-        % copy data from Request to proxy connection
-        %%http_read_data(Request,_,[to(PostStream)]),
-        %%close(PostStream),
-
-        debug(redaktilo(analinioj),'ANA reply ~q',[Reply]),
-
-        % ricevu la rezultojn el la proxy-konekto kaj plusendu al la retumilo
-        %%format('Content-type: ~w~n~n',['application/json']),
-        %set_stream(ResultStream,encoding(utf8)),
-        %set_stream(current_output,encoding(utf8)),
-        %copy_stream_data(ResultStream,current_output),
-        %close(ResultStream).
-        reply_json(Reply).
 
 analizo(Request) :-
-    %%    ajax_auth(Request),
-        
-        http_parameters(Request,
-            [
-            teksto(Teksto, [length<150000])
-            ]),
-    
-        %agordo:get_config([http_ana_scheme(AnaScheme),http_ana_host(AnaHost),http_ana_port(AnaPort),http_ana_root(AnaRoot)]),
-        % ni bezonas validan AjaxID por fone demandi la citaĵo-serĉo-servon
-        %request_ajax_id(Request,AjaxID),
-        %once((ajax_id_time_valid(AjaxID), AxID1 = AjaxID ; new_ajax_id(Request,AxID1) )),
-        % kreu la URL por fona voko de la citaĵo-servo
-        %uri_authority_components(Auth,uri_authority(_,_,AnaHost,AnaPort)),
-        agordo:get_config(http_ana_url,Url),
-        uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-        atom_concat(Root,'/analizo',Path),
-        uri_query_components(Query,[teksto(Teksto)]),
-        uri_components(Url1,uri_components(Scheme,Auth,Path,Query,_)),
-        debug(redaktilo(analizo),'url ~q',[Url]),
-        http_open(Url1,Stream,[header(content_type,ContentType)]),
+    http_parameters(Request,
+    [
+        teksto(Teksto, [length<150000])
+    ]),
 
-        format('Content-type: ~w~n~n',[ContentType]),
-        set_stream(Stream,encoding(utf8)),
-        set_stream(current_output,encoding(utf8)),
-        copy_stream_data(Stream,current_output),
-        close(Stream).
+    agordo:get_config(http_ana_url,Url),
+    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+    atom_concat(Root,'/analizo',Path),
+    uri_query_components(Query,[teksto(Teksto)]),
+    uri_components(Url1,uri_components(Scheme,Auth,Path,Query,_)),
+    debug(redaktilo(analizo),'url ~q',[Url]),
+    http_open(Url1,Stream,[header(content_type,ContentType)]),
+
+    format('Content-type: ~w~n~n',[ContentType]),
+    set_stream(Stream,encoding(utf8)),
+    set_stream(current_output,encoding(utf8)),
+    copy_stream_data(Stream,current_output),
+    close(Stream).
 
 
 homonimoj_senref(_Request) :-
-%%    ajax_auth(Request),
     set_stream(current_output,encoding(utf8)),
 	
     % format('Content-type: application/json~n~n'),
@@ -575,3 +534,20 @@ preferataj_lingvoj(AccLng,Lingvoj) :-
 	      )),
 	      Lingvo \= eo
 	  ), Lingvoj).
+
+% kiom da seancoj (uzantoj) momente aktivas,
+% tio povas esti erariga, ĉar
+% - se oni plurfoje salutas sen malsaluti oni kalkuliĝas dum iom da tempo plurfoje
+% - kiam la seanco finiĝis, ajax_id povas esti daŭre funkcianta
+
+active_sessions_header :-
+        bagof(S,
+            Idle^(
+                http_current_session(S,idle(Idle)),Idle<3600
+            ),Sessions),
+        length(Sessions,Cnt),!,
+        format('Revo-Seancoj: ~d~n',Cnt).
+    
+    % kaze ke ne ekzistas seancoj, evitu malsukcesi per false...
+    active_sessions_header :- true.
+    
