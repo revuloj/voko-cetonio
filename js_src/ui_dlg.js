@@ -26,7 +26,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
         var kampoj = this.options.kampoj
         if (values === undefined) {
             // return values
-            vals = {};
+            let vals = {};
             for (let key in kampoj) {
                 let k = $(kampoj[key]);
                 if (k.attr("type") == "checkbox" || k.attr("type") == "radio") {
@@ -1073,8 +1073,8 @@ function plenigu_lingvojn() {
              function(pref_data,lingvoj_data) {
 
                 //console.debug(pref_data);
-                pref_lngoj = pref_data[0];
-                preflng = pref_lngoj[0]; // globala variablo
+                let pref_lngoj = pref_data[0];
+                let preflng = pref_lngoj[0]; // globala variablo
                  
                 var lingvoj_a_b = '';
                 var lingvoj_c_g = '';
@@ -1368,7 +1368,7 @@ function tradukojn_enmeti(event) {
 
 function plenigu_sxablonojn() {
     var sxbl_list = '';
-    for (nomo  in snc_sxablonoj) {
+    for (let nomo  in snc_sxablonoj) {
         sxbl_list += '<option>' + nomo + '</option>'
     }
     $("#sxablono_elekto").append(sxbl_list);
