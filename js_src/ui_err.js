@@ -210,9 +210,26 @@ export function mrkkontrolo() {
     }
 }
 
-function _snc_sen_mrk(inx) {
-}
 
+export function klrkontrolo() {
+    var art = $("#xml_text");
+    var xml = art.val();
+    var klroj = art.Artikolo("klr_ppp");
+
+    if (klroj) {
+        var avt = $("#dock_avertoj");
+
+        for (pos in klroj) {
+            let klr = get_line_pos(pos,xml);
+   
+            klr.line++; klr.pos++;
+            klr.msg = "klarigo sen krampoj, <span class='klr_ppp' title='anstataŭigu'>anstataŭigebla per: <a>" +
+                "&lt;klr&gt;[…]&lt;/klr&gt;</a></span>";
+            avt.Erarolisto("aldonu",klr)
+        }
+    }
+}
+    
 
 export function vortokontrolo() {
 
