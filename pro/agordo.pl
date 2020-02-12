@@ -19,12 +19,15 @@ read_cfg :-
     once((
 	 getenv('HOME',HomeDir),
 	 atom_concat(HomeDir,'/etc/redaktilo.cfg',CfgFile),
-	 exists_file(CfgFile)
+	 exists_file(CfgFile),
+	 atom_concat(HomeDir,'/etc/auth_cfg',AuthCfg),
+     exists_file(AuthCfg)
 	 ;
-	 expand_file_search_path(agordo('redaktilo.cfg'),CfgFile)
+	 expand_file_search_path(agordo('redaktilo.cfg'),CfgFile),
+	 expand_file_search_path(agordo('auth_cfg'),AuthCfg)
 	)),
-    ensure_loaded(CfgFile).
-
+    ensure_loaded(CfgFile),
+    ensure_loaded(AuthCfg).
 
 get_config(Key,Value) :-
     atom(Key),
