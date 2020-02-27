@@ -2,8 +2,19 @@
         download/0
     ]).
 
+user:file_search_path(pro, '.'). % aŭ: current_prolog_flag(home, Home). ...
+
 :- use_module(library(http/http_open)).
+:- use_module(library(http/json)).
+
 :- use_module(pro(cfg/agordo)).
+
+download :-
+    agordo:get_config(revodb_tmp,TmpFile),
+    agordo:get_config(revogh_prefix,Prf),
+	github_release(Prf,DownloadUrls),
+	member(Url,DownloadUrls), !,
+	download_file(Url,TmpFile).
 
 download :-
     agordo:get_config(revodb_zip,UrlPattern),
@@ -20,23 +31,39 @@ download :-
 	    )
 	)).
 
+github_release(Prf,DownloadUrls):-
+    agordo:get_config(revogh_release,Url),
+	catch((
+		http_open(Url,InStream,[encoding(octet)]),
+		json_read_dict(InStream,R),
+		findall(
+			DlUrl,
+			(
+				member(A,R.assets),
+				%sub_atom(A.name,0,_,_,Prf),
+				sub_atom(A.name,_,_,_,Prf),
+				DlUrl=A.browser_download_url
+			), 
+			DownloadUrls
+		)),
+		_E,
+		(format('Malsukcesis trovi la dosierojn en ~w.~n',[Url]), fail)).
 
 download_file(Url,File) :-
     setup_call_cleanup(
-	    (
+	(
 		catch(
 			http_open(Url,InStream,[encoding(octet)]),
 			_E,
 			(format('~w not found.~n',[Url]), fail)),
 		open(File,write,OutStream,[encoding(octet)])
-	    ),
-	    (
+	),
+	(
 		debug(redaktilo(download),'downloading ~q to ~q',[Url,File]),
-                format('downloading ~q to ~q',[Url,File]),
+        format('downloading ~q to ~q',[Url,File]),
 		copy_stream_data(InStream,OutStream)
-	    ),
-	    (
+	),
+	(
 		close(InStream),
 		close(OutStream)
-	    )
-	).
+	)).
