@@ -103,6 +103,15 @@ init :-
 http:location(red,root(red),[]).
 http:location(static,root(static),[]).
 
+/*** workaround bug in SWI 8.0.3 - exchanged Request / Request0 in append ***/
+:- abolish(http_dispatch:request_expansion/2).
+:- http_request_expansion(my_auth_expansion, 100).
+my_auth_expansion(Request0, Request, Options) :-
+	%debug(auth,'>> my_auth_exp ~q ~q',[Request0,Options]),
+    http_dispatch:authentication(Options, Request0, Extra),
+	append(Extra, Request0, Request).
+	%debug(auth,'<< my_auth_exp ~q',[Request]).
+
 % redirect from / to /redaktilo/red, when behind a proxy, this is a task for the proxy
 :- http_handler('/', http_redirect(moved,root(red)),[]).
 :- http_handler(root(.), http_redirect(moved,root('red/')),[]).

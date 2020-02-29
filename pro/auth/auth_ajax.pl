@@ -30,6 +30,14 @@
 :- multifile http:authenticate/3.
 http:authenticate(ajaxid,Request,[user(User),email(Email)]) :-  ajax_auth(Request,User,Email).
 
+%%/*** workaround bug in SWI 8.0.3 - exchanged Request / Request0 in append ***/
+%%:- http_request_expansion(my_auth_expansion, 10). % 110?
+%%my_auth_expansion(Request0, Request, Options) :-
+%%	%debug(auth,'>> my_auth_exp ~q ~q',[Request0,Options]),
+%%    http_dispatch:authentication(Options, Request0, Extra),
+%%	append(Extra, Request0, Request).
+%%	%debug(auth,'<< my_auth_exp ~q',[Request]).
+%%/*****************/	
 
 ajax_auth(Request,RedID,Email) :-
 	once((

@@ -88,6 +88,7 @@ for Facebook see isntructions at:
 
 :- http_handler(auth(logout), server_logout, []).
 
+
 auth_config:login_item(Server, 10-Item) :-
     % adjust xxxx for google, facebook, yahoo...
     http_absolute_location(icons('social_xxxx_box.png'), Img, []),
