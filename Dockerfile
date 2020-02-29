@@ -40,7 +40,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xsltproc sqlite3 unzip && rm -rf /var/lib/apt/lists/* 
 
 # ne plu bezonata pro oauth2.pl: RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
-# jam enestas en swipl:stable: RUN swipl -g "pack_install(prosqlite,[interactive(false)]),halt" -t "halt(1)"
 
 RUN useradd -ms /bin/bash -u 1088 cetonio
 WORKDIR /home/cetonio

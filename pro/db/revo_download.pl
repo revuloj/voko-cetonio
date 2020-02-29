@@ -2,11 +2,10 @@
         download/0
     ]).
 
-user:file_search_path(pro, '.'). % aŭ: current_prolog_flag(home, Home). ...
-
 :- use_module(library(http/http_open)).
 :- use_module(library(http/json)).
 
+user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 :- use_module(pro(cfg/agordo)).
 
 download :-

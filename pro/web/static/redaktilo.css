@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'power_symbols';
+    src: url('Unicode_IEC_symbol.woff2') format('woff2'),
+         url('Unicode_IEC_symbol.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html {
     height: 100%
 }
@@ -383,6 +391,20 @@ dd {
    color: white !important;    
    font-weight: bold !important;
 }
+
+.logout_btn {
+    font-family: 'power_symbols';
+    font-style: normal;
+    border-color: #327E04 !important;
+    background-color: #459e00 !important;
+    border-radius: 4px;
+    color: white !important;    
+    font-weight: bold !important;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+ }
+  
+
 
 #vrt, #xml, #html, #sercho {
     //display: block;

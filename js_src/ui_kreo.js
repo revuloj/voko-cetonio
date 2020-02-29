@@ -18,7 +18,7 @@ $(document).ready(function () {
     // prepari la redaktilo-aranĝon
     $(function () {
       
-      tabl_init()
+      tabl_init();
       menu_init();
       dlg_init();
 

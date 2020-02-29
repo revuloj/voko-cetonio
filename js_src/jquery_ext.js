@@ -123,6 +123,7 @@ jQuery.fn.extend({
         if (is_chrome) {
             //var tmp = this.value;
             this.focus();
+            scrollPos = $(this).scrollTop();
             ///var charBefore = this.value.charCodeAt(this.selectionStart-1);
             // en Chrome enmetaĵo foje shovighas unu signon tro frue, t.e. linirompo estos malantaŭ
             // la enmetaĵo anstataŭ antaŭ. Provu kompensi tiun problemon paŝante unu signon pli antaŭen...
@@ -133,6 +134,7 @@ jQuery.fn.extend({
             //console.log("insert at "+chr+': '+myValue.charCodeAt(0)+'['+myValue.substr(0,10)+"]");
             // enmetu la tekston
             document.execCommand("insertText", false, myValue);
+            $(this).scrollTop(scrollPos);
         } else if (document.selection) {
           // Internet Explorer
           this.focus();

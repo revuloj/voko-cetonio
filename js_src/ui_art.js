@@ -20,6 +20,10 @@ $.widget( "redaktilo.Artikolo", {
             _snc: new RegExp('<snc\\s*>\\s*(?:<[^>]+>\\s*){1,2}([^\\s\\.,;:?!()]+)','g')
         };
 
+        this._regex_klr = {
+            _klr: new RegExp('<klr>\\.{3}</klr>','g')
+        }
+    
         this._regex_drv = {
             _lbr: new RegExp('\n','g'),
             _mrk: new RegExp('<drv\\s+mrk\\s*=\\s*"([^"]+)"', ''),
@@ -396,6 +400,19 @@ $.widget( "redaktilo.Artikolo", {
         }
         return sncoj;
     },
+
+    klr_ppp: function() {
+        var xmlStr = this.element.val();
+        var klroj = {};
+                if (xmlStr) {
+            var rx = this._regex_klr;
+            while ((m = rx._klr.exec(xmlStr)) !== null) {
+                var klr = m[1];
+                klroj[m.index] = klr
+            }
+        }
+        return klroj;
+    },     
 
     // elprenas la tradukojn de certa lingvo el XML-artikolo
     tradukoj: function(lng) {

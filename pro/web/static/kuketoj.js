@@ -23,6 +23,10 @@ function enableImgButtons() {
     ggl.style.opacity='1.0';
     ggl.disabled = false;
     ggl.style.filter='alpha(opacity=100)';
+    var fb = document.getElementById('facebook_login');
+    fb.style.opacity='1.0';
+    fb.disabled = false;
+    fb.style.filter='alpha(opacity=100)';
     var yho = document.getElementById('yahoo_login');
     yho.style.opacity='1.0';
     yho.style.filter='alpha(opacity=100)';
