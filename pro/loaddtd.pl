@@ -1,18 +1,20 @@
 /* -*- Mode: Prolog -*- */
 :- module(loaddtd,[
         load_dtd/1, 
-	load_entities/1,
-	dtd2pl_entities/0
+	      load_entities/1,
+	      dtd2pl_entities/0,
+        dtd2json_entities/0
     ]).
 
 :- use_module(library(dcg/basics)).
+:- use_module(library(http/json)).
 :- use_module(library(pairs)).
 :- use_module(entity_dcg).
 
-
-
 dtd('../dtd/vokoxml.dtd').
 prolog_entity_file('voko_entities.pl').
+json_entity_file('voko_entities.js').
+
 
 load_dtd(VokoDTD) :-
   % PLIBONIGU:
@@ -50,6 +52,10 @@ dtd2pl_entities:-
   prolog_entity_file(File),
   save_entities(File,EL).
 
+dtd2json_entities:-
+  load_entities(EL),
+  json_entity_file(File),
+  save_entities_json(File,EL).
 
 load_entities(EntityList) :-
   dtd(DTDFile),
@@ -68,6 +74,32 @@ save_entities(FileName,EntityList) :-
       write_entities(EntityList)),  
     close(Out)
   ).
+
+save_entities_json(FileName,EntityList) :-
+  setup_call_cleanup(
+    open(FileName,write,Out,[encoding(utf8)]),
+    (
+      write(Out,"const voko_entities={"),
+      json_write_entries(EntityList,Out),
+      write(Out,"}")
+    ),
+    close(Out)
+  ).
+
+json_write_entries([Key-Value],Out) :-
+  json_write_entry(Key,Value,Out),!.
+
+json_write_entries([Key-Value|Rest],Out) :-
+  json_write_entry(Key,Value,Out),
+  write(Out,",\n"),
+  json_write_entries(Rest,Out).
+
+json_write_entry(Key,_,Out) :-
+  member(Key,[`amp`,`lt`,`gt`,`apos`,`quot`]),!,
+  format(Out,'"~s":"&~s;"',[Key,Key]).
+
+json_write_entry(Key,Value,Out) :-
+  format(Out,'"~s":"~s"',[Key,Value]).
 
 retrieve_entities([entity(E)|Tail],[E|EntityList]) :-
   retrieve_entities(Tail,EntityList).
