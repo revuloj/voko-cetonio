@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ADD . ./
 
-RUN curl -LO https://dl.google.com/closure-compiler/compiler-latest.tar.gz \
+# nun tie: https://github.com/google/closure-compiler/releases/latest (?)
+RUN curl -LO https://github.com/google/closure-compiler/releases/latest/compiler-latest.tar.gz \
   && tar -xvzf compiler-latest.tar.gz 
 
 #RUN java -jar closure-compiler*.jar --dependency_mode LOOSE --js_module_root js_src --js js_src/*.js \
