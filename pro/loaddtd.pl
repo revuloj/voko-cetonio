@@ -24,7 +24,7 @@ load_dtd(VokoDTD) :-
   new_dtd(vortaro,VokoDTD),
   load_dtd(VokoDTD,DTDFile,[dialect(xml)]).
 
-
+%% Testoj...
 
 %entity_list(DTD,Entities) :-
 %  dtd_property(DTD,Entities).
@@ -82,9 +82,10 @@ save_entities_json(FileName,EntityList) :-
   setup_call_cleanup(
     open(FileName,write,Out,[encoding(utf8)]),
     (
-      write(Out,"const voko_entities={"),
+      writeln(Out,'/* jshint esversion: 6 */'),
+      writeln(Out,'const voko_entities={'),
       json_write_entries(EntityList,Out),
-      write(Out,"}")
+      writeln(Out,'}')
     ),
     close(Out)
   ).
@@ -93,8 +94,13 @@ json_write_entries([Key-Value],Out) :-
   json_write_entry(Key,Value,Out),!.
 
 json_write_entries([Key-Value|Rest],Out) :-
+  atom_length(Value,L), (L=1;L>10), !,
   json_write_entry(Key,Value,Out),
   write(Out,",\n"),
+  json_write_entries(Rest,Out).
+
+% ni ne eligas unuojn kun longeco>1 en JSON
+json_write_entries([_|Rest],Out) :-
   json_write_entries(Rest,Out).
 
 json_write_entry(Key,_,Out) :-
