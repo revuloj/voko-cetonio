@@ -3,7 +3,7 @@
         load_dtd/1, 
 	      load_entities/1,
 	      dtd2pl_entities/0,
-        dtd2json_entities/0
+        dtd2json_entities/0 % tion nun povas ankaŭ fari voko-grundo/js_util/vokosgn2x.js
     ]).
 
 :- use_module(library(dcg/basics)).
@@ -13,7 +13,7 @@
 
 dtd('../dtd/vokoxml.dtd').
 prolog_entity_file('voko_entities.pl').
-json_entity_file('voko_entities.js').
+json_entity_file('voko_entities.js'). 
 
 
 load_dtd(VokoDTD) :-
@@ -70,8 +70,11 @@ load_entities_from_file(File,EntityList) :-
 save_entities(FileName,EntityList) :-
   setup_call_cleanup(
     open(FileName,write,Out,[encoding(utf8)]),
-    with_output_to(Out,
-      write_entities(EntityList)),  
+    (
+      writeln(Out,':-encoding(utf8).'),
+      with_output_to(Out,
+        write_entities(EntityList))
+    ),  
     close(Out)
   ).
 
