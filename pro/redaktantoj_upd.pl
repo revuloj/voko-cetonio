@@ -3,7 +3,11 @@
 :- module(redaktantoj,[]).
 
 :- use_module(library(dcg/basics)).
-:- use_module(sqlrevo).
+:- use_module(library(debug)).
+
+user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
+:- use_module(pro(db/redaktantoj)).
+:- use_module(pro(cfg/agordo)).
 
 
 update_redaktantoj :-
@@ -33,9 +37,10 @@ redaktanto(Nomo-Retadresoj) -->
     nomo(Nomo), whites, retadresoj(Retadresoj), whites,
     {
 	Nomo \= '',
-	Retadresoj \= []
+	Retadresoj \= [],
 %,
 %	format('~q ~q~n',[Nomo,Retadresoj])
+    debug(redaktantoj,'~q ~q~n',[Nomo,Retadresoj])
     }. % debug
 
 nomo(Nomo) --> string_without("<",N),

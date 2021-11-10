@@ -46,6 +46,7 @@ get_config([Opt|KVs]) :-
     call(Opt),
     get_config(KVs).
 
+% pado estas kunmetita el agordo por RootKey kaj agordo por PathKey
 get_path(RootKey,PathKey,Value) :-
 	get_config(RootKey,Root),
 	get_config(PathKey,Path),
