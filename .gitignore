@@ -3,7 +3,8 @@
 .\#*
 tmp/
 sql/*.db
-dtd/
+dtd
+voko
 *.log
 *.zip
 

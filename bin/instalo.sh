@@ -36,4 +36,20 @@ redaktantoj)
     /usr/bin/curl -u ${CGI_USER}:${CGI_PWD} -o ${redaktantoj_trg} ${redaktantoj_url}
     echo "aktualigante sql/redaktatoj.db..."
     /usr/bin/swipl -s ${redaktantoj_upd} -g "${redaktantoj_goal}" -t "halt"
+    ;;
+js)
+    # closure-compiler el Ubuntu estas tro malnova kaj ne subtenas ESMAScript6!
+    # ni do uzas la kompilion en voko-grundo per npm/JS-kompililo...!
+    echo "kompilante javoskripto-fontojn per closure-compiler..."
+    /usr/bin/closure-compiler \
+        --compilation_level WHITESPACE_ONLY \
+        --language_in ECMASCRIPT6 \
+        --common_js_module_path_prefix js_src \
+        --common_js_entry_module js_src/ui_kreo.js \
+        --js_output_file pro/web/static/redaktilo-2a-gen.js \
+        js_src/*.js
+        # --dependency_mode "LOOSE"
+        # --externs https://code.jquery.com/jquery-3.2.1.min.js
+        # --externs https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css
+        # --externs https://code.jquery.com/ui/1.12.1/themes/south-street/jquery-ui.css
 esac

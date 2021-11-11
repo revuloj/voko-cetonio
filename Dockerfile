@@ -1,6 +1,7 @@
 ##### staĝo 1: Ni bezonas TeX kaj metapost por konverti simbolojn al png
 FROM silkeh/latex:small as metapost
-MAINTAINER <diestel@steloj.de>
+LABEL Author=<diestel@steloj.de>
+
 COPY mp2png.sh .
 RUN apk --update add curl unzip librsvg --no-cache && rm -f /var/cache/apk/* 
 RUN curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
@@ -10,7 +11,7 @@ RUN cd voko-grundo-master && ../mp2png.sh # && cd ${HOME}
 
 ##### staĝo 2: Ni bezonas Javon kaj Closure-Compiler por kompili la Javo-skript-dosieron
 FROM openjdk:jre-slim as builder
-MAINTAINER <diestel@steloj.de>
+LABEL Author=<diestel@steloj.de>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl && rm -rf /var/lib/apt/lists/* 
@@ -35,7 +36,7 @@ RUN curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
 
 ##### staĝo 3: Nun ni kreos la propran procesumon por la redaktilo...
 FROM swipl:stable
-MAINTAINER <diestel@steloj.de>
+LABEL Author=<diestel@steloj.de>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xsltproc sqlite3 unzip && rm -rf /var/lib/apt/lists/* 

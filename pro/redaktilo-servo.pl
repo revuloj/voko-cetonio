@@ -117,7 +117,13 @@ my_auth_expansion(Request0, Request, Options) :-
 % redirect from / to /redaktilo/red, when behind a proxy, this is a task for the proxy
 :- http_handler('/', http_redirect(moved,root(red)),[]).
 :- http_handler(root(.), http_redirect(moved,root('red/')),[]).
+
+% uzas padon web...
 :- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
+%% provizore provu sen saltuto...
+%%:- http_handler(red(.), reply_files, [prefix,id(landing)]).
+
+ % uzas padon static ...
 :- http_handler(static(.), reply_static_files, [prefix]).
 
 :- http_handler(red(revo_preflng), revo_preflng, [authentication(ajaxid)]).
@@ -142,9 +148,12 @@ my_auth_expansion(Request0, Request, Options) :-
 :- http_handler(root(smb), serve_files_in_directory(smb), [prefix]).
 
 server(Port) :-
+    show_pathes,
+    show_handlers,
     http_server(http_dispatch, [port(Port)]).
 
 daemon :-
+    show_pathes,
     http_daemon.
 
 help :-
@@ -162,6 +171,25 @@ help :-
 	       
 
 /*******************************************/
+
+show_pathes :-
+    forall(
+        (
+            member(Path,[web,voko,static,stl,cfg,smb,js,icons,css]),
+            file_search_path(Path,Dir)
+        ),
+        %debug(redaktilo(pado),'~q -> ~q',[Path,Dir])
+        format('~q -> ~q~n',[Path,Dir])
+    ). 
+
+show_handlers :-
+    http_dispatch:path_tree(T),
+    forall(
+        %http:location(P,H,_),
+        member(node(P,H,_,_),T),
+        format('~q >> ~q~n',[P,H])
+    ).
+
 
 entry_no_cache(Request) :-
     member(path(Path),Request),

@@ -28,7 +28,7 @@
     integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
     crossorigin="anonymous"></script> 
 
-  <script src="redaktilo-gen.js"></script> 
+  <script src="../static/redaktilo-2a-min.js"></script> 
 <!--    <script src="redaktilo-iloj.js"></script>
     <script src="redaktilo-ui.js"></script>
     <script src="redaktilo-sxbl.js"></script>
@@ -43,6 +43,7 @@
             <li class="ui-widget-header"><div>Artikolon</div></li>
                 <li id="nova_menu_item"><div>Krei...</div></li> 
                 <li id="shargi_menu_item"><div>Ŝargi...</div></li>
+                <li id="lastaj_menu_item"><div>Lastaj...</div></li>
                 <li id="sendiservile_menu_item"><div>Sendi...</div></li>
                 <li id="kontroli_menu_item"><div>Kontroli...</div></li>
             <li class="ui-widget-header"><div>Enmeti</div></li>
@@ -132,9 +133,11 @@
     </div>
       
     <div id="versio">
-        <button id="logout_btn" class="ui-button ui-widget logout_btn" title="Adiaŭ">&#x23FB;</button>
-        <br/>
-        v0.9.4
+      <button id="help_btn" class="ui-button ui-widget help_btn" title="Helpo">
+        <a href="https://revuloj.github.io/temoj/rnc.html" target="_new">&#x2754;</a></button>
+      <button id="logout_btn" class="ui-button ui-widget logout_btn" title="Adiaŭ">&#x23FB;</button>
+      <br/>
+        eldono 0.9.7
     </div>
       
            
@@ -157,10 +160,41 @@
           </table>
         </form>
     </div>
+
+    <div id="lastaj_dlg" title="Lastaj redaktoj">
+      <p id="lastaj_error" class="ui-state-error ui-corner-all"></p>          
+      <form id="lastaj_form"> <!--enctype="text/plain" > -->
+        <div id="lastaj_tabelo" class="dlg_tab_div">
+          <table class="dlg_tabelo" id="lastaj_table">
+            <thead><tr><th>Artikolo</th><th></th><th>Tempo (UTK)</th><th>Redakto</th></tr></thead>
+            <tbody id="lastaj_listo">
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <fieldset>
+          <legend>Detaloj</legend>
+          <div id="lastaj_detaloj">
+            <label for="lastaj_dosiero">dosiero: </label>
+            <input type="text" id="lastaj_dosiero" disabled name="lastaj_dosiero"/>
+            <button id="lastaj_rigardu" class="ui-button ui-widget ui-corner-all" title="Rigardu">&#x1F50D;&#xFE0E;</button>
+            <br/>
+            <label for="lastaj_mesagho">mesaĝo: </label><br/>
+            <textarea id="lastaj_mesagho" name="lastaj_mesagho" disabled rows="3" cols="60" readonly="readonly"></textarea>
+          </div> 
+          </fieldset>
+      </form>
+    </div>
       
     <div id="sendiservile_dlg" title="Sendi al la redaktoservo">
-        <p id="sendiservile_error" class="ui-state-error ui-corner-all"></p>
-            
+        <p style="max-width: 30em">
+          <em>Submeti</em> tra gist.github.com estas nova metodo, 
+          kiu evitas problemojn pro spamfiltriloj kaj
+          permesas listigi kaj rigardi viajn lastatempajn redaktojn. 
+          Se neatendite okazos problemoj pri tiu nova metodo, vi povas
+          ankoraŭ uzi la malnovan metodon, t.e. <em>Sendi</em> retpoŝte.
+        </p>
+        <p id="sendiservile_error" class="ui-state-error ui-corner-all"></p>        
         <form id="sendiservile_form" method="post" action="revo_sendo" enctype="multipart/formdata"> <!--enctype="text/plain" > -->
           <input type="text" id="sendiservile_komento" size=30 name="shangho" placeholder="Priskribo de la ŝanĝoj" />
         </form>
