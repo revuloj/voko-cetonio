@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cetoniujo
+  labels:
+    app: cetonio
+spec:
+  containers:
+  - name: grilo
+    image: 127.0.0.1:32000/voko/grilo:latest
+  - name: akrido
+    image: 127.0.0.1:32000/voko/akrido:latest
+  - name: cikado
+    image: 127.0.0.1:32000/voko/cikado:latest
