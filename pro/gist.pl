@@ -7,7 +7,7 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json)).
 :- use_module(library(crypto)).
-:- use_module(agordo).
+:- use_module(pro(cfg/agordo)).
 
 gh_gist_url('https://api.github.com/gists').
 gh_owner('reta-vortaro').

@@ -119,7 +119,8 @@ my_auth_expansion(Request0, Request, Options) :-
 :- http_handler(root(.), http_redirect(moved,root('red/')),[]).
 
 % uzas padon web...
-:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
+%%:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
+:- http_handler(red(.), reply_files, [prefix, authentication(local), id(landing)]).
 %% provizore provu sen saltuto...
 %%:- http_handler(red(.), reply_files, [prefix,id(landing)]).
 

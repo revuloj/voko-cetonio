@@ -222,7 +222,13 @@ redaktilo_saluto(_Options) -->
 % Kontrolu, ĉu la uzanto jam salutis tra Google, FB, Yahoo... (OAuth2)
 % kaj se ne, konduku lin al la saluto-paĝo
 
-page_auth(_Request,RedID) :-
+%page_auth(Request,RedID) :-	
+%	debug(auth,'>> page_auth ~q',[Request]),	
+%	% ni jam sukcesis saluti per alia metodo (ekz-e auth_local)
+%	memberchk(user(User),Request),
+%	nonvar(User),!.
+
+page_auth(_Request,RedID) :-	
 	debug(auth,'>> page_auth',[]),	
     once((
 		oauth2_id(RedID)
