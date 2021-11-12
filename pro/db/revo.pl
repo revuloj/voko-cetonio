@@ -4,7 +4,9 @@
 	      search_trd/2,
 	      search_eo_html/2,
 	      search_eo_json/2,
-	      search_trd_html/2
+	      search_trd_html/2,
+          homonimoj_sen_ref/1,
+          homonimoj_sen_ref_json/1
 	  ]).
 
 :- use_module(library(prosqlite)).

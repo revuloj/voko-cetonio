@@ -38,7 +38,6 @@ user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 ***/
 %:- use_module(redaktilo).
 :- use_module(pro(auth/auth_page)).
-:- use_module(pro(auth/auth_local)).
 :- use_module(pro(auth/auth_ajax)).
 % legu post redaktilo_auth, por difini oauth2:server_attribute (multifile)
 :- use_module(pro(cfg/agordo)).
@@ -47,6 +46,7 @@ user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 :- use_module(sendo).
 :- use_module(gist).
 :- use_module(pro(db/revo)).
+:- use_module(pro(db/redaktantoj)).
 :- use_module(xml_quote).
 %:- use_module(xslt_trf).
 :- use_module(xslt_proc).
@@ -106,13 +106,13 @@ http:location(red,root(red),[]).
 http:location(static,root(static),[]).
 
 /*** workaround bug in SWI 8.0.3 - exchanged Request / Request0 in append ***/
-:- abolish(http_dispatch:request_expansion/2).
-:- http_request_expansion(my_auth_expansion, 100).
-my_auth_expansion(Request0, Request, Options) :-
-	%debug(auth,'>> my_auth_exp ~q ~q',[Request0,Options]),
-    http_dispatch:authentication(Options, Request0, Extra),
-	append(Extra, Request0, Request).
-	%debug(auth,'<< my_auth_exp ~q',[Request]).
+%% :- abolish(http_dispatch:request_expansion/2).
+%% :- http_request_expansion(my_auth_expansion, 100).
+%% my_auth_expansion(Request0, Request, Options) :-
+%% 	%debug(auth,'>> my_auth_exp ~q ~q',[Request0,Options]),
+%%     http_dispatch:authentication(Options, Request0, Extra),
+%% 	append(Extra, Request0, Request).
+%% 	%debug(auth,'<< my_auth_exp ~q',[Request]).
 
 % redirect from / to /redaktilo/red, when behind a proxy, this is a task for the proxy
 :- http_handler('/', http_redirect(moved,root(red)),[]).
@@ -120,7 +120,7 @@ my_auth_expansion(Request0, Request, Options) :-
 
 % uzas padon web...
 %%:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
-:- http_handler(red(.), reply_files, [prefix, authentication(local), id(landing)]).
+:- http_handler(red(.), reply_files, [prefix, authentication(page), id(landing)]).
 %% provizore provu sen saltuto...
 %%:- http_handler(red(.), reply_files, [prefix,id(landing)]).
 
@@ -296,7 +296,7 @@ revo_sercho(Request) :-
     active_sessions_header,    
 	
 	% format('Content-type: application/json~n~n'),
-	findall(Json,sqlrevo:search_eo_json(Sercho,Json),ResultList)
+	findall(Json,search_eo_json(Sercho,Json),ResultList)
 	       % debug(redaktilo(request),'json=~q',[ResultList]),
 	       % json_write(current_output,ResultList).
         -> reply_json(ResultList)
@@ -308,7 +308,7 @@ revo_sercho(Request) :-
 revo_lastaj_redaktoj(Request) :-   
     once((
         member(user(RedID),Request),
-        sqlrevo:email_redid(Retadreso,RedID)
+        email_redid(Retadreso,RedID)
         ;
         http_session_data(retadreso(Retadreso))
     )),
@@ -331,7 +331,7 @@ revo_sendo(Request) :-
     % http_session_data(retadreso(Retadreso)),
     once((
         member(user(RedID),Request),
-        sqlrevo:email_redid(Retadreso,RedID)
+        email_redid(Retadreso,RedID)
         ;
         http_session_data(retadreso(Retadreso))
     )),
@@ -560,7 +560,7 @@ homonimoj_senref(_Request) :-
     set_stream(current_output,encoding(utf8)),
 	
     % format('Content-type: application/json~n~n'),
-    findall(Json,sqlrevo:homonimoj_sen_ref_json(Json),ResultList)
+    findall(Json,homonimoj_sen_ref_json(Json),ResultList)
     -> reply_json(ResultList)
     ;
     format('Status: ~d~n~n',[500]).

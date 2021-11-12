@@ -29,7 +29,7 @@
 :- encoding(utf8).
 
 :- multifile http:authenticate/3.
-http:authenticate(oauth,Request,[user(User)]) :- page_auth(Request,User).
+http:authenticate(page,Request,[user(User)]) :- page_auth(Request,User).
 
 http:location(auth, root(auth), []).
 http:location(reg,root(reg),[]).
@@ -231,6 +231,8 @@ redaktilo_saluto(_Options) -->
 page_auth(_Request,RedID) :-	
 	debug(auth,'>> page_auth',[]),	
     once((
+		local_auth(RedID,_Email)
+		;
 		oauth2_id(RedID)
 		;
 		http_redirect(moved_temporary, location_by_id(login_page), _)
@@ -313,6 +315,22 @@ session_data_user(RedID,Retadreso) :-
 	http_session_data(retadreso(Retadreso)),
 	http_session_data(red_id(RedID)).
 
+
+% Kiam ni uzas la redaktilon loke, ni ne volas uzi registron de redaktantoj
+% kaj apartan servon por ensaluti. La solan uzanton ni simple transdonas
+% kiel retpoŝta adreso en mediovariablo REDAKTANTO_RETPOSHTO
+% Noto: tamen devas esti registrita retpoŝtadreso, se la redaktoj
+% traktiĝu poste!
+
+%%http:authenticate(local,Request,[user(User),email(Email)]) :- local_auth(Request,User,Email).
+
+local_auth(RedID,Email) :-
+    getenv('REDAKTANTO_RETPOSHTO',Email),
+    debug(auth,'>> local_auth: ~q',[Email]),	   
+    check_email(Email,CheckedEmail), 
+    email_redid(CheckedEmail,RedID),
+	http_open_session(_SessionID, []),
+	session_assert_user(RedID,CheckedEmail). % USER = hash(Email)
 
 
 /******************************* helpopredikatoj **********************/
