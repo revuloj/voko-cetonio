@@ -99,6 +99,7 @@ init :-
     assert(user:file_search_path(static,web(static))),
     assert(user:file_search_path(voko,VokoDir)),
     assert(user:file_search_path(cfg,voko(cfg))),
+    assert(user:file_search_path(jsc,voko(jsc))),  
     assert(user:file_search_path(stl,voko(stl))),
     assert(user:file_search_path(smb,voko(smb))).
 		  
@@ -147,6 +148,8 @@ http:location(static,root(static),[]).
 :- http_handler(root(voko), serve_files_in_directory(cfg), [prefix]).
 :- http_handler(root(stl), serve_files_in_directory(stl), [prefix]).
 :- http_handler(root(smb), serve_files_in_directory(smb), [prefix]).
+:- http_handler(root(jsc), serve_files_in_directory(jsc), [prefix]).
+:- http_handler(root(bld), proxy_bld, [prefix]).
 
 server(Port) :-
     show_pathes,
@@ -176,7 +179,7 @@ help :-
 show_pathes :-
     forall(
         (
-            member(Path,[web,voko,static,stl,cfg,smb,js,icons,css]),
+            member(Path,[web,voko,static,stl,cfg,smb,js,jsc,icons,css]),
             file_search_path(Path,Dir)
         ),
         %debug(redaktilo(pado),'~q -> ~q',[Path,Dir])
