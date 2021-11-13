@@ -32,6 +32,7 @@ RUN curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
 
 COPY --from=grundo build/smb/ /home/cetonio/voko/smb/
 COPY --from=grundo build/stl/ /home/cetonio/voko/stl/
+COPY --from=grundo build/jsc/ /home/cetonio/voko/jsc/
 COPY --from=grundo build/jqu/ /home/cetonio/pro/web/static/
 
 COPY --from=grundo build/xsl/ ${HOME_DIR}/files/xsl/
