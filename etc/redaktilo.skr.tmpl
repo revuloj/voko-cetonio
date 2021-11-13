@@ -1,0 +1,51 @@
+% La identigaj servoj uzante OAuth / OpenID Connect, kiel Google, FB k.a.
+% administras kontojn de uzantoj kaj povas esti uzataj kun la redaktilo kiel
+% registrita aplikaĵo. Do necesas programisto-konto ĉe tiuj servoj, per tiu oni povas
+% registri sian aplikaĵon kaj rezulte ricevas kliento-identigilon (ClientID) kaj
+% kliento-sekreton (Client Secret) - ambaŭ necesas por uzi la identigan servon de
+% la respektiva provizanto.
+
+% GOOGLE
+% https://console.developers.google.com
+
+oauth2:server_attribute(google, client_id,
+                        '---***---.apps.googleusercontent.com').
+oauth2:server_attribute(google, client_secret,
+                        '---***---').
+
+% YAHOO
+% https://developer.yahoo.com/oauth2/guide/openid_connect/
+% https://developer.yahoo.com/apps
+% App ID: LOBK9P4s
+
+oauth2:server_attribute(yahoo, client_id,
+                        '---***---').
+oauth2:server_attribute(yahoo, client_secret,
+                        '---***---').
+
+% FACEBOOK
+% https://developers.facebook.com/docs/facebook-login/web
+% https://developers.facebook.com/apps
+% https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/
+% https://auth.nuxtjs.org/providers/facebook.html
+
+% <div id="fb-root"></div>
+% <script async defer crossorigin="anonymous"
+% src="https://connect.facebook.net/eo_EO/sdk.js#xfbml=1&version=v5.0&appId=470350070308530&autoLogAppEvents=1"></script>
+%
+% <div class="fb-login-button" data-width=""
+%  data-size="medium" data-button-type="login_with" data-auto-logout-link="false" data-use-continue-as="false"></div>
+
+oauth2:server_attribute(facebook, client_id,
+                        '---***---').
+oauth2:server_attribute(facebook, client_secret,
+                        '---***---').
+
+% la slautnomo kaj pasvorto por via poŝtfako, uzata por
+% forsendi redaktojn
+mail_user('---***---').
+mail_pw('---***---').
+
+% tio servas por identigi fonajn Ajax-petojn, vi povas
+% meti arbitran sekreton (signoĉenon) tie ĉi
+ajax_secret('---***---').
