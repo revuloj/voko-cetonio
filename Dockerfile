@@ -22,8 +22,8 @@ ADD . ./
 
 RUN curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
   && unzip master.zip voko-grundo-master/xsl/* voko-grundo-master/dtd/* \
-  voko-grundo-master/cfg/* voko-grundo-master/owl/voko.rdf && rm master.zip \
-  && mv voko-grundo-master voko \
+     voko-grundo-master/cfg/* voko-grundo-master/smb/*.gif voko-grundo-master/owl/voko.rdf \
+  && rm master.zip && mv voko-grundo-master voko \
   && cd voko/cfg \
   && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/bibliogr.xml \
   && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/klasoj.xml
