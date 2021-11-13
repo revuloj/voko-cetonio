@@ -12,7 +12,6 @@
     
 :- initialization(read_cfg).
 
-
 % sha_hash(wolfram,H,[algorithm(sha384),encoding(utf8)]),hash_atom(H,A).
 
 read_cfg :-
@@ -26,12 +25,19 @@ read_cfg :-
     ensure_loaded(CfgFile). 
 
 read_auth_cfg :-
-    once((
-	 getenv('HOME',HomeDir),
-	 atom_concat(HomeDir,'/etc/auth_cfg',AuthCfg),
-     exists_file(AuthCfg)
+    once((	  
+	  % la agordo-dosiero indikas kie estas auth_cfg
+	  get_config(auth_cfg,AuthCfg),
+	  exists_file(AuthCfg)
+     ;
+	  % ĝi estas sub ~/etc/auth_cfg
+	  getenv('HOME',HomeDir),
+	  atom_concat(HomeDir,'/etc/auth_cfg',AuthCfg),
+      exists_file(AuthCfg)
 	 ;
-	 expand_file_search_path(agordo('auth_cfg'),AuthCfg)
+	 % ĝi estas es dosierujo indikita per pad-specifo 'agordo', tion
+	 % eblas transdoni sur la komandlinio per -p agordo=...
+	  expand_file_search_path(agordo('auth_cfg'),AuthCfg)
 	)),
     ensure_loaded(AuthCfg).
 
