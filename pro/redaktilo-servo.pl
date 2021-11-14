@@ -158,6 +158,7 @@ server(Port) :-
 
 daemon :-
     show_pathes,
+    show_handlers,
     http_daemon.
 
 help :-
