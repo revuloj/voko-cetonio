@@ -1,5 +1,5 @@
 ##### staĝo 1: certigu, ke vi antaŭe kompilis voko-grundo aŭ ŝargis de Github kiel pakaĵo
-FROM voko-grundo as grundo 
+FROM ghcr.io/revuloj/voko-grundo/voko-grundo:latest as grundo 
   # ni bezonos la enhavon de voko-grundo build poste por kopi jsc, stl, dok
 
 ##### staĝo 2: Nun ni kreos la propran procesumon por la redaktilo...
