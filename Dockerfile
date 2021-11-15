@@ -44,7 +44,7 @@ RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml &&
 USER cetonio:users
 RUN mkdir -p tmp && mkdir -p sql
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["./bin/docker-entrypoint.sh"]
 
 CMD ["swipl",\
     "-s","pro/redaktilo-servo.pl",\
