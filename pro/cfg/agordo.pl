@@ -16,6 +16,7 @@
 
 read_cfg :-
 	read_cfg('redaktilo.cfg'),
+	read_cfg('redaktilo.url'),
 	read_cfg('oauth_setup'),
 	read_secrets('redaktilo.skr').
 
@@ -28,7 +29,7 @@ read_cfg(FileName) :-
 		;
 		% aŭ ĝi estas agordita per komandlinia parametro: -p agordo=/ie/cfg
 		% PLOBONIGU: ĉu ni serĉu tie unue?
-		expand_file_search_path(agordo(Filename),CfgFile)
+		expand_file_search_path(agordo(FileName),CfgFile)
 	)),
 	ensure_loaded(CfgFile). 
 
