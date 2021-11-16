@@ -27,7 +27,7 @@ update-db)
     echo "aktualigante datumbazon de artikoloj el la ĉiutaga eldono..."
     mkdir -p ${tmp_dir}
     /usr/bin/swipl -s ${revodb_upd} -g "${revodb_goal}" -t "halt"
-    /usr/bin/unzip ${tmp_dir}/revo-inx.db.tmp.zip -d ${tmp_dir}
+    /usr/bin/unzip -o ${tmp_dir}/revo-inx.db.tmp.zip -d ${tmp_dir}
     cp ${tmp_dir}/revo-inx.db ${sql_dir}/revo-inx.db
     ;;
 redaktantoj)

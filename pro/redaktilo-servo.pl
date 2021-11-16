@@ -74,7 +74,7 @@ thread_init :-
 
 init :-
     set_prolog_flag(encoding,utf8),
-    agordo:read_auth_cfg,
+    % agordo:read_auth_cfg,
     agordo:get_config([
      http_app_root(AppRoot),
 	 http_app_scheme(Scheme),

@@ -15,36 +15,42 @@
 % sha_hash(wolfram,H,[algorithm(sha384),encoding(utf8)]),hash_atom(H,A).
 
 read_cfg :-
+	read_cfg('redaktilo.cfg'),
+	read_cfg('oauth_setup'),
+	read_secrets('redaktilo.skr').
+
+read_cfg(FileName) :-
     once((
-	 getenv('HOME',HomeDir),
-	 atom_concat(HomeDir,'/etc/redaktilo.cfg',CfgFile),
-	 exists_file(CfgFile)
-	 ;
-	 expand_file_search_path(agordo('redaktilo.cfg'),CfgFile)
+		% agordo-dosiero povas esti en ~/etc/
+		getenv('HOME',HomeDir),
+		atomic_list_concat([HomeDir,'etc',FileName],'/',CfgFile),
+		exists_file(CfgFile)
+		;
+		% aŭ ĝi estas agordita per komandlinia parametro: -p agordo=/ie/cfg
+		% PLOBONIGU: ĉu ni serĉu tie unue?
+		expand_file_search_path(agordo(Filename),CfgFile)
 	)),
-    ensure_loaded(CfgFile). 
+	ensure_loaded(CfgFile). 
 
-read_auth_cfg :-
-    once((	  
-	  % la agordo-dosiero indikas kie estas auth_cfg
-	  get_config(auth_cfg,AuthCfg),
-	  exists_file(AuthCfg)
-     ;
-	  % ĝi estas sub ~/etc/auth_cfg
-	  getenv('HOME',HomeDir),
-	  atom_concat(HomeDir,'/etc/auth_cfg',AuthCfg),
-      exists_file(AuthCfg)
-	 ;
-	 % ĝi estas es dosierujo indikita per pad-specifo 'agordo', tion
-	 % eblas transdoni sur la komandlinio per -p agordo=...
-	  expand_file_search_path(agordo('auth_cfg'),AuthCfg)
-	)),
-    ensure_loaded(AuthCfg).
+read_secrets(DefaultSecretFN) :-
+	once((	  
+		% la agordo-predikato 'secrets' indikas kie estas la sekreto-dosiero
+		get_config(secrets,SecretFile),
+		exists_file(SecretFile),
+		ensure_loaded(SecretFile)
+		;
+		% se ĝi ne estas agordita aŭ ne troviĝas en la indikita loko
+		% ni provu trovi ĝin en aprioraj agordo-dosierujoj
+		read_cfg(DefaultSecretFN)
+	)).
 
+
+% donu unu agordo-valoron per gia ŝlosilo
 get_config(Key,Value) :-
     atom(Key),
     call(agordo:Key,Value).
 
+% donu liston de agordoj en la formo [nomo1(Valoro1),nomo2(Valoro2),...]
 get_config([]).
 get_config([Opt|KVs]) :-
 %    Opt =.. [Key,Value],
