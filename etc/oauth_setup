@@ -68,3 +68,10 @@ oauth2:server_attribute(facebook, redirect_uri, URI) :-
 oauth2:server_attribute(facebook, scope,
                         'email').
 
+absolute_uri(Path,URI) :-
+    agordo:get_config(http_app_scheme,Scheme),
+    http_absolute_uri(Path, U),
+    sub_atom(U,0,5,_,'http:'),
+    sub_atom(U,5,_,0,R),
+    atom_concat(Scheme,R,URI).
+
