@@ -82,5 +82,5 @@ absolute_uri(Path,URI) :-
         ;
         atom_concat(Port,':',P)
         )),
-    format(atom(URI),'~w://~w~w~w',[Scheme,Host,Port,AppRoot,Path]).
+    format(atom(URI),'~w://~w~w~w~w',[Scheme,Host,P,AppRoot,Path]).
 
