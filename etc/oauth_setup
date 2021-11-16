@@ -7,7 +7,7 @@
 oauth2:server_attribute(google, url,
                         'https://accounts.google.com').
 oauth2:server_attribute(google, redirect_uri, URI) :- 
-    http_absolute_uri(root('/oauth2/google/reply'), URI).
+    absolute_uri(root('/oauth2/google/reply'), URI).
 
 % la identigilon kaj sekreton ni legos el docker-sekreto, vd. redaktilo.skr.tmpl!
 % oauth2:server_attribute(google, client_id,
@@ -26,7 +26,7 @@ oauth2:server_attribute(google, scope,
 oauth2:server_attribute(yahoo, url, %authorization_endpoint,
                         'https://api.login.yahoo.com/oauth2/request_auth').
 oauth2:server_attribute(yahoo, redirect_uri, URI) :- 
-    http_absolute_uri(root('/oauth2/yahoo/reply'), URI).
+    absolute_uri(root('/oauth2/yahoo/reply'), URI).
 
 % la identigilon kaj sekreton ni legos el docker-sekreto, vd. redaktilo.skr.tmpl!
 % oauth2:server_attribute(yahoo, client_id,
@@ -59,7 +59,7 @@ oauth2:server_attribute(facebook, token_endpoint,
 oauth2:server_attribute(facebook, userinfo_endpoint,
                         'https://graph.facebook.com/v2.12/me').
 oauth2:server_attribute(facebook, redirect_uri, URI) :- 
-    http_absolute_uri(root('/oauth2/facebook/reply'), URI).
+    absolute_uri(root('/oauth2/facebook/reply'), URI).
 % la identigilon kaj sekreton ni legos el docker-sekreto, vd. redaktilo.skr.tmpl!
 % oauth2:server_attribute(facebook, client_id,
 %                         '---***---').
