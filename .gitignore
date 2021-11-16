@@ -8,6 +8,6 @@ voko
 *.log
 *.zip
 
-oauth_setup
+#oauth_setup
 
 

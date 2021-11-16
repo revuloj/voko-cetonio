@@ -1,0 +1,67 @@
+
+% GOOGLE
+% https://console.developers.google.com
+
+oauth2:server_attribute(google, url,
+                        'https://accounts.google.com').
+oauth2:server_attribute(google, redirect_uri,
+                        'http://example.com:3040/oauth2/google/reply').
+
+% la identigilon kaj sekreton ni legos el docker-sekreto, vd. redaktilo.skr.tmpl!
+% oauth2:server_attribute(google, client_id,
+%                        '---***---.apps.googleusercontent.com').
+% oauth2:server_attribute(google, client_secret,
+%                        '---***---').
+oauth2:server_attribute(google, scope,
+                        email).
+
+% YAHOO
+% https://developer.yahoo.com/oauth2/guide/openid_connect/
+% https://developer.yahoo.com/apps
+% App ID: LOBK9P4s
+
+%oauth2:server_attribute(yahoo, url, 'https://login.yahoo.com').
+oauth2:server_attribute(yahoo, url, %authorization_endpoint,
+                        'https://api.login.yahoo.com/oauth2/request_auth').
+oauth2:server_attribute(yahoo, redirect_uri,
+                        'https://revaj.steloj.de/redaktilo-test/oauth2/yahoo/reply').
+
+% la identigilon kaj sekreton ni legos el docker-sekreto, vd. redaktilo.skr.tmpl!
+% oauth2:server_attribute(yahoo, client_id,
+%                        '---***---').
+% oauth2:server_attribute(yahoo, client_secret,
+%                        '---***---').
+oauth2:server_attribute(yahoo, scope,
+                        'openid,sdct-r').  % https://developer.yahoo.com/oauth2/guide/yahoo_scopes/
+
+% FACEBOOK
+% https://developers.facebook.com/docs/facebook-login/web
+% https://developers.facebook.com/apps
+% https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/
+% https://auth.nuxtjs.org/providers/facebook.html
+
+% <div id="fb-root"></div>
+% <script async defer crossorigin="anonymous" 
+% src="https://connect.facebook.net/eo_EO/sdk.js#xfbml=1&version=v5.0&appId=470350070308530&autoLogAppEvents=1"></script>
+% 
+% <div class="fb-login-button" data-width=""
+%  data-size="medium" data-button-type="login_with" data-auto-logout-link="false" data-use-continue-as="false"></div>
+
+
+oauth2:server_attribute(facebook, url,
+                        'https://www.facebook.com/v5.0/dialog/oauth').
+oauth2:server_attribute(facebook, authorization_endpoint,
+                        'https://www.facebook.com/v5.0/dialog/oauth').
+oauth2:server_attribute(facebook, token_endpoint,
+                        'https://graph.facebook.com/v5.0/oauth/access_token').
+oauth2:server_attribute(facebook, userinfo_endpoint,
+                        'https://graph.facebook.com/v2.12/me').
+oauth2:server_attribute(facebook, redirect_uri,
+                        'https://revaj.steloj.de/redaktilo-test/oauth2/facebook/reply').
+% la identigilon kaj sekreton ni legos el docker-sekreto, vd. redaktilo.skr.tmpl!
+% oauth2:server_attribute(facebook, client_id,
+%                         '---***---').
+% oauth2:server_attribute(facebook, client_secret,
+%                         '---***---').
+oauth2:server_attribute(facebook, scope,
+                        'email').  
