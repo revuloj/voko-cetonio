@@ -4,9 +4,10 @@
 	      search_trd/2,
 	      search_eo_html/2,
 	      search_eo_json/2,
-	      search_trd_html/2,
+	      search_trd_html/2
+          /*,
           homonimoj_sen_ref/1,
-          homonimoj_sen_ref_json/1
+          homonimoj_sen_ref_json/1*/
 	  ]).
 
 :- use_module(library(prosqlite)).
@@ -100,6 +101,7 @@ art_trd(Artikolo,Lng,Tradukoj) :-
 art_trd_json(Artikolo,Lng,json([mrk=Mrk,kap=Kap,num=Num,trd=Trd])) :-
     art_trd(Artikolo,Lng,row(Mrk,Kap,Num,Trd)).
 
+/*
 homonimoj_sen_ref(Homonimoj) :-
    % format(atom(Query),'select distinct a.kap, a.art, b.art from nodo a, nodo b where a.kap=b.kap and a.art <> b.art and not exists (select * from referenco r where r.tip=''hom'' and r.mrk = a.mrk and r.cel = b.mrk) order by a.kap;',[]),
    format(atom(Query),'select distinct a.kap, a.art, b.art from nodo a, nodo b where a.kap=b.kap collate nocase and a.art <> b.art and not exists (select * from referenco r where r.tip=''hom'' and max(instr(r.mrk,a.mrk),instr(a.mrk,r.mrk))=1 and max(instr(r.cel,b.mrk),instr(b.mrk,r.cel))=1) order by a.kap;',[]),
@@ -107,6 +109,6 @@ homonimoj_sen_ref(Homonimoj) :-
 
 homonimoj_sen_ref_json(json([kap=Kap,art1=Art1,art2=Art2])) :-
     homonimoj_sen_ref(row(Kap,Art1,Art2)).
-
+*/
 
 

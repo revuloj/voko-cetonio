@@ -106,7 +106,7 @@ init :-
 :- http_handler(red(bildo_info_2), bildo_info_2, [authentication(ajaxid)]).
 :- http_handler(red(analizo), analizo, [authentication(ajaxid)]).
 :- http_handler(red(analinioj), analinioj, [authentication(ajaxid)]).
-:- http_handler(red(homonimoj_senref), homonimoj_senref, [authentication(ajaxid)]).
+%:- http_handler(red(homonimoj_senref), homonimoj_senref, [authentication(ajaxid)]).
 
 :- http_handler(root(voko), serve_files_in_directory(cfg), [prefix]).
 :- http_handler(root(stl), serve_files_in_directory(stl), [prefix]).
@@ -510,7 +510,7 @@ analizo(Request) :-
     copy_stream_data(Stream,current_output),
     close(Stream).
 
-
+/*
 homonimoj_senref(_Request) :-
     set_stream(current_output,encoding(utf8)),
 	
@@ -519,7 +519,7 @@ homonimoj_senref(_Request) :-
     -> reply_json(ResultList)
     ;
     format('Status: ~d~n~n',[500]).
-
+*/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
