@@ -2,6 +2,8 @@
 :- module(redaktilo_servo,
 	  [ server/1			% +Port
 	  ]).
+
+:- use_module(library(debug)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_server_files)).
@@ -27,45 +29,32 @@
 % TODO: is http/http_error autoloaded?
 % see http://www.swi-prolog.org/pldoc/man?section=http-debug
 
-:- use_module(library(debug)).
-
 user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 
-% difinu la aplikaĵon "redaktilo"
-/***
-:- use_module(redaktilo:library(pengines)).
-:- use_module(redaktilo:redaktilo).
-***/
 %:- use_module(redaktilo).
 :- use_module(pro(auth/auth_page)).
 :- use_module(pro(auth/auth_ajax)).
 % legu post redaktilo_auth, por difini oauth2:server_attribute (multifile)
 :- use_module(pro(cfg/agordo)).
+:- use_module(pro(cfg/http_agordo)).
 
-:- use_module(sercho).
-:- use_module(sendo).
-:- use_module(gist).
+:- use_module(pro(sercho)).
+:- use_module(pro(sendo)).
+:- use_module(pro(gist)).
 :- use_module(pro(db/revo)).
 :- use_module(pro(db/redaktantoj)).
-:- use_module(xml_quote).
+:- use_module(pro(xml_quote)).
 %:- use_module(xslt_trf).
-:- use_module(xslt_proc).
+:- use_module(pro(xslt_proc)).
 %:- use_module(ekzfnt).
 %%:- use_module(relaxng).
-
-:- debug(redaktilo(_)).
-:- debug(http(request)).
-%% :- debug(openid(_)).
-:- debug(sendo).
-
-revo_url('https://reta-vortaro.de/revo/').
 
 % aktuale la demono malŝaltas protokoladon per "debug"
 % kaj ŝalto per komandlinio ne funkcias...
 thread_init :-
     debug(redaktilo(_)),
     debug(http(request)),
-    %% debug(openid(ax)), % yadis, authenticate, verify, resolve, check_authentication, crypt, associate...
+    %% debug(auth),
     debug(sendo).
 
 :- initialization(init).
@@ -75,36 +64,10 @@ thread_init :-
 init :-
     set_prolog_flag(encoding,utf8),
     % agordo:read_auth_cfg,
-    agordo:get_config([
-     http_app_root(AppRoot),
-	 http_app_scheme(Scheme),
-	 http_app_host(Host),
-	 http_app_port(Port),
-	 http_session_timeout(Timeout)
-	]),
-    set_setting(http:prefix,AppRoot),
-    set_setting(http:public_scheme,Scheme),
-    set_setting(http:public_port,Port),
-    set_setting(http:public_host,Host),
-    http_set_session_options([
-	  cookie(redaktilo_seanco),
-    %%%  create(noauto),
-      timeout(Timeout),
-	  path(AppRoot)
-	]),
-    % la lokaj dosierujoj el kiuj servi dosierojn
-    agordo:get_path(root_dir,web_dir,WebDir),
-    agordo:get_path(root_dir,voko_dir,VokoDir),
-    assert(user:file_search_path(web,WebDir)),
-    assert(user:file_search_path(static,web(static))),
-    assert(user:file_search_path(voko,VokoDir)),
-    assert(user:file_search_path(cfg,voko(cfg))),
-    assert(user:file_search_path(jsc,voko(jsc))),  
-    assert(user:file_search_path(stl,voko(stl))),
-    assert(user:file_search_path(smb,voko(smb))).
+    http_agordo.
+
 		  
-http:location(red,root(red),[]).
-http:location(static,root(static),[]).
+
 
 /*** workaround bug in SWI 8.0.3 - exchanged Request / Request0 in append ***/
 %% :- abolish(http_dispatch:request_expansion/2).
@@ -152,13 +115,19 @@ http:location(static,root(static),[]).
 :- http_handler(root(bld), proxy_bld, [prefix]).
 
 server(Port) :-
-    show_pathes,
-    show_handlers,
+    % skribu la agordon
+    http_setting_info,
+    http_path_info,
+    http_handler_info,
+    % lanĉu la servon
     http_server(http_dispatch, [port(Port)]).
 
 daemon :-
-    show_pathes,
-    show_handlers,
+    % skribu la agordon
+    http_setting_info,
+    http_path_info,
+    http_handler_info,
+    % lanĉu la servon
     http_daemon.
 
 help :-
@@ -176,24 +145,6 @@ help :-
 	       
 
 /*******************************************/
-
-show_pathes :-
-    forall(
-        (
-            member(Path,[web,voko,static,stl,cfg,smb,js,jsc,icons,css]),
-            file_search_path(Path,Dir)
-        ),
-        %debug(redaktilo(pado),'~q -> ~q',[Path,Dir])
-        format('~q -> ~q~n',[Path,Dir])
-    ). 
-
-show_handlers :-
-    http_dispatch:path_tree(T),
-    forall(
-        %http:location(P,H,_),
-        member(node(P,H,_,_),T),
-        format('~q >> ~q~n',[P,H])
-    ).
 
 
 entry_no_cache(Request) :-
@@ -257,7 +208,7 @@ revo_artikolo(Request) :-
      ).
 
 xml_stream(FileName,XmlStream,Status) :-
-    revo_url(Revo),
+    agordo:get_config(revo_url,Revo),
     % antaŭŝargu DTD
     %%  vokodtd(vortaro,VokoDTD),
     % elŝutu XML

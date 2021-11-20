@@ -1,8 +1,10 @@
 /* -*- Mode: Prolog -*- */
 
 :- module(agordo,[
-	      get_config/2
+	      get_config/2,
+		  get_path/3
 	  ]).
+
 
 :- dynamic send_pw/1, revodb/1.
 
@@ -16,7 +18,7 @@
 
 read_cfg :-
 	read_cfg('redaktilo.cfg'),
-	read_cfg('redaktilo.url'),
+	%read_cfg('redaktilo.url'),
 	read_cfg('oauth_setup'),
 	read_secrets('redaktilo.skr').
 
