@@ -15,9 +15,8 @@ http:location(static,root(static),[]).
 
 http_agordo :-
 	% ekstraktu la unuopaj HTTP-agordojn el la mediocariablo REDAKTILO_URL
-	getenv('REDAKTILO_URL',URL) 
-    -> (
-        uri_components(URL,Cmp),
+	(getenv('REDAKTILO_URL',URL) 
+    ->  uri_components(URL,Cmp),
         uri_data(scheme,Cmp,Scheme),
         uri_data(authority,Cmp,Authority),
         uri_data(path,Cmp,AppRoot),
@@ -28,13 +27,11 @@ http_agordo :-
         set_setting(http:prefix,AppRoot),
         set_setting(http:public_scheme,Scheme),
         set_setting(http:public_port,Port),
-        set_setting(http:public_host,Host)
-        )
-    ;   (
+        set_setting(http:public_host,Host)        
+    ;   
         writeln('AVERTO: Mankas medivariablo REDAKTILO_URL. La servo parte ne funkcios (ensalutado ktp.)'),
-        AppRoot = '/'
-        ),
-
+        AppRoot = '/'        
+    ),
     % la agordo de HTTP-seancoj
     get_config(http_session_timeout,SessTimeout),
     http_set_session_options([
@@ -58,6 +55,7 @@ http_agordo :-
 
 http_path_info :-
     writeln('% http-padoj'),
+    writeln('% bezonataj: web,voko,static,stl,cfg,smb,js,jsc,icons,css'),
     forall(
         (
             member(Path,[web,voko,static,stl,cfg,smb,js,jsc,icons,css]),
