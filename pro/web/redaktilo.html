@@ -79,12 +79,12 @@
     <div id="tabs">
       <ul id="tab-buttons">
 <!--            <li><a href="#vrt">vrt - redakti</a></li> -->
-        <li><a href="#xml">xml - redakti</a></li>
-        <li><a href="#html">antaŭrigardo</a>
+        <li><a href="#xml">&lt;/&gt;</a></li>
+        <li><a href="#html">A</a>
           <button id="re_antaurigardo" class="ui-button ui-widget ui-corner-all" title="Refreŝigu">&#x27f3;
             </button>
           </li>
-        <li><a href="#sercho">serĉo</a></li>
+        <li><a href="#sercho">S</a></li>
 <!--            <li><a href="#kontrolo">kontrolo</a></li>
         <li><a href="#helpo">helpo</a></li>
 -->
@@ -93,12 +93,22 @@
         <p>funkcio mankas ankoraŭ.</p>
       </div> -->
       <div id="xml">
-        <select id="art_strukturo"></select>
+        <div id="xml_supro">
+          <select id="art_strukturo"></select>
+          <div>
+            <button id="help_btn" class="ui-button ui-widget help_btn" title="Helpo">
+              <a href="https://revuloj.github.io/temoj/rnc.html" target="_new">&#x2754;</a>
+            </button>
+            <button id="logout_btn" class="ui-button ui-widget logout_btn" title="Adiaŭ">&#x23FB;</button>
+            <br/>
+            <span class="versio">eldono 2b</span>
+          </div>
+        </div>
         <textarea id="xml_text" name="xml_text" placeholder="Ŝargu artikolon (per la menukomando) aŭ alŝovu XML-dosieron (ekz. el via disko aŭ retpoŝto) tien ĉi."></textarea>
         <div id="pos_klv" class="ui-corner-all">
           <span class="position" id="position">1:1</span
-          ><label class="kklvbtn" for="kromklvr">&#x2328;</label
-          ><input class="ui-button kklvbtn" type="checkbox" id="kromklvr" />
+          ><label class="ui-helper-reset kklvbtn" for="kromklvr">&#x2328;</label
+          ><input class="ui-button ui-helper-reset kklvbtn" type="checkbox" id="kromklvr" />
         </div>
         <div id="dock">
             <div id="elekto_indikoj">
@@ -140,13 +150,6 @@
       </div> <!-- #sercho -->
     </div> <!-- #tabs -->
       
-    <div id="versio">
-      <button id="help_btn" class="ui-button ui-widget help_btn" title="Helpo">
-        <a href="https://revuloj.github.io/temoj/rnc.html" target="_new">&#x2754;</a></button>
-      <button id="logout_btn" class="ui-button ui-widget logout_btn" title="Adiaŭ">&#x23FB;</button>
-      <br/>
-        eldono 0.9.7
-    </div>
       
            
 <!--  ### dialogoj ### -->      

@@ -43,10 +43,11 @@ body {
         max-height: 95% !important;
         overflow: auto !important;
     }
+    /*
     #positions {
         font-size: 100% !important;
         overflow-x: visible
-    }
+    } */
     #xml_text {
         font-size: 110%
     }
@@ -79,6 +80,8 @@ body {
     0% {color: #7f2f2f;}
 }
 
+
+
 textarea {
     resize: none;
     overflow: auto;
@@ -86,8 +89,8 @@ textarea {
 
 #pos_klv {
     position: absolute;
-    top: 4.5em;
-    right: 1em;
+    top: 4.2em;
+    right: 4.2em;
     opacity: .8;
 }
 
@@ -160,20 +163,51 @@ dd {
     width: 15%;
     border: 0px solid red
 }
+
 #tabs {
-    display: flex; //inline-block;
+    display: flex; 
     -webkit-display: flex;
-    flex-direction: column;
-    -webkit-flex-direction: column;
+    flex-direction: row-reverse;
+    -webkit-flex-direction: row-reverse;
+
+    /* samsupre kiel la menuo */
     vertical-align: top;
     padding: 0;
     margin: 0;
     height: 100%;
-    //width: 80%;
+    /*width: 80%;*/
     flex: 1;
     -webkit-flex: 1;
     border: 0px solid blue
 }
+
+.ui-tabs-vertical {
+    width: 3em; 
+}
+.ui-tabs-vertical .ui-tabs-nav { 
+    padding: 0.2em .2em .2em 0em; 
+    width: 3em; 
+}
+.ui-tabs-vertical .ui-tabs-nav li { 
+    width: 100%; 
+    border-bottom-width: 1px !important; 
+    border-right-width: 0 !important; 
+    margin: 0 -1px .2em 0; 
+}
+.ui-tabs-vertical .ui-tabs-nav li a { 
+    display:block; 
+}
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { 
+    padding-bottom: 0; 
+    padding-right: .1em; 
+    border-right-width: 1px; 
+}
+/*
+.ui-tabs-vertical .ui-tabs-panel { 
+    padding: 1em; 
+    width: 40em;
+}
+*/
 
 #menu {
    height: 99.8%;
@@ -477,6 +511,14 @@ dd {
     //height: 100%
 }
 
+#xml_supro {
+    display: flex;
+}
+
+#art_strukturo {
+    flex: 1;
+}
+
 #sercho_fono {
     //border: 1px solid blue;
     display: flex;
@@ -544,17 +586,13 @@ dd {
 }
 
 
-#versio {
-    position: absolute;
-    top: 0;
-    right:0;
-    margin: 0.2em;
+.versio {
     font-family: sans-serif;
     font-size: small;
     color: teal
 }
 
-
+/*
 #positions {
     position: absolute;
     max-height: 90%;
@@ -567,13 +605,14 @@ dd {
     border-bottom: none;
 }
 
-/*
+
 #collapse_outline {
     //overflow: auto !important;
     // max-height: 90% !important;
 }
 */
 
+/*
 #art_outline {
     margin-bottom: 0.3em;
     padding: 0.1em !important;
@@ -600,6 +639,7 @@ dd {
     font-weight: bold;
     text-align: center
 }
+*/
 
 #ekzemplo_sercho_rezultoj {
   max-height: 15em;
