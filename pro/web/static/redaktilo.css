@@ -84,6 +84,16 @@ textarea {
     overflow: auto;
 }
 
+#xml .position {
+    position: absolute;
+    background-color: silver;
+    border-radius: 3px;
+    padding: .2em;
+    top: 4.5em;
+    right: 1em;
+    opacity: .8;
+}
+
 fieldset {
     border: 1px solid #327e04;
 }
