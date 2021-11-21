@@ -19,14 +19,14 @@
 <!-- see https://code.jquery.com (https://www.srihash.org) -->
 
   <script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
 
   <script
-    src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-    crossorigin="anonymous"></script> 
+    src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"
+    integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA="
+    crossorigin="anonymous"></script>
 
   <script src="../static/redaktilo-2b-min.js"></script> 
 <!--    <script src="redaktilo-iloj.js"></script>
@@ -64,6 +64,7 @@
                 <li id="datumprotekto_menu_item"><div>Datumprotekto...</div></li> 
         </ul>
           
+        <!--
         <div id="positions" class="ui-widget ui-widget-content">
              <div class="butonoj">
                   <div id="kromklavaro" class='reghim_btn' data-cmd="klavaro" title='montru kromklavaron'>&nbsp;~][&hellip;]</div>
@@ -72,8 +73,7 @@
                  <h3><span id="edit_position">linio &dash;, &dash;</span></h3>
                  <div id="art_outline"></div>
              </div>
-            <!-- <div id="edit_position">linio &dash;, signo &dash;</div> -->
-        </div>
+        </div>-->
     </div>
 
     <div id="tabs">
@@ -95,7 +95,11 @@
       <div id="xml">
         <select id="art_strukturo"></select>
         <textarea id="xml_text" name="xml_text" placeholder="Ŝargu artikolon (per la menukomando) aŭ alŝovu XML-dosieron (ekz. el via disko aŭ retpoŝto) tien ĉi."></textarea>
-        <div id="position" class="position">1:1</div>
+        <div id="pos_klv" class="ui-corner-all">
+          <span class="position" id="position">1:1</span
+          ><label class="kklvbtn" for="kromklvr">&#x2328;</label
+          ><input class="ui-button kklvbtn" type="checkbox" id="kromklvr" />
+        </div>
         <div id="dock">
             <div id="elekto_indikoj">
             </div>
@@ -104,7 +108,7 @@
               <ul id="dock_avertoj"></ul>
             </div>
             <div id="dock_klavaro" class="butonoj">
-                [fermu] [indiko] [serĉo]
+                [indiko] [serĉo]
                 &#x2015; &middot; &nbsp; &#x202f;
                 tld [] () &#x201e;&#x201c; &sbquo;&#x2018; ctl nom nac esc ind var frm
                 grase kursive emfaze sup sub minuskloj kamelo                 

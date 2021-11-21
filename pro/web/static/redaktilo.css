@@ -84,14 +84,28 @@ textarea {
     overflow: auto;
 }
 
-#xml .position {
+#pos_klv {
     position: absolute;
-    background-color: silver;
-    border-radius: 3px;
-    padding: .2em;
     top: 4.5em;
     right: 1em;
     opacity: .8;
+}
+
+#pos_klv .position {
+    background-color: silver;
+    border-radius: 4px;
+    padding: .18em;
+    margin: 2px
+}
+
+.kklvbtn {
+    background-color: silver;
+    border-radius: 4px;
+    padding: .18em;
+    margin: 2px;
+    color: black !important;
+    font-weight: normal !important;
+    box-shadow: none !important;
 }
 
 fieldset {
