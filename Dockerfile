@@ -1,6 +1,7 @@
 ##### staĝo 1: certigu, ke vi antaŭe kompilis voko-grundo aŭ ŝargis de Github kiel pakaĵo
 FROM ghcr.io/revuloj/voko-grundo/voko-grundo:latest as grundo 
-  # ni bezonos la enhavon de voko-grundo build poste por kopi jsc, stl, dok
+  # ni bezonos la enhavon de voko-grundo build poste por kopii jsc, stl, dok
+
 
 ##### staĝo 2: Nun ni kreos la propran procesumon por la redaktilo...
 FROM swipl:stable
