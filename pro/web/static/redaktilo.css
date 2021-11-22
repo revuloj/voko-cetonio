@@ -186,7 +186,7 @@ dd {
 }
 .ui-tabs-vertical .ui-tabs-nav { 
     padding: 0.2em .2em .2em 0em; 
-    width: 3em; 
+    width: 2em; 
 }
 .ui-tabs-vertical .ui-tabs-nav li { 
     width: 100%; 
@@ -195,6 +195,8 @@ dd {
     margin: 0 -1px .2em 0; 
 }
 .ui-tabs-vertical .ui-tabs-nav li a { 
+    padding: .5em .25em !important;
+    width: 100%;
     display:block; 
 }
 .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { 
