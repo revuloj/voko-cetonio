@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
       
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/south-street/jquery-ui.css"/>
+    <!--link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/south-street/jquery-ui.css"/-->
     <link rel="stylesheet" href="../static/redaktilo.css"/>
     <link rel="SHORTCUT ICON" href="../static/revo.ico">
       
@@ -77,19 +77,32 @@
     </div>
 
     <div id="tabs">
-      <ul id="tab-buttons">
-<!--            <li><a href="#vrt">vrt - redakti</a></li> -->
-        <li><a href="#xml">&lt;/&gt;</a></li>
-        <li><a href="#html">👁</a>
-          <!--<img src="../smb/i_okul.png" width="20"/> -->
-          <!--button id="re_antaurigardo" class="ui-button ui-widget ui-corner-all" title="Refreŝigu">&#x27f3;
-            </button -->
-          </li>
-        <li><a href="#sercho">🔍︎</a></li>
-<!--            <li><a href="#kontrolo">kontrolo</a></li>
-        <li><a href="#helpo">helpo</a></li>
--->
-      </ul>
+      <div id="right_side">
+        <span class="versio">Cetonio<br/>2b</span>
+
+        <ul id="tab-buttons">
+  <!--            <li><a href="#vrt">vrt - redakti</a></li> -->
+          <li id="t_xml"><a href="#xml">&lt;/&gt;</a></li>
+          <li id="t_html"><a href="#html">👁</a>
+            <!--<img src="../smb/i_okul.png" width="20"/> -->
+            <!--button id="re_antaurigardo" class="ui-button ui-widget ui-corner-all" title="Refreŝigu">&#x27f3;
+              </button -->
+            </li>
+          <li id="t_s_int"><a href="#sercho">🔍︎</a></li>
+          <li id="t_s_ext"><a href="#sercho">&#x1f30d;</a></li>
+  <!--            <li><a href="#kontrolo">kontrolo</a></li>
+          <li><a href="#helpo">helpo</a></li>
+  -->
+        </ul>
+
+        <div class="side_btn">
+          <button id="help_btn" class="ui-button help_btn" title="Helpo">
+            <a href="https://revuloj.github.io/temoj/rnc.html" target="_new">&#x2754;</a>
+          </button>
+          <button id="logout_btn" class="ui-button logout_btn" title="Adiaŭ">&#x23FB;</button>
+        </div>
+
+      </div>
 <!--          <div id="vrt">
         <p>funkcio mankas ankoraŭ.</p>
       </div> -->
@@ -97,21 +110,16 @@
         <div id="xml_supro">
           <button id="menu_show_btn" class="menu_toggle">&#x00ab;</button>
           <select id="art_strukturo"></select>
-          <div>
-            <button id="help_btn" class="ui-button ui-widget help_btn" title="Helpo">
-              <a href="https://revuloj.github.io/temoj/rnc.html" target="_new">&#x2754;</a>
-            </button>
-            <button id="logout_btn" class="ui-button ui-widget logout_btn" title="Adiaŭ">&#x23FB;</button>
-            <br/>
-            <span class="versio">eldono 2b</span>
-          </div>
+          <div
+            ><label class="ui-helper-reset kklvbtn" for="kromklvr">&#x2328;</label
+            ><input class="ui-button ui-helper-reset kklvbtn" type="checkbox" checked="checked" id="kromklvr"
+          /></div>
         </div>
-        <textarea id="xml_text" name="xml_text" placeholder="Ŝargu artikolon (per la menukomando) aŭ alŝovu XML-dosieron (ekz. el via disko aŭ retpoŝto) tien ĉi."></textarea>
-        <div id="pos_klv" class="ui-corner-all">
-          <span class="position" id="position">1:1</span
-          ><label class="ui-helper-reset kklvbtn" for="kromklvr">&#x2328;</label
-          ><input class="ui-button ui-helper-reset kklvbtn" type="checkbox" id="kromklvr" />
-        </div>
+
+        <textarea id="xml_text" name="xml_text" spellcheck="false" placeholder="Ŝargu artikolon (per la menukomando) aŭ alŝovu XML-dosieron (ekz. el via disko aŭ retpoŝto) tien ĉi."></textarea>        
+
+        <div class="surxml ui-corner-all" id="position">1:1</div>
+
         <div id="dock">
             <div id="elekto_indikoj">
             </div>
@@ -139,11 +147,21 @@
                   <span id ="sercho_butonoj" class="butonoj" style="vertical-align: top; font-size: 74%">[blank]</span> 
                 </p>
                 <p>
-                    <input id="s_vikipedio" type="submit" class="ui-button ui-corner-all" name="sercho_vikipedio_submit" value="Vikipedio"/>
-                    <input id="s_klasikaj" type="submit" class="ui-button ui-corner-all" name="sercho_klasikaj_submit" value="Klasikaj tekstoj"/>
-                    <input id="s_postaj" type="submit" class="ui-button ui-corner-all" name="sercho_postaj_submit" value="Postaj tekstoj"/>
-                    <input id="s_anaso" type="submit" class="ui-button ui-corner-all" name="sercho_anaso_submit" value="Anaso"/>
-                    <input id="s_bildoj" type="submit" class="ui-button ui-corner-all" name="sercho_bildoj_submit" value="Bildoj"/>
+                  <fieldset id="regexes" class="s_int">
+                    <!--legend>re:</legend-->
+                    <input type="button" id="re_b" value="^..."/>
+                    <input type="button" id="re_o" value="-o-"/>
+                    <input type="button" id="re_a" value="-a-"/>
+                    <input type="button" id="re_tr" value="tr"/>
+                    <input type="button" id="re_ntr" value="ntr"/>
+                  </fieldset>
+
+                  <input id="s_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_klasikaj_submit" value="Klasikaj tekstoj"/>
+                  <input id="s_postaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_postaj_submit" value="Postaj tekstoj"/>
+
+                  <input id="s_anaso" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_anaso_submit" value="Anaso"/>
+                  <input id="s_bildoj" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_bildoj_submit" value="Bildoj"/>
+                  <input id="s_anaso" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_anaso_submit" value="Anaso"/>
                 </p>
                 <!-- input type="submit" name="sercho_guglo_submit" value="Guglo"/ -->
             </form>
