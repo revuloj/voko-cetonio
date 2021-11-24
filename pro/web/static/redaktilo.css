@@ -104,7 +104,8 @@ button {
 }
 
 
-input {
+input,
+select {
     background-color: var(--input-bgr-clr) !important;
     color: var(--input-fnt-clr) !important;
 }
@@ -234,6 +235,16 @@ dd {
     border: 0px solid blue
 }
 
+.ui-tabs-nav li {
+    background-color: var(--tab-bgr-clr) !important;
+}
+
+.ui-tabs-nav li.ui-tabs-active,
+.ui-tabs-nav li.ui-state-active a {
+    background-color: var(--input-bgr-clr) !important;
+    color: var(--input-fnt-clr) !important;
+}
+
 .ui-tabs-vertical {
     width: 3em; 
 }
@@ -273,6 +284,7 @@ dd {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    background-color: var(--nav-bgr-clr);
 }
 
 #right_side>* {
@@ -457,6 +469,7 @@ dd {
     width: 4em;
     overflow: hidden;
     border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
     border-radius: 4px;
     padding: 0.1em;
     margin: 0;
@@ -528,6 +541,7 @@ dd {
     min-width: 1.6em;
     overflow: hidden;
     border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
     border-radius: 4px;
     padding: 0.1em;
     margin: 0 0.1em 0 0.1em;
@@ -560,7 +574,7 @@ dd {
 .reghim_btn {
    background-color: var(--btn-bgr-clr) !important;
    border-color: var(--btn-brd-clr) !important;
-   color: var(--main-fnt-clr);
+   color: var(--main-fnt-clr) !important;
    /*
    border-color: #327E04 !important;
    background-color: #459e00 !important;
@@ -576,9 +590,9 @@ dd {
     -webkit-display: flex;
     -webkit-flex-direction: column;
     
-    /*border: 1px solid red;*/
-    
-    border-bottom: 1px solid silver;
+    /*border: 1px solid red;*/    
+    /*border-bottom: 1px solid var(--main-brd-clr);*/
+    border-right: 1px solid var(--main-brd-clr);
     /*height: 80%; */
     flex: 1;
     -webkit-flex: 1;
@@ -586,7 +600,12 @@ dd {
     margin: 0 !important;
     padding: 0;
     overflow: hidden;
-    //overflow: auto;
+    /*overflow: auto;*/
+}
+
+#html {
+    background-color: #F5F5D5 !important;
+    color: black !important;
 }
 
 #rigardo {
@@ -595,9 +614,11 @@ dd {
     margin-bottom: 0.5 em;
     margin-right: 0.5 em;
 
-    //border: 1px solid blue;
+    background-color: #F5F5D5 !important;
+
+    /*border: 1px solid blue;*/
     
-    //width: 100%;
+    /*width: 100%;*/
     height: 100%;
     flex: 1;
     -webkit-flex: 1;
@@ -608,12 +629,12 @@ dd {
 }
 
 #xml_text {
-    //width: 100%;
+    /*width: 100%;*/
     flex: 1;
     -webkit-flex: 1;
     font-family: monospace;
     margin: 1px;
-    //height: 100%
+    /*height: 100%*/
 }
 
 #xml_supro {
@@ -692,9 +713,13 @@ dd {
 
 
 .versio {
+    position: absolute;
+    left: 1em;
+    bottom: 1em;
     font-family: sans-serif;
     font-size: small;
-    color: teal;
+    font-weight: bold;
+    color: whitesmoke;
     text-align: center;
 }
 
@@ -802,7 +827,7 @@ dd {
 }
 
 #traduko_tabelo {
-    display: flex; //inline-block;
+    display: flex; /*inline-block;*/
     -webkit-display: flex;
     flex-direction: column;
     -webkit-flex-direction: column;
