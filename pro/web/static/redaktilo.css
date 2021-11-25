@@ -646,26 +646,26 @@ dd {
 }
 
 #sercho_fono {
-    //border: 1px solid blue;
+    /*border: 1px solid blue;*/
     display: flex;
     -webkit-display: flex;
     flex-direction: column;
     -webkit-flex-direction: column;
     
-    //border: 1px solid red;
+    /*border: 1px solid red;*/
     
     flex: 1;
     -webkit-flex: 1;
-    margin-left: 1em;
-    margin-right: 1em;
+    margin-left: .5em;
+    margin-right: .5em;
     
     overflow: hidden;
-    //height: 400px;
+    /*height: 400px;*/
 }
 
 
 #sercho_form {
-    border: 1px solid #f5f3e5;
+    /*border: 1px solid #f5f3e5;*/
     margin-top: 0.5em;
 }
 
