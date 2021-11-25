@@ -41,10 +41,12 @@ oauth2:server_attribute(facebook, client_id,
 oauth2:server_attribute(facebook, client_secret,
                         '---***---').
 
-% la slautnomo kaj pasvorto por via poŝtfako, uzata por
-% forsendi redaktojn
+% la retpoŝtservilo, salutnomo kaj pasvorto por via poŝtfako, uzata por
+% forsendi redaktojn. La sendinto-adreso de la redaktilo.
+mail_smtp('---***---').
 mail_user('---***---').
 mail_pw('---***---').
+mail_from('---***---').
 
 % tio servas por identigi fonajn Ajax-petojn, vi povas
 % meti arbitran sekreton (signoĉenon) tie ĉi

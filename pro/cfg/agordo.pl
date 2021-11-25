@@ -47,11 +47,20 @@ read_secrets(DefaultSecretFN) :-
 		read_cfg(DefaultSecretFN)
 	)).
 
+% agordoj, kiujn ni
+% povas legi el medio-variablo kun resp. majuskla nomo
+get_config(Key,Value) :-
+    atom(Key), upcase_atom(Key,KEY),
+	call(agordo:env_supersede,ESS),
+	memberchk(KEY,ESS),	
+	getenv(KEY,Value).
 
 % donu unu agordo-valoron per gia ŝlosilo
 get_config(Key,Value) :-
     atom(Key),
     call(agordo:Key,Value).
+
+
 
 % donu liston de agordoj en la formo [nomo1(Valoro1),nomo2(Valoro2),...]
 get_config([]).
