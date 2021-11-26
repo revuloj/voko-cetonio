@@ -23,7 +23,6 @@ body {
     font-size: 1.1em;
     
     display: flex;
-    -webkit-display: flex;
 }
 
 .ui-dialog {
@@ -168,6 +167,9 @@ label.kklvbtn {
     color: black !important;
     font-weight: normal !important;
     box-shadow: none !important;
+
+    box-sizing: border-box;   
+    height: 100%;
 }
 
 
@@ -280,12 +282,14 @@ dd {
     width: 100%; 
     border-bottom-width: 1px !important; 
     border-left-width: 0 !important; 
-    margin: .1em .1em .1em 0; 
+    margin: .1em .1em .1em 0;
+
 }
 .ui-tabs-vertical .ui-tabs-nav li a { 
     padding: .5em .25em !important;
     width: 100%;
     display:block; 
+    box-sizing: border-box;   
 }
 .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { 
     padding-bottom: 0; 
@@ -620,7 +624,6 @@ dd {
 #xml {
     display: flex;
     flex-direction: row;
-    -webkit-display: flex;
     -webkit-flex-direction: row;
     flex: 1;
     margin: 0;
@@ -631,7 +634,6 @@ dd {
 #vrt, #html, #sercho, #xml_redakto {
     display: flex;
     flex-direction: column;
-    -webkit-display: flex;
     -webkit-flex-direction: column;
 }
 
@@ -694,7 +696,6 @@ dd {
 #sercho_fono {
     /*border: 1px solid blue;*/
     display: flex;
-    -webkit-display: flex;
     flex-direction: column;
     -webkit-flex-direction: column;
     
@@ -728,10 +729,10 @@ dd {
 #sercho_trovoj {
     border: 1px solid silver;
     border-radius: 6px;
-    //padding: 1em;
+    /*padding: 1em;*/
     margin-top: 0;
     
-    //border: 1px solid blue;
+    /*border: 1px solid blue;*/
     
     flex: 1;
     -webkit-flex: 1;
@@ -833,13 +834,13 @@ dd {
     border: 1px solid #e3a345;
     margin-left: 1em;
     margin-right: 1em;
-    //height: 900px;
-    //border-radius: 4px;
+    /*height: 900px;*/
+    /*border-radius: 4px;*/
 }
 
 .dlg_tabelo td {
     border: 1px solid #e3a345;
-    //border-radius: 4px;
+    /*border-radius: 4px;*/
     padding: 0.2em;
     vertical-align: top
 }
@@ -874,7 +875,6 @@ dd {
 
 #traduko_tabelo {
     display: flex; /*inline-block;*/
-    -webkit-display: flex;
     flex-direction: column;
     -webkit-flex-direction: column;
     vertical-align: top;
