@@ -37,46 +37,6 @@
   </head>
 
   <body>
-    <div id="sidebar">
-          
-        <ul id="menu">
-            <li class="ui-widget-header"><div>Artikolon</div></li>
-                <li id="nova_menu_item"><div>Krei...</div></li> 
-                <li id="shargi_menu_item"><div>Ŝargi...</div></li>
-                <li id="lastaj_menu_item"><div>Lastaj...</div></li>
-                <li id="sendiservile_menu_item"><div>Sendi...</div></li>
-                <li id="kontroli_menu_item"><div>Kontroli...</div></li>
-            <li class="ui-widget-header"><div>Enmeti</div></li>
-                <li id="tradukoj_menu_item"><div>Tradukojn...</div></li> 
-                <li id="referenco_menu_item"><div>Referencon...</div></li>
-                <li id="indiko_menu_item"><div>Indikon...</div></li> 
-                <li id="ekzemplo_menu_item"><div>Ekzemplon...</div></li> 
-                <li id="bildo_menu_item"><div>Bildon...</div></li> 
-                <li id="derivajho_menu_item"><div>Derivaĵon...</div></li> 
-                <li id="senco_menu_item"><div>Sencon...</div></li> 
-                <li id="sxablono_menu_item"><div>Sencon ŝablone...</div></li> 
-                <li id="rimarko_menu_item"><div>Rimarkon...</div></li> 
-            <!--
-            <li class="ui-widget-header"><div>Kontroli</div></li>
-                <li id="homonimoj_menu_item"><div>Homonimojn...</div></li> 
-                -->
-            <li class="ui-widget-header"><div>Pri</div></li>
-                <li id="datumprotekto_menu_item"><div>Datumprotekto...</div></li> 
-        </ul>
-          
-        <!--
-        <div id="positions" class="ui-widget ui-widget-content">
-             <div class="butonoj">
-                  <div id="kromklavaro" class='reghim_btn' data-cmd="klavaro" title='montru kromklavaron'>&nbsp;~][&hellip;]</div>
-             </div>
-             <div id="collapse_outline">
-                 <h3><span id="edit_position">linio &dash;, &dash;</span></h3>
-                 <div id="art_outline"></div>
-             </div>
-        </div>-->
-        <span class="versio">Cetonio 2b</span>
-
-    </div>
 
     <div id="tabs">
       <div id="right_side">
@@ -108,33 +68,76 @@
         <p>funkcio mankas ankoraŭ.</p>
       </div> -->
       <div id="xml">
-        <div id="xml_supro">
-          <button id="menu_show_btn" class="menu_toggle">&#x00ab;</button>
-          <select id="art_strukturo"></select>
-          <div
-            ><label class="ui-helper-reset kklvbtn" for="kromklvr">&#x2328;</label
-            ><input class="ui-button ui-helper-reset kklvbtn" type="checkbox" checked="checked" id="kromklvr"
-          /></div>
-        </div>
 
-        <textarea id="xml_text" name="xml_text" spellcheck="false" placeholder="Ŝargu artikolon (per la menukomando) aŭ alŝovu XML-dosieron (ekz. el via disko aŭ retpoŝto) tien ĉi."></textarea>        
+        <div id="xml_sidebar">
+          
+          <ul id="menu">
+              <li class="ui-widget-header"><div>Artikolon</div></li>
+                  <li id="nova_menu_item"><div>Krei...</div></li> 
+                  <li id="shargi_menu_item"><div>Ŝargi...</div></li>
+                  <li id="lastaj_menu_item"><div>Lastaj...</div></li>
+                  <li id="sendiservile_menu_item"><div>Sendi...</div></li>
+                  <li id="kontroli_menu_item"><div>Kontroli...</div></li>
+              <li class="ui-widget-header"><div>Enmeti</div></li>
+                  <li id="tradukoj_menu_item"><div>Tradukojn...</div></li> 
+                  <li id="referenco_menu_item"><div>Referencon...</div></li>
+                  <li id="indiko_menu_item"><div>Indikon...</div></li> 
+                  <li id="ekzemplo_menu_item"><div>Ekzemplon...</div></li> 
+                  <li id="bildo_menu_item"><div>Bildon...</div></li> 
+                  <li id="derivajho_menu_item"><div>Derivaĵon...</div></li> 
+                  <li id="senco_menu_item"><div>Sencon...</div></li> 
+                  <li id="sxablono_menu_item"><div>Sencon ŝablone...</div></li> 
+                  <li id="rimarko_menu_item"><div>Rimarkon...</div></li> 
+              <!--
+              <li class="ui-widget-header"><div>Kontroli</div></li>
+                  <li id="homonimoj_menu_item"><div>Homonimojn...</div></li> 
+                  -->
+              <li class="ui-widget-header"><div>Pri</div></li>
+                  <li id="datumprotekto_menu_item"><div>Datumprotekto...</div></li> 
+          </ul>
+            
+          <!--
+          <div id="positions" class="ui-widget ui-widget-content">
+               <div class="butonoj">
+                    <div id="kromklavaro" class='reghim_btn' data-cmd="klavaro" title='montru kromklavaron'>&nbsp;~][&hellip;]</div>
+               </div>
+               <div id="collapse_outline">
+                   <h3><span id="edit_position">linio &dash;, &dash;</span></h3>
+                   <div id="art_outline"></div>
+               </div>
+          </div>-->
+          <span class="versio">Cetonio 2b</span> 
+        </div> <!-- sidebar -->
 
-        <div class="surxml ui-corner-all" id="position">1:1</div>
+        <div id="xml_redakto">
+          <div id="xml_supro">
+            <button id="menu_show_btn" class="menu_toggle">&#x00ab;</button>
+            <select id="art_strukturo"></select>
+            <div
+              ><label class="ui-helper-reset kklvbtn" for="kromklvr">&#x2328;</label
+              ><input class="ui-button ui-helper-reset kklvbtn" type="checkbox" checked="checked" id="kromklvr"
+            /></div>
+          </div>
 
-        <div id="dock">
-            <div id="elekto_indikoj">
-            </div>
-            <div id="dock_kontrolo">
-              <ul id="dock_eraroj"></ul>
-              <ul id="dock_avertoj"></ul>
-            </div>
-            <div id="dock_klavaro" class="butonoj">
-                [indiko] [serĉo]
-                &#x2015; &middot; &nbsp; &#x202f;
-                tld [] () &#x201e;&#x201c; &sbquo;&#x2018; ctl nom nac esc ind var frm
-                grase kursive emfaze sup sub minuskloj kamelo                 
-            </div>                 
-        </div>
+          <textarea id="xml_text" name="xml_text" spellcheck="false" placeholder="Ŝargu artikolon (per la menukomando) aŭ alŝovu XML-dosieron (ekz. el via disko aŭ retpoŝto) tien ĉi."></textarea>        
+
+          <div class="surxml ui-corner-all" id="position">1:1</div>
+
+          <div id="dock">
+              <div id="elekto_indikoj">
+              </div>
+              <div id="dock_kontrolo">
+                <ul id="dock_eraroj"></ul>
+                <ul id="dock_avertoj"></ul>
+              </div>
+              <div id="dock_klavaro" class="butonoj">
+                  [indiko] [serĉo]
+                  &#x2015; &middot; &nbsp; &#x202f;
+                  tld [] () &#x201e;&#x201c; &sbquo;&#x2018; ctl nom nac esc ind var frm
+                  grase kursive emfaze sup sub minuskloj kamelo                 
+              </div>                 
+          </div>
+        </div> <!-- #xml_redakto -->
       </div> <!-- #xml -->
       <div id="html">
         <div id="rigardo" class="ui-helper-reset"></div>
@@ -143,27 +146,29 @@
         <div id="sercho_fono">
             <form id="sercho_form">
                 <p id="sercho_error" class="ui-state-error ui-corner-all"></p>
-                <p style="margin-top: 0">
+                <div id="serch_kampo">
                   <input type="text" id="sercho_sercho" name="ekzemplo_sercho" size="60" placeholder="Vorto aŭ frazo serĉenda" />
                   <span id ="sercho_butonoj" class="butonoj" style="vertical-align: top; font-size: 74%">[blank]</span> 
-                </p>
-                <p>
-                  <fieldset id="regexes" class="s_int">
+                </div>
+                <div  id="regexes">
+                  <fieldset class="s_int">
                     <!--legend>re:</legend-->
                     <input type="button" id="re_b" value="^..."/>
+                    <i>vort</i>
                     <input type="button" id="re_o" value="-o-"/>
                     <input type="button" id="re_a" value="-a-"/>
                     <input type="button" id="re_tr" value="tr"/>
                     <input type="button" id="re_ntr" value="ntr"/>
                   </fieldset>
-
+                </div>
+                <div id="serch_btnj">
                   <input id="s_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_klasikaj_submit" value="Klasikaj tekstoj"/>
                   <input id="s_postaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_postaj_submit" value="Postaj tekstoj"/>
 
                   <input id="s_vikipedio" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_vikipedio_submit" value="Vikipedio"/>
                   <input id="s_bildoj" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_bildoj_submit" value="Bildoj"/>
                   <input id="s_anaso" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_anaso_submit" value="Anaso"/>
-                </p>
+                </div>
                 <!-- input type="submit" name="sercho_guglo_submit" value="Guglo"/ -->
             </form>
             <dl id="sercho_trovoj"></dl>
