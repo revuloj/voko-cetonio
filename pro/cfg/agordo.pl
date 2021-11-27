@@ -53,7 +53,7 @@ get_config(Key,Value) :-
     atom(Key), upcase_atom(Key,KEY),
 	call(agordo:env_supersede,ESS),
 	memberchk(KEY,ESS),	
-	getenv(KEY,Value).
+	getenv(KEY,Value),!.
 
 % donu unu agordo-valoron per gia ŝlosilo
 get_config(Key,Value) :-
