@@ -6,21 +6,20 @@
 :- use_module(library(http/http_client)).
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json)).
-:- use_module(library(crypto)).
-:- use_module(pro(cfg/agordo)).
+%:- use_module(library(crypto)).
 
-gh_gist_url('https://api.github.com/gists').
-gh_owner('reta-vortaro').
+:- use_module(pro(cfg/agordo)).
+:- use_module(pro(db/redaktantoj)).
 
 
 post_gist(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
     agordo:get_config(github_token,AccessToken),
     atom_codes(Xml,Quoted),
-    sigelo(Retadreso,Xml,Sigelo),
-    info_json(Retadreso,Sigelo,InfoJson),
+    sigelo(Retadreso,Xml,Sigelo,_LSums),
+    info_json(Sigelo,_LSums,InfoJson),
     atom_json_term(Info,InfoJson,[]),
-    json_post_data(Redakto,Dosiero,Shangho_au_Nomo,Info,Xml,JsonData),
-    gh_gist_url(URL),
+    json_post_data(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Info,Xml,JsonData),
+    agordo:get_config(gh_gist_url,URL),
     atom_concat('token ',AccessToken,TokenHeader),
     http_post(URL, json(JsonData), Reply, 
         [redirect(false),authenticate(false),request_header(authorization=TokenHeader),
@@ -34,52 +33,63 @@ post_gist(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
     )).
 
 get_gists(Retadreso) :-
-  list_gist(Retadreso,Gists),
+  get_gist_list(Retadreso,Gists),
   reply_json(Gists).
 
-list_gist(Retadreso,Gists) :-
+get_gist_list(Retadreso,Gists) :-
   agordo:get_config(github_token,AccessToken),
-  gh_gist_url(URL), atom_concat('token ',AccessToken,TokenHeader),
+  agordo:get_config(gh_gist_url,URL), 
+  atom_concat('token ',AccessToken,TokenHeader),
   http_get(URL, Reply, 
         [redirect(false),authenticate(false),request_header(authorization=TokenHeader)]),!,  
-  json_gist_list(Retadreso,Reply,Gists),!.
+  email_redid(Retadreso,RedId),   
+  sub_atom(RedId,0,7,_,RHash),     
+  json_gist_list(RHash,Reply,Gists),!.
 
 
 json_gist_list(_,[],[]).
-json_gist_list(Retadreso,[json(Json)|Rest],[Gist|MoreGists]) :-
-  member(id=Id,Json),
-  debug(gist,'gist: ~q',[Id]),
-  member(files=json(FilesJson),Json),
-  member(FName=json(JFile),FilesJson),
-  debug(gist,'  file: ~q',[FName]),
-  FName \= 'rezulto.json',
-  FName \= 'rezulto.log',
-  member(type='application/json',JFile),
-  member(raw_url=RawUrl,JFile),
-  gist_autoro(Retadreso,RawUrl),
+json_gist_list(RHash,[json(Json)|Rest],[Gist|MoreGists]) :-
+  % elfiltru gistojn de tiu ĉi redaktanto
+  member(description=Desc,Json),
+  atomic_list_concat([RHash|_],':',Desc),
+
   gist_list_item(Json,Gist),
   debug(gist,'  item: ~q~n',[Gist]),
-  json_gist_list(Retadreso,Rest,MoreGists).
-% skip
-json_gist_list(Retadreso,[_|Rest],MoreGists) :-
+  json_gist_list(RHash,Rest,MoreGists).
+
+% ignoru aliajn, kiuj ne estas de tiu ĉi redaktanto
+json_gist_list(RHash,[_|Rest],MoreGists) :-
   debug(gist,'  SKIP',[]),
-  json_gist_list(Retadreso,Rest,MoreGists).
+  json_gist_list(RHash,Rest,MoreGists).
 
-gist_autoro(Retadreso,Url) :-
-  http_get(Url, Reply, []),
-  %format('    jr:~w~n',[Reply]),
-  atom_json_term(Reply,json(J),[]),
-  member(red_adr=Retadreso,J).
 
-gist_list_item(Json,json([id=Id,desc=Desc,created=Created,updated=Updated,name=XmlName,url=XmlUrl])) :-
+gist_list_item(Json,json([id=Id,desc=Desc2,created=Created,updated=Updated,
+    name=XmlName,html_url=GistUrl,xml_url=XmlUrl,
+    rezulto=Rezulto,rez_url=RezUrl])) :-
   member(id=Id,Json),
   member(description=Desc,Json),
+  atomic_list_concat([_|D2],':',Desc),
+  atomic_list_concat(D2,':',Desc2),
   member(created_at=Created,Json),
   member(updated_at=Updated,Json),
+  member(html_url=GistUrl,Json),
+  % nomo de la XML-dosiero
   member(files=json(FilesJson),Json),
   member(XmlName=json(JFile),FilesJson),
   member(type='application/xml',JFile),
-  member(raw_url=XmlUrl,JFile).
+  member(raw_url=XmlUrl,JFile),
+  % nomo de la rezulto-dosiero, se estas
+  once((
+    member(files=json(FilesJson),Json),
+    member(RName=json(RFile),FilesJson),
+    member(RName,['konfirmo.json','eraro.json']),
+    member(type='application/json',RFile),
+    member(raw_url=RezUrl,RFile),
+    sub_atom(RName,0,_,5,Rezulto)
+    ;
+    RezUrl='',
+    Rezulto=''
+  )).
 
 
 /***
@@ -95,11 +105,13 @@ gist_list_item(Json,json([id=Id,desc=Desc,created=Created,updated=Updated,name=X
   }
 }
 ***/
-json_post_data(Redakto,Dosiero,Shangho_au_Nomo,Info,Xml,
+json_post_data(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Info,Xml,
     json([description=Desc,files=Files])) :-        
     %escape_data(Info,InfoEsc),
     %escape_data(Xml,XmlEsc),
-    atomic_list_concat([Redakto,Shangho_au_Nomo],':',Desc),
+    email_redid(Retadreso,RedId),   
+    sub_atom(RedId,0,7,_,RHsh),
+    atomic_list_concat([RHsh,Redakto,Shangho_au_Nomo],':',Desc),
     atom_concat(Dosiero,'.xml',XmlDos),
     atom_concat(Dosiero,'.json',JsnDos),
     Files=json([
@@ -108,14 +120,34 @@ json_post_data(Redakto,Dosiero,Shangho_au_Nomo,Info,Xml,
         ]).
 
 
-info_json(Retadreso,Sigelo,json([red_adr=Retadreso,sigelo=Sigelo,celo=Celo])) :-
+info_json(Sigelo,_LSums,json([sigelo=Sigelo,celo=Celo])) :- %,lsums=LSums])) :-
     agordo:get_config(github_repo,Repo),
     atom_concat(Repo,'/revo',Celo).
     
-sigelo(Retadreso,Quoted,Sigelo) :-
+sigelo(Retadreso,Xml,Sigelo,'') :-
     agordo:get_config(sigelilo,Sigelilo),
-    atomic_list_concat([Retadreso,Quoted],'\n',Data),
-    crypto_data_hash(Data,Sigelo,[algorithm(sha256),hmac(Sigelilo)]).
+    atomic_list_concat([Retadreso,Xml],'\n',Data),
+    % debug...
+    %line_sums(Data,LSums),
+    hmac_sha(Sigelilo,Data,HMac,[algorithm(sha256)]),
+    hash_atom(HMac,Sigelo).
+    % this was running into a bug on Ubunut 16.04 VM, where Sigelilo
+    % appearantly was not used:
+    % crypto_data_hash(Data,Sigelo,[algorithm(sha256),hmac(Sigelilo)]).
+
+line_sums(Xml,Sums) :-
+  atomic_list_concat(Lines,'\n',Xml),
+  line_sums_(Lines,S),
+  atomic_list_concat(S,',',Sums).
+
+
+line_sums_([],[]).
+line_sums_([L|Lines],[S|Sums]):-
+  atom_length(L,Len),
+  sha_hash(L,[H1,H2|_],[]),
+  hash_atom([H1,H2],H),
+  format(atom(S),'~w-~w',[Len,H]),
+  line_sums_(Lines,Sums).
 
 gist_html_url(json(KV),json([html_url=Url])) :-
     member(html_url=Url,KV).
