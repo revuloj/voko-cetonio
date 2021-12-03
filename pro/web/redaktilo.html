@@ -40,7 +40,7 @@
 
     <div id="tabs">
       <div id="right_side">
-
+        <div id="rs_dist"></div>
         <ul id="tab-buttons">
   <!--            <li><a href="#vrt">vrt - redakti</a></li> -->
           <li id="t_xml"><a href="#xml">&lt;/&gt;</a></li>
@@ -109,14 +109,14 @@
           <div class="versio"><a href="https://github.com/revuloj/voko-cetonio">Cetonio 2c</a></div> 
         </div> <!-- sidebar -->
 
+
         <div id="xml_redakto">
           <div id="xml_supro">
             <button id="menu_show_btn" class="menu_toggle">&#x00ab;</button>
             <select id="art_strukturo"></select>
             <div
-              ><label class="ui-helper-reset kklvbtn" for="kromklvr">&#x2328;</label
-              ><input class="ui-button ui-helper-reset kklvbtn" type="checkbox" checked="checked" id="kromklvr"
-            /></div>
+              ><button id="kromklvr"class="kklvbtn" value="1">&#x2328;</button
+              ></div>
           </div>
 
           <textarea id="xml_text" name="xml_text" spellcheck="false" placeholder="Ŝargu artikolon (per la menukomando) aŭ alŝovu XML-dosieron (ekz. el via disko aŭ retpoŝto) tien ĉi."></textarea>        
@@ -139,6 +139,7 @@
           </div>
         </div> <!-- #xml_redakto -->
       </div> <!-- #xml -->
+
       <div id="html">
         <div id="rigardo" class="ui-helper-reset"></div>
       </div> <!-- #html -->
@@ -175,8 +176,7 @@
         </div>
       </div> <!-- #sercho -->
     </div> <!-- #tabs -->
-      
-      
+            
            
 <!--  ### dialogoj ### -->      
       
