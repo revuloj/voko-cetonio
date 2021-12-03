@@ -287,7 +287,7 @@ revo_sendo(Request) :-
         ]),
     once((
         member(user(RedID),Request),
-        sqlrevo:email_redid(Retadreso,RedID)
+        email_redid(Retadreso,RedID)
         ;
         http_session_data(retadreso(Retadreso))
     )),    

@@ -1,5 +1,6 @@
 ##### staĝo 1: certigu, ke vi antaŭe kompilis voko-grundo aŭ ŝargis de Github kiel pakaĵo
-FROM ghcr.io/revuloj/voko-grundo/voko-grundo:latest as grundo 
+ARG VERSION=latest
+FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} as grundo 
   # ni bezonos la enhavon de voko-grundo build poste por kopii jsc, stl, dok
 
 
@@ -35,7 +36,7 @@ RUN chown cetonio etc \
 COPY --from=grundo build/smb/ /home/cetonio/voko/smb/
 COPY --from=grundo build/stl/ /home/cetonio/voko/stl/
 COPY --from=grundo build/jsc/ /home/cetonio/voko/jsc/
-COPY --from=grundo build/jsc/redaktilo*.css /home/cetonio/pro/web/static/
+# COPY --from=grundo build/jsc/redaktilo*.css /home/cetonio/pro/web/static/
 COPY --from=grundo build/rsj/ /home/cetonio/pro/web/static/
 
 COPY --from=grundo build/xsl/ ${HOME_DIR}/files/xsl/
