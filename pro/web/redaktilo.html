@@ -106,7 +106,7 @@
                    <div id="art_outline"></div>
                </div>
           </div>-->
-          <span class="versio">Cetonio 2b</span> 
+          <div class="versio"><a href="https://github.com/revuloj/voko-cetonio">Cetonio 2c</a></div> 
         </div> <!-- sidebar -->
 
         <div id="xml_redakto">
@@ -225,11 +225,11 @@
       
     <div id="sendiservile_dlg" title="Sendi al la redaktoservo">
         <p style="max-width: 30em">
-          <em>Submeti</em> tra gist.github.com estas nova metodo, 
+          <em>Submeti</em> tra gist.github.com estas la preferinda metodo, 
           kiu evitas problemojn pro spamfiltriloj kaj
           permesas listigi kaj rigardi viajn lastatempajn redaktojn. 
-          Se neatendite okazos problemoj pri tiu nova metodo, vi povas
-          ankoraŭ uzi la malnovan metodon, t.e. <em>Sendi</em> retpoŝte.
+          Se neatendite okazos problemoj pri submetado, vi povas
+          alternative <em>Sendi</em> retpoŝte.
         </p>
         <p id="sendiservile_error" class="ui-state-error ui-corner-all"></p>        
         <form id="sendiservile_form" method="post" action="revo_sendo" enctype="multipart/formdata"> <!--enctype="text/plain" > -->
@@ -437,12 +437,12 @@
     <p id="krei_error" class="ui-state-error ui-corner-all"></p>
     <form id="krei_form">              
       <label for="krei_dos">dosiernomo: </label><br/>
-      <input id="krei_dos" name="krei_dos" placeholder="Dosiernomo (unika, sen .xml)"/>
+      <input id="krei_dos" type="text" name="krei_dos" placeholder="Dosiernomo (unika, sen .xml)"/>
       <br/>
 
       <label for="krei_rad">kapvorto: </label><br/>
-      <input id="krei_rad" name="krei_rad" placeholder="Radiko"/> /
-      <input id="krei_fin" name="krei_fin" size="3" placeholder="Fino, ekz. 'o'"/>
+      <input id="krei_rad" type="text" name="krei_rad" placeholder="Radiko"/> /
+      <input id="krei_fin" type="text" name="krei_fin" size="3" placeholder="Fino, ekz. 'o'"/>
       <br/>
       
       <label for="krei_dif">difino: </label><br/>
@@ -458,7 +458,7 @@
     <p id="derivajho_error" class="ui-state-error ui-corner-all"></p>
     <form id="derivajho_form">              
         <label for="derivajho_kap">kapvorto: </label><br/>
-        <input id="derivajho_kap" name="derivajho_kap" placeholder="Kapvorto, uzu tildon (~)"/>
+        <input id="derivajho_kap" type="text" name="derivajho_kap" placeholder="Kapvorto, uzu tildon (~)"/>
         <br/>
         <label for="derivajho_dif">difino: </label><br/>
         <textarea id="derivajho_dif" name="derivajho_dif" rows="3" cols="60" placeholder="Difino - vi povas uzi tildon (~)"></textarea>
@@ -472,7 +472,7 @@
         <p id="senco_error" class="ui-state-error ui-corner-all"></p>
         <form id="senco_form">              
           <label for="senco_mrk">distingilo: </label><br/>
-          <input id="senco_mrk" name="senco_mrk" placeholder="Markosufikso" title="Marko-sufikso: distingilo de aliaj sencoj de sama derivaĵo"/>
+          <input id="senco_mrk" type="text" name="senco_mrk" placeholder="Markosufikso" title="Marko-sufikso: distingilo de aliaj sencoj de sama derivaĵo"/>
           <br/>          
           <label for="senco_dif">difino: </label><br/>
           <textarea id="senco_dif" name="senco_dif" rows="3" cols="60" placeholder="Difino - vi povas uzi tildon (~)"></textarea>
@@ -547,7 +547,7 @@
           <br/>
             
           <label for="rimarko_aut">aŭtoro: </label><br/>
-          <input id="rimarko_aut" name="rimarko_aut" placeholder="Aŭtoro"/> 
+          <input id="rimarko_aut" type="text" name="rimarko_aut" placeholder="Aŭtoro"/> 
             
         </form>
         <div id="rimarko_butonoj" class="butonoj">
