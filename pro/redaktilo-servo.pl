@@ -272,7 +272,8 @@ revo_lastaj_redaktoj(Request) :-
     get_gists(Retadreso).
 
 
-% forsendas artikolon senditan de la krozilo per afiŝado ĉe gist.github.com
+% forsendas artikolon senditan de la krozilo per unu el du metodoj:
+% submeto al gist.github.com aŭ per retpoŝto
 revo_sendo(Request) :-   
     debug(redaktilo(request),'revo_sendo: ~q',[Request]),
     % read parameters
@@ -281,66 +282,49 @@ revo_sendo(Request) :-
 			shangho(Shangho_au_Nomo, [length>1,length<500]),
 			redakto(Redakto, [oneof([redakto,aldono]),default(redakto)]),
             dosiero(Dosiero, [length>0,length<50]),
+            metodo(Metodo, [oneof([api,email]),default(api)]),
 			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
         ]),
-    % http_session_data(retadreso(Retadreso)),
     once((
         member(user(RedID),Request),
-        email_redid(Retadreso,RedID)
+        sqlrevo:email_redid(Retadreso,RedID)
         ;
         http_session_data(retadreso(Retadreso))
-    )),
-
-%    sqlrevo:email_redid(Retadreso,RedID),
+    )),    
     debug(redaktilo(request),'shangho=~q',[Shangho_au_Nomo]),
-
     % kodigu specialajn literojn ktp. per unuoj
     get_entity_index(ReverseEntInx,_EntValLenInx,EntVal1Inx),
     atom_codes(Xml,Codes),
     xml_quote_cdata(Codes,Quoted,ReverseEntInx,EntVal1Inx,utf8),
+    % afiŝu aŭ retpoŝtu...
+    revo_sendo(Metodo,Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted).
 
+
+% forsendas artikolon senditan de la krozilo per afiŝado ĉe gist.github.com
+revo_sendo(api,Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-   
     % respondu kaj sendu
     active_sessions_header,
     %format('Content-type: application/json~n~n'),
-
     post_gist(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted).
-    
+    %format('Bone. Sendita.').
+
 % forsendas artikolon senditan de la krozilo per retpoŝto
-%revo_sendo(Request) :-    
-%    debug(redaktilo(request),'~q',[Request]),
-%    % read post data
-%    http_parameters(Request,
-%		[
-%			shangho(Shangho_au_Nomo, [length>1,length<500]),
-%			redakto(Redakto, [oneof([redakto,aldono]),default(redakto)]),
-%			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
-%		]),
-%    debug(redaktilo(request),'shangho=~q',[Shangho_au_Nomo]),
-%
-%     % http_session_data(retadreso(Retadreso)),
-%    member(email(Retadreso),Request),
-%    %sqlrevo:email_redid(Retadreso,RedID),
-%
-%    % kodigu specialajn literojn ktp. per unuoj
-%    get_entity_index(ReverseEntInx,_EntValLenInx,EntVal1Inx),
-%    atom_codes(Xml,Codes),
-%    xml_quote_cdata(Codes,Quoted,ReverseEntInx,EntVal1Inx,utf8),
-%
-%    % respondu kaj sendu
-%    active_sessions_header,
-%    format('Content-type: text/html~n~n'),
-%    % FIXME: pli bone havu apartan funkcion por sendi novan artikolon?
-%    once((
-%        Redakto = redakto,
-%        send_revo_redakto(Retadreso,Shangho_au_Nomo,Quoted)
-%        ;
-%        Redakto = aldono,
-%        send_revo_aldono(Retadreso,Shangho_au_Nomo,Quoted)
-%        ;
-%        %format('Status: ~d~n~n',[401]),
-%        throw(http_reply(html(['Neatendita eraro dum forsendo.\n'])))
-%    )),
-%    format('Bone. Sendita.').
+revo_sendo(email,Retadreso,Redakto,_Dosiero,Shangho_au_Nomo,Quoted) :-   
+    % respondu kaj sendu
+    active_sessions_header,
+    format('Content-type: text/html~n~n'),
+    % FIXME: pli bone havu apartan funkcion por sendi novan artikolon?
+    once((
+        Redakto = redakto,
+        send_revo_redakto(Retadreso,Shangho_au_Nomo,Quoted)
+        ;
+        Redakto = aldono,
+        send_revo_aldono(Retadreso,Shangho_au_Nomo,Quoted)
+        ;
+        %format('Status: ~d~n~n',[401]),
+        throw(http_reply(html(['Neatendita eraro dum forsendo.\n'])))
+    )),
+    format('Bone. Sendita.').
 
 
 % sintaks-kontrolo de la artikolo per Jing
