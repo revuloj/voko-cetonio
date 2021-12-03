@@ -19,6 +19,7 @@ preparo)
     fi
 
     echo "Aktualigante skriptojn al nova eldono ${release}..."
+    sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PAGE}
     sed -i 's/Cetonio "[1-9][a-z]";/Cetonio "'${release}'";/' ${PAGE}
     ;;
 helpo | *)
