@@ -345,7 +345,7 @@ revo_kontrolo(Request) :-
     http_open(Url,Stream,[header(content_type,_ContentType),post(atom(Xml))]),
     %format('Content-type: ~w~n~n',[ContentType]),
     active_sessions_header,
-    format('Content-type: application/json; charset=UTF-8~n~n'), % alternative sendu kiel teksto la la retumilo
+    format('Content-type: application/json; charset=UTF-8~n~n'), % alternative sendu kiel teksto al la retumilo
             % kaj traktu tie per Javoskripto...
     set_stream(Stream,encoding(utf8)),
     set_stream(current_output,encoding(utf8)),
@@ -359,10 +359,10 @@ err_text_json(In,Out) :-
     repeat,
     read_line_to_codes(In, Codes),
     (   Codes == end_of_file
-    ->  !
+    ->  write(Out,"{}"), ! % pro ĝusta sintakos ni simple skribas {} post la lasta komo
     ;   atom_codes(Line, Codes),
         err_line_json(Line,Json),
-        json_write(Out,Json),
+        json_write(Out,Json), write(Out,','),
         fail
     ).
 
