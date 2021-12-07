@@ -6,7 +6,7 @@
 	  ]).
 
 
-:- dynamic send_pw/1, revodb/1.
+:- dynamic send_pw/1, revodb/1, env_supersede/1, secrets/1.
 
 % apriora agordo-dosierujo, povas esti
 % ŝanĝita per swipl -p agordo=/...
