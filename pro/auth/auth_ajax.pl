@@ -40,11 +40,13 @@ http:authenticate(ajaxid,Request,[user(User),email(Email)]) :-  ajax_auth(Reques
 %%/*****************/	
 
 ajax_auth(Request,RedID,Email) :-
+    %debug(redaktilo(ajaxid),'AjaxAuth...',[]),
 	once((
+        % ni ricevis kuketon AjaxID el redaktanto ID kaj kreo-tempo
 		ajax_user(Request,RedID,ClientIP,Email),
 		debug(redaktilo(ajaxid),'AjaxAuth: ~q ~q',[RedID,ClientIP])
 		;
-		% kreu AjaxID el session+request
+		% AjaxID mankas, sed se ni havas ankoraŭ seancon, ni kreu novan AjaxID el seanco+peto
 		new_ajax_id_cookie(Request,RedID,Cookie),
 		debug(redaktilo(ajaxid),'AjaxID: ~q',[Cookie]),
 		format('Set-Cookie: ~w\r\n',[Cookie])
@@ -61,7 +63,7 @@ ajax_auth(Request,RedID,Email) :-
 ajax_user(Request,RedID,ClientIP,Retadreso) :-
     %debug(redaktilo(ajaxid),'AjaxRequest ~q',[Request]),
     member(peer(ip(A,B,C,D)),Request),
-    % debug(redaktilo(ajaxid),'AjaxID_a ~q',[Cookies]),
+    %debug(redaktilo(ajaxid),'AjaxID_a ~q',[Cookies]),
     atomic_list_concat([A,B,C,D],'.',ClientIP),
     %debug(redaktilo(ajaxid),'AjaxID_b ~q',[ClientIP]),
     request_ajax_id(Request,AjaxID),
@@ -76,6 +78,7 @@ ajax_user(Request,RedID,ClientIP,Retadreso) :-
     ajax_hmac(RedID,ClientIP,HexTime,HexMac),
     % save in session if already closed
 	db_redaktantoj:email_redid(Retadreso,RedID).
+    %debug(redaktilo(ajaxid),'AuthOK ~q',[Retadreso]).
 
 ajax_id_time_valid(AjaxID) :-
     sub_atom(AjaxID,20,8,_,HexTime), 
@@ -118,9 +121,11 @@ new_ajax_id(Request,RedId,AjaxID,Time) :-
     member(peer(ip(A,B,C,D)),Request),
     %debug(redaktilo(ajaxid),'AjaxID_2 ~q ~q',[A,B]),
     atomic_list_concat([A,B,C,D],'.',ClientIP),
+    http_in_session(_), % demandi tion unue evitas escepton je la sekva demando,
+                        % anstataŭ ne revenas per 'fail.' kaj tiel povas redoni HTTP-401 en ajax_auth.
     http_session_data(retadreso(Retadreso)),
     db_redaktantoj:email_redid(Retadreso,RedId),
-    debug(redaktilo(ajaxid),'AjaxID_3 ~q ~q',[RedId,Retadreso]),
+    %debug(redaktilo(ajaxid),'AjaxID_3 ~q ~q',[RedId,Retadreso]),
     % calculate hmac
     get_time(Time), Seconds is floor(Time),
     format(atom(HexTime),'~16r',[Seconds]),
@@ -140,8 +145,11 @@ ajax_hmac(RedId,ClientIP,HexTime,HexMac20) :-
     %debug(redaktilo(ajaxid),'AjaxID_hmac ~q ~q ~q',[RedId,ClientIP,HexTime]),
     atomic_list_concat([RedId,ClientIP,HexTime],String),
     agordo:get_config(ajax_secret,AjaxSecret),
-    %debug(redaktilo(ajaxid),'AjaxID_hmac ~q ~q',[String,AjaxSecret]),
+    %debug(redaktilo(ajaxid),'AjaxID_hmac ~q',[String]),
     hmac_sha(AjaxSecret,String,HMac,[algorithm(sha256)]),
-    hash_atom(HMac,Hex), sub_atom(Hex,0,20,_,HexMac20).
+    hash_atom(HMac,Hex), 
+    %debug(redaktilo(ajaxid),'AjaxID_hmac 3: ~q ~q',[Hex,HexMac20]),
+    sub_atom(Hex,0,20,_,HexMac20).
+    %debug(redaktilo(ajaxid),'AjaxID_hmac 4',[]).
 
 

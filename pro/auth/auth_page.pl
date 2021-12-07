@@ -305,7 +305,9 @@ auth_config:reply_logged_out(_Options) :-
 	catch(http_session_retractall(oauth2id(_)), _, true),
 	catch(http_session_retractall(red_id(_)), _, true),
   	catch(http_session_retractall(retadreso(_)), _, true),
-	revo_login_page(_).
+	%revo_login_page(_).
+	%throw(http_reply(moved_temporary('/'))).
+	http_redirect(moved_temporary,location_by_id(landing),_).
 
 session_assert_user(RedID,Retadreso) :-
 	http_session_assert(retadreso(Retadreso)),
