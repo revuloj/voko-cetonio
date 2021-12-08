@@ -3,6 +3,7 @@
 target="${1:-docker}"
 
 HTML=pro/web/redaktilo.html
+HTML2=pro/web/static/*.html
 CSS=pro/web/static/*.css
 
 case $target in
@@ -10,8 +11,17 @@ case $target in
 docker)
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
     todir=/home/cetonio/pro
+
     echo "${HTML} -> ${cetonio_id}:${todir}/web"
     docker cp ${HTML} ${cetonio_id}:${todir}/web
+
+    echo "${HTML2} -> ${cetonio_id}:${todir}/web/static"
+    for html in ${HTML2}
+    do
+        echo "${html}"
+        docker cp ${html} ${cetonio_id}:${todir}/web/static/
+    done
+
     echo "${CSS} -> ${cetonio_id}:${todir}/web/static"
     for css in ${CSS}
     do
