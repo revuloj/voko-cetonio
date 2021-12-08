@@ -33,6 +33,7 @@ read_cfg(FileName) :-
 		% PLOBONIGU: ĉu ni serĉu tie unue?
 		expand_file_search_path(agordo(FileName),CfgFile)
 	)),
+	format('Legante agordon el ~w...~n',[CfgFile]),
 	ensure_loaded(CfgFile). 
 
 read_secrets(DefaultSecretFN) :-
@@ -40,6 +41,7 @@ read_secrets(DefaultSecretFN) :-
 		% la agordo-predikato 'secrets' indikas kie estas la sekreto-dosiero
 		get_config(secrets,SecretFile),
 		exists_file(SecretFile),
+		format('Legante agordon el ~w...~n',[SecretFile]),
 		ensure_loaded(SecretFile)
 		;
 		% se ĝi ne estas agordita aŭ ne troviĝas en la indikita loko
