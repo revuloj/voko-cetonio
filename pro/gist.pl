@@ -15,8 +15,8 @@
 post_gist(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
     agordo:get_config(github_token,AccessToken),
     atom_codes(Xml,Quoted),
-    sigelo(Retadreso,Xml,Sigelo,_LSums),
-    info_json(Sigelo,_LSums,InfoJson),
+    sigelo(Retadreso,Xml,Sigelo,_LSums), 
+    info_json(Sigelo,InfoJson),
     atom_json_term(Info,InfoJson,[]),
     json_post_data(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Info,Xml,JsonData),
     agordo:get_config(gh_gist_url,URL),
@@ -120,7 +120,7 @@ json_post_data(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Info,Xml,
         ]).
 
 
-info_json(Sigelo,_LSums,json([sigelo=Sigelo,celo=Celo])) :- %,lsums=LSums])) :-
+info_json(Sigelo,json([sigelo=Sigelo,celo=Celo])) :- %,lsums=LSums])) :-
     agordo:get_config(github_repo,Repo),
     atom_concat(Repo,'/revo',Celo).
     
