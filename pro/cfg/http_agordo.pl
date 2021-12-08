@@ -57,9 +57,9 @@ uri_port(ACmp,Scheme,Port) :-
         uri_authority_data(port,ACmp,Port),
         nonvar(Port)
         ;
-        Scheme = http, Port='80'
+        Scheme = http, Port = 80
         ;
-        Scheme = https, Port = '443'
+        Scheme = https, Port = 443
     )).
 
 http_path_info :-
