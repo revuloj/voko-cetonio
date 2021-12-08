@@ -22,7 +22,7 @@ http_agordo :-
         uri_data(path,Cmp,AppRoot),
         uri_authority_components(Authority,ACmp),
         uri_authority_data(host,ACmp,Host),
-        uri_authority_data(port,ACmp,Port),
+        uri_port(ACmp,Scheme,Port),
         % metu la agordon en la kampojn de la modulo 'http:'
         set_setting(http:prefix,AppRoot),
         set_setting(http:public_scheme,Scheme),
@@ -52,6 +52,15 @@ http_agordo :-
 	assert(user:file_search_path(stl,voko(stl))),
 	assert(user:file_search_path(smb,voko(smb))).
 
+uri_port(ACmp,Scheme,Port) :-
+    once((
+        uri_authority_data(port,ACmp,Port),
+        nonvar(Port)
+        ;
+        Scheme = http, Port='80'
+        ;
+        Scheme = https, Port = '443'
+    )).
 
 http_path_info :-
     writeln('% http-padoj'),
