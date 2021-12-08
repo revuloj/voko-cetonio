@@ -69,12 +69,10 @@ oauth2:server_attribute(facebook, scope,
                         'email').
 
 absolute_uri(Path,URI) :-
-    agordo:get_config([
-        http_app_root(AppRoot),
-        http_app_scheme(Scheme),
-        http_app_host(Host),
-        http_app_port(Port)
-       ]),
+    setting(http:prefix,AppRoot),
+    setting(http:public_scheme,Scheme),
+    setting(http:public_port,Port),
+    setting(http:public_host,Host),
     once((
         Scheme = http, Port = 80, P = ''
         ;
