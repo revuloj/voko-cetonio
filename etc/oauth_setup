@@ -1,7 +1,7 @@
 
 :- use_module(library(http/http_path)).
 
-:- multifile oauth2:server_attribute.
+:- multifile oauth2:server_attribute/3.
 
 % GOOGLE
 % https://console.developers.google.com

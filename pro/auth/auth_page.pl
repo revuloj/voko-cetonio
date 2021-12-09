@@ -290,7 +290,7 @@ auth_config:reply_logged_in(Options) :-
 
 
 user_info(Provider,UserInfo) :- 
-	(var(Provider) ; Provider \= facebook), !,
+	(var(Provider) ; Provider \= facebook),
 	auth_config:user_info(_, Provider, UserInfo).
 
 user_info(facebook,UserInfo) :- 
