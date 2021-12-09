@@ -16,7 +16,8 @@ http:location(static,root(static),[]).
 http_agordo :-
 	% ekstraktu la unuopaj HTTP-agordojn el la mediocariablo REDAKTILO_URL
 	(getenv('REDAKTILO_URL',URL) 
-    ->  uri_components(URL,Cmp),
+    ->  format('REDAKTILO_URL: ~w~n',[URL]),
+        uri_components(URL,Cmp),
         uri_data(scheme,Cmp,Scheme),
         uri_data(authority,Cmp,Authority),
         uri_data(path,Cmp,AppRoot),
@@ -40,7 +41,7 @@ http_agordo :-
         timeout(SessTimeout),
         path(AppRoot)
     ]),    
-
+    writeln('difinante padojn...'),
 	% la lokaj dosierujoj el kiuj servi dosierojn
 	get_path(root_dir,web_dir,WebDir),
 	get_path(root_dir,voko_dir,VokoDir),
