@@ -51,7 +51,7 @@ revo_login_page(_Request) :-
 	debug(auth, 'revo_login_page >>',[]),
     
     reply_html_page(saluto,
-		    [ title('Saluto al Redaktilo'),
+		    [ title('Saluto al Cetonio'),
 %		      link([rel="stylesheet",type="text/css",href="../css/openid.css"],[]),
 		      link([rel="stylesheet",type="text/css",href="../static/static-pages.css"],[]),
 		      script([src="../static/kuketoj.js"],[]),
@@ -166,9 +166,9 @@ register_email_form(SubId,Options) -->
 redaktilo_saluto(_Options) -->	
     html(div([],
 	     [
-		  h2('Saluto al Redaktilo'),
+		  h2('Saluto al Cetonio'),
 
-	      p(['Per ensalutado al Redaktilo tra via konto ĉe unu el la malspuraj retprovizantoj vi konsentas uzi ',
+	      p(['Per ensalutado al Cetonio tra via konto ĉe unu el la malspuraj retprovizantoj vi konsentas uzi ',
 			  'viajn personajn informojn kiel priskribita detale en la ',
 		  a([href="../static/datumprotekto.html"],['Datumprotekta Deklaro']),'.']),
 
