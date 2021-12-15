@@ -51,10 +51,14 @@ RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml &&
 USER cetonio:users
 RUN mkdir -p tmp && mkdir -p sql
 
+# se ni volas uzi la gastigan reton por forsendi retpoŝton
+# ni bezonas la eblecon difini la servo-repordon tie ĉi,
+# ĉar 
+#   network --driver host 
+# ne kunfunkcias kun
+#   run --publish gastiga:interna
+ENV CETONIO_PORT=8080
 ENTRYPOINT ["./bin/docker-entrypoint.sh"]
 
-CMD ["swipl",\
-    "-s","pro/redaktilo-servo.pl",\
-    "-g","redaktilo_servo:daemon","-t","halt",\
-    "-p","agordo=etc","--",\
-    "--workers=10","--port=8080","--no-fork"]
+CMD swipl -s pro/redaktilo-servo.pl -g "redaktilo_servo:daemon" -t halt \
+    -p agordo=etc -- --workers=10 --port=${CETONIO_PORT} --no-fork
