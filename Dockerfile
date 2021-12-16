@@ -51,6 +51,7 @@ RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml &&
 USER cetonio:users
 RUN mkdir -p tmp && mkdir -p sql
 
+
 # se ni volas uzi la gastigan reton por forsendi retpoŝton
 # ni bezonas la eblecon difini la servo-repordon tie ĉi,
 # ĉar 
