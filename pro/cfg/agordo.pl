@@ -57,7 +57,7 @@ get_config(Key,Value) :-
 	memberchk(KEY,ESS),	
 	getenv(KEY,Value),!.
 
-% donu unu agordo-valoron per gia ŝlosilo
+% donu unu agordo-valoron per ĝia ŝlosilo
 get_config(Key,Value) :-
     atom(Key),
     call(agordo:Key,Value).
