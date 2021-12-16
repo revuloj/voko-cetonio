@@ -2,10 +2,10 @@
 :- module(sercho,
     [ 
         sercho/2,
-        bildo_sercho/2
-%        bildo_info/1,
-%        bildo_info_2/1,
-%        bildeto_info/1
+        bildo_sercho/2,
+        bildo_info/1,
+        bildo_info_2/1,
+        bildeto_info/1
     ]).
 :- use_module(library(http/http_open)).
 :- use_module(library(http/json)).

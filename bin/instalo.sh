@@ -31,6 +31,14 @@ update-db)
     cp ${tmp_dir}/revo-inx.db ${sql_dir}/revo-inx.db
     ;;
 redaktantoj)
+    if [[ -z "$CGI_USER" ]]; then
+        echo "Mankas medivariablo CGI_USER, ne eblas elŝuti redaktantojn!"
+        exit 1
+    fi
+    if [[ -z "$CGI_PWD" ]]; then
+        echo "Mankas medivariablo CGI_PWD, ne eblas elŝuti redaktantojn!"
+        exit 1
+    fi
     # elsutu redaktanto-liston kaj aktualigu la datumbazon per ĝi
     echo "${redaktantoj_trg} <- ${redaktantoj_url}"
     /usr/bin/curl -u ${CGI_USER}:${CGI_PWD} -o ${redaktantoj_trg} ${redaktantoj_url}
