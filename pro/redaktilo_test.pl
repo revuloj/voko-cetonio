@@ -4,7 +4,7 @@
 :- use_module(library(http/http_client)).
 
 test:-
-    agordo:get_config(http_rng_url,Url),
+    agordo:get_url(grilo,Url),
     Xml = '<?xml version="1.0"?><vortaro><art>\n<drv><dif>Test</dif></drv>\n</art>\n</vortaro>',
     format('url: ~w, xml:~w~n',[Url,Xml]),
     http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),
@@ -15,7 +15,7 @@ test:-
     close(Stream).
 
 test:-
-    agordo:get_config(http_rng_url,Url),
+    agordo:get_url(grilo,Url),
     Xml = '<?xml version="1.0"?><vortaro>\n<art mrk="x">\n<kap>test</kap>\n<drv mrk="x.0o"><kap><tld/>o</kap><dif>Test</dif></drv>\n</art>\n</vortaro>\n',
     format('url: ~w, xml:~w~n',[Url,Xml]),
     http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),
@@ -28,7 +28,7 @@ test:-
 test :-
     %http_read_json(Request, JSON, [json_object(dict)]),
     atom_json_dict('{"1": "praĉevalidoj", "5": "henas iihiii"}',JSON,[]),
-    agordo:get_config(http_ana_url,Url),
+    agordo:get_url(akrido,Url),
     uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
     atom_concat(Root,'/analinioj',Path),
     uri_components(Url1,uri_components(Scheme,Auth,Path,'',_)),
@@ -38,7 +38,7 @@ test :-
 
 
 test_k:-
-    agordo:get_config(http_rng_url,Url),
+    agordo:get_url(grilo,Url),
     Xml = '<?xml version="1.0"?><vortaro>\nart mrk="x">\n<kap>test</kap>\n<rv mrk="x.0o"><kap><tld/>o</kap><dif>Test</dif></drv>\n</art>\n</vortaro>\n',
     format('url: ~w, xml:~w~n',[Url,Xml]),
     http_open(Url,Stream,[header(content_type,ContentType),post(atom(Xml))]),

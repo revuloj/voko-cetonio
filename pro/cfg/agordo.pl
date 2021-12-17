@@ -5,6 +5,7 @@
 		  get_path/3
 	  ]).
 
+:- use_module(library(uri)).
 
 :- dynamic send_pw/1, revodb/1, env_supersede/1, secrets/1.
 
@@ -77,3 +78,26 @@ get_path(RootKey,PathKey,Value) :-
 	get_config(RootKey,Root),
 	get_config(PathKey,Path),
 	atom_concat(Root,Path,Value).
+
+get_url(Servo,URL) :-
+	once((
+		upcase_atom(Servo,SERVO),
+		atom_concat(SERVO,'_PORT',SPVAR),
+		getenv(SPVAR,Port)
+		;
+		atom_concat(Servo,'_port',AKey),
+		call(agordo:AKey,Port)
+	)),
+	atom_concat(Servo,'_base_url',BKey),
+	call(agordo:BKey,Base),
+    uri_components(Base,uri_components(Scheme,Auth,Root,_,_)),
+    uri_authority_components(Auth,ACmp),
+    uri_authority_data(host,ACmp,Host),
+	% set port and recompile URI...
+	uri_authority_data(port,ANew,Port),
+    uri_authority_data(host,ANew,Host),
+    uri_authority_components(AuthNew,ANew),
+    uri_components(URL,uri_components(Scheme,AuthNew,Root,_,_)).
+
+
+

@@ -338,7 +338,7 @@ revo_kontrolo(Request) :-
 %% KOREKTU: necesas voki kontrol-servon nun anstataŭ rekte Javon/Jing
     %relaxng_json(Xml,Json),
     %reply_json(Json).
-    agordo:get_config(http_rng_url,Url),
+    agordo:get_url(grilo,Url),
     %uri_components(Url,uri_components(Scheme,Auth,Path,_,_)),
     %uri_components(Url1,uri_components(Scheme,Auth,Path,_,_)),
     debug(redaktilo(kontrolo),'url ~q',[Url]),
@@ -461,7 +461,7 @@ analinioj(Request) :-
     http_read_json(Request, JSON, [json_object(dict)]),
     debug(redaktilo(analinioj),'ANA json ~q',[JSON]),
 
-    agordo:get_config(http_ana_url,Url),
+    agordo:get_url(akrido,Url),
     uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
     atom_concat(Root,'/analinioj',Path),
     uri_components(Url1,uri_components(Scheme,Auth,Path,'',_)),
@@ -480,7 +480,7 @@ analizo(Request) :-
         teksto(Teksto, [length<150000])
     ]),
 
-    agordo:get_config(http_ana_url,Url),
+    agordo:get_url(akrido,Url),
     uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
     atom_concat(Root,'/analizo',Path),
     uri_query_components(Query,[teksto(Teksto)]),

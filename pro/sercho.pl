@@ -2,10 +2,10 @@
 :- module(sercho,
     [ 
         sercho/2,
-        bildo_sercho/2,
-        bildo_info/1,
-        bildo_info_2/1,
-        bildeto_info/1
+        bildo_sercho/2
+        %bildo_info/1,
+        %bildo_info_2/1,
+        %bildeto_info/1
     ]).
 :- use_module(library(http/http_open)).
 :- use_module(library(http/json)).
@@ -38,7 +38,7 @@ sercho(anaso,Sercho) :- !,
 
 sercho(Kie,Sercho) :-
     memberchk(Kie,[klasikaj,postaj]),
-    agordo:get_config(http_cit_url,Url),
+    agordo:get_url(cikado,Url),
     uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
     atom_concat(Root,'/cikado',Path),
     uri_query_components(Search,[sercho(Sercho),kie(Kie)]),
