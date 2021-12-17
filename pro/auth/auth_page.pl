@@ -130,7 +130,7 @@ register_email_form(SubId,Options) -->
 			[
 			    h1(['Registrado de via retpoŝtadreso']),
 			    div(
-			      [style='background-color: #f5f3e5; padding: 2em'],
+			      [style='background-color: goldenrod; padding: 2em'],
 			      [
 			       p(['Vi sukcese salutis.']),
 			       p(['Necesas ligi vian konton kun la retpoŝtadreso uzata de vi kiel redaktanto. ',
@@ -174,21 +174,21 @@ redaktilo_saluto(_Options) -->
 
 	      form([name="google",id="google",action="login",method="GET"],
  		    [input([type="hidden",name="server",value="google"]),
-		     div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 1em; margin-bottom: 1em"],
+		     div([style="background-image: linear-gradient(90deg,lightgoldenrodyellow,transparent); padding: 1em; margin-bottom: 1em"],
 		       [ %p(['Se vi havas konton ĉe Google:']),
 		        input([type="image",id="google_login",src="../static/btn_google_signin_light_normal_web.png",disabled=disabled,
 			       alt="Saluto per Google",title="Salutu per Google-konto",value="Google",style="margin-left:1em"])])]),
 
 		 form([name="facebook",id="facebook",action="login",method="GET"],
 			[input([type="hidden",name="server",value="facebook"]),
-			div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 1em; margin-bottom: 1em"],
+			div([style="background-image: linear-gradient(90deg,lightgoldenrodyellow,transparent); padding: 1em; margin-bottom: 1em"],
 				[ %p(['Se vi havas konton ĉe Facebook:']),
 				input([type="image",id="facebook_login",src="../static/btn_facebook_signin.png",disabled=disabled,
 					alt="Saluto per Facebook",title="Salutu per Facebook-konto",value="Facebook",style="margin-left:1em"])])]),
 
 	      form([name="yahoo",id="yahoo",action="login",method="GET"],		    
 		   [input([type="hidden",name="server",value="yahoo"]),
-		    div([style="background-image: linear-gradient(90deg,#f5f3e5,transparent); padding: 1em"],
+		    div([style="background-image: linear-gradient(90deg,lightgoldenrodyellow,transparent); padding: 1em"],
 			[ %p(['Se vi havas konton ĉe Yahoo:']),
 			 input([type="image",id="yahoo_login",src="../static/btn_yahoo_signin.png",onclick="javascript:{$('form#login').submit();}",disabled=disabled,
 				alt="Saluto per Yahoo",title="Salutu per Yahoo-konto",style="margin-left:1em"],[])
