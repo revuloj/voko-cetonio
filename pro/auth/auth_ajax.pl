@@ -83,7 +83,7 @@ ajax_user(Request,RedID,ClientIP,Retadreso) :-
 ajax_id_time_valid(AjaxID) :-
     sub_atom(AjaxID,20,8,_,HexTime), 
     get_time(Now), hex_value(HexTime,Time),
-    Valid is Time + 24 * 3600,
+    Valid is Time + 3 * 24 * 3600,
     %http_timestamp(Valid,ValidTill),
     Valid > Now.
 
@@ -136,7 +136,7 @@ new_ajax_id(Request,RedId,AjaxID,Time) :-
 new_ajax_id_cookie(Request,RedID,Cookie) :-
     new_ajax_id(Request,RedID,AjaxID,Time),	
     setting(http:prefix,Prefix),
-    Time24 is Time + 240 * 3600,
+    Time24 is Time + 3 * 24 * 3600,
     http_timestamp(Time24,Expires),
     format(atom(Cookie),'redaktilo_ajax=~w;Expires=~w;Path=~w; Version=1',
 	   [AjaxID,Expires,Prefix]).
