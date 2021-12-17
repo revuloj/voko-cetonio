@@ -89,6 +89,10 @@ mail_options(Options) :-
         auth_method(Method),
 	auth(User-Pwd)].
 
+
+% swipl -p pro=pro pro/sendo.pl
+% ?- test_send_file. 
+
 test_send_file :-
     xml_file_test(File),
 
