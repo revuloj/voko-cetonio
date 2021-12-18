@@ -1,7 +1,7 @@
 body {
     font-family: segoe ui,Arial,sans-serif;
     font-size: 1.1em; 
-    background-color: #e5e3d5;
+    background-color: goldenrod;
     margin: 2em;
 }
 li {
@@ -14,7 +14,7 @@ input[type="image"] {
 }
 
 .kuketoaverto { position: fixed; bottom: 0px; left: 5%; max-width: 90%; min-height:40%;
-                background-color: #c0c090; margin: 0; display: none;
+                background-color: goldenrod; margin: 0; display: none;
                 border-radius: 5px 5px 0 0; border: 1px solid #303030; border-bottom: none
               }
 .kuketoaverto P { text-align:left; max-width: 50em }
