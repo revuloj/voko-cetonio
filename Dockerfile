@@ -45,7 +45,7 @@ COPY --from=grundo build/rsj/ /home/cetonio/pro/web/static/
 COPY --from=grundo build/xsl/ ${HOME_DIR}/files/xsl/
 # PLIBONIGU: tion prefere ni jam faru en voko-grundo...?
 
-RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml && \
+RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml &&  \
     xsltproc voko/xsl/cfg_klasoj.xsl voko/owl/voko.rdf > voko/cfg/klasoj.xml
 
 USER cetonio:users
