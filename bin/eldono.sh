@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-release=2c
+release=2e
 
 # ni komprenas preparo 
 target="${1:-helpo}"
