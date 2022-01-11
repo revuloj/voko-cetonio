@@ -2,6 +2,8 @@
 :- module(sercho,
     [ 
         sercho/2,
+        sercho_vrk/2,
+        verkaro/1,
         bildo_sercho/2
         %bildo_info/1,
         %bildo_info_2/1,
@@ -44,6 +46,35 @@ sercho(Kie,Sercho) :-
     uri_query_components(Search,[sercho(Sercho),kie(Kie)]),
     uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
     debug(redaktilo(citajho),'url ~q',[Url1]),
+    http_open(Url1,Stream,[header(content_type,ContentType)]),
+    format('Content-type: ~w~n~n',[ContentType]),
+    set_stream(Stream,encoding(utf8)),
+    set_stream(current_output,encoding(utf8)),
+    copy_stream_data(Stream,current_output),
+    close(Stream).
+
+sercho_vrk(Vrkj,Sercho) :- % verkolisto    
+    agordo:get_url(cikado,Url),
+    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+    atom_concat(Root,'/cikado',Path),
+    uri_query_components(Search,[sercho(Sercho),vrk(Vrkj)]),
+    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
+    debug(redaktilo(citajho),'url ~q',[Url1]),
+    http_open(Url1,Stream,[header(content_type,ContentType)]),
+    format('Content-type: ~w~n~n',[ContentType]),
+    set_stream(Stream,encoding(utf8)),
+    set_stream(current_output,encoding(utf8)),
+    copy_stream_data(Stream,current_output),
+    close(Stream).
+
+verkaro(Kiu) :-
+    memberchk(Kiu,[klasikaj,postaj]),
+    agordo:get_url(cikado,Url),
+    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+    atom_concat(Root,'/verkaro',Path),
+    uri_query_components(Search,[kiu(Kiu)]),
+    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
+    debug(redaktilo(verkaro),'url ~q',[Url1]),
     http_open(Url1,Stream,[header(content_type,ContentType)]),
     format('Content-type: ~w~n~n',[ContentType]),
     set_stream(Stream,encoding(utf8)),

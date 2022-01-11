@@ -100,6 +100,7 @@ init :-
 :- http_handler(red(revo_rigardo), revo_rigardo, [authentication(ajaxid)]).
 %:- http_handler(red(revo_bibliogr), revo_bibliogr, []).
 :- http_handler(red(citajho_sercho), citajho_sercho, [authentication(ajaxid)]).
+:- http_handler(red(verkaro), verko_listo, [authentication(ajaxid)]).
 :- http_handler(red(bildo_sercho), bildo_sercho, [authentication(ajaxid)]).
 :- http_handler(red(bildo_info), bildo_info, [authentication(ajaxid)]).
 :- http_handler(red(bildeto_info), bildeto_info, [authentication(ajaxid)]).
@@ -411,9 +412,24 @@ citajho_sercho(Request) :-
     http_parameters(Request,
     [
 	    sercho(Sercho, [length>1,length<500]),
-	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj])]) 
+	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj])]),
+        vrk(Vrkj, [optional(true),length<500])
     ]),
-    sercho(Kie,Sercho).
+    once((
+        Vrkj \= '', % ni ricevis detalan verko-liston
+        memberchk(Kie,[klasikaj,postaj]),
+        sercho_vrk(Vrkj,Sercho)
+        ;
+        sercho(Kie,Sercho)
+    )).
+
+
+verko_listo(Request) :-
+    http_parameters(Request,
+    [
+	    kiu(Kiu, [oneof([klasikaj,postaj])]) 
+    ]),
+    verkaro(Kiu).
 
 bildo_sercho(Request) :-       
     http_parameters(Request,
