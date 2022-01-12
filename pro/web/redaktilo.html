@@ -153,14 +153,49 @@
                 </div>
                 <div  id="regexes">
                   <fieldset class="s_int">
-                    <!--legend>re:</legend-->
-                    <input type="button" id="re_b" value="^..."/>
+                    <legend>regulesprimo:</legend>
+                    <label for="re_rad">radiko:</label>
+                    <input type="text" readonly/>
+                    <label for="re_rvrb">verba</label>
+                    <input id="re_rvrb" name="re_rk" value="i" type="radio">
+                    <label for="re_rsbst">substantiva</label>
+                    <input id="re_rsbst" name="re_rk" value="o" type="radio">
+                    <label for="re_radj">adjektiva</label>
+                    <input id="re_radj" name="re_rk" value="a" type="radio">
+                    <br/>
+                    <label>esprimo:<label>
+                    <label for="re_b">vortkomenco</label><input id="re_b" type="checkbox">
+                    <label for="re_pref">prefikso</label><input id="re_pref" type="checkbox">
+                    <label for="re_suf">sufikso</label><input id="re_suf" type="checkbox">
+
+                    <label for="re_vvrb">-i</label>
+                    <input id="re_vvrb" name="re_vs" value="i" type="radio">
+                    <label for="re_vsbst">-o</label>
+                    <input id="re_vsbst" name="re_vs" value="o" type="radio">
+                    <label for="re_vadj">-a</label>
+                    <input id="re_vadj" name="re_vs" value="a" type="radio">
+                    <label for="re_vadv">-e</label>
+                    <input id="re_vadv" name="re_vs" value="e" type="radio">
+
+                    <!--
+                    <input type="button" id="re_pref" value="pref-"/>
                     <i>vort</i>
+                    <input type="button" id="re_osuf" value="-o-suf-"/>
+                    <input type="button" id="re_asuf" value="-a-suf-"/>
+                    <input type="button" id="re_isuf" value="-i-suf-"/>
+                    <input type="button" id="re_nsuf" value="-n-suf-"/>
                     <input type="button" id="re_o" value="-o-"/>
                     <input type="button" id="re_a" value="-a-"/>
-                    <input type="button" id="re_tr" value="tr"/>
-                    <input type="button" id="re_ntr" value="ntr"/>
+                    <input type="button" id="re_e" value="-e-"/>
+                    <input type="button" id="re_i" value="-i-"/>
+                    -->
+                    <!--
                     &nbsp;<input type="button" id="re_helpo" value="&#x2754;"/>
+                    <br/>
+                    <label for="re_esprimo">regulesprimo:</label>
+                    -->                    
+                    <div id="re_esprimo"></div>
+
                   </fieldset>
                 </div>
                 <div id="serch_btnj">
@@ -176,8 +211,18 @@
                 </div>
                 <!-- input type="submit" name="sercho_guglo_submit" value="Guglo"/ -->
             </form>
-            <div id="sercho_klasikaj" class="kasxita"></div>
-            <div id="sercho_postaj" class="kasxita"></div>
+            <div id="sercho_klasikaj" class="kasxita">
+              <button id="s_klasikaj_chiuj" class="ui-button ui-corner-all" value="1">Ĉiuj</button>
+              <button id="s_klasikaj_neniuj" class="ui-button ui-corner-all" value="0">Neniu</button>
+              <button id="s_klasikaj_preta" class="ui-button ui-corner-all" value="preta">Preta</button>
+              <div id="sercho_klasikaj_vl"></div>
+            </div>
+            <div id="sercho_postaj" class="kasxita">
+              <button id="s_postaj_chiuj" class="ui-button ui-corner-all" value="1">Ĉiuj</button>
+              <button id="s_postaj_neniuj" class="ui-button ui-corner-all" value="0">Neniu</button>
+              <button id="s_postaj_preta" class="ui-button ui-corner-all" value="preta">Preta</button>
+              <div id="sercho_postaj_vl"></div>
+            </div>
             <dl id="sercho_trovoj"></dl>
         </div>
       </div> <!-- #sercho -->
