@@ -151,9 +151,12 @@
                   <input type="text" id="sercho_sercho" name="ekzemplo_sercho" size="60" placeholder="Vorto aŭ frazo serĉenda" />
                   <span id ="sercho_butonoj" class="butonoj" style="vertical-align: top; font-size: 74%">[blank]</span> 
                 </div>
-                <div  id="regexes">
+                <details><summary>
+                  regulesprimo
+                </summary>
+                  <div  id="regexes">
                   <fieldset class="s_int">
-                    <legend>regulesprimo:</legend>
+                    <!--<legend>regulesprimo:</legend>-->
                     radiko: <span id="re_radiko"></span>
                     <label for="re_rvrb">aga</label>
                     <input id="re_rvrb" name="re_rk" value="i" type="radio">
@@ -200,7 +203,8 @@
                     <div id="re_esprimo"></div>
 
                   </fieldset>
-                </div>
+                  </div>
+                </details>
                 <div id="serch_btnj">
                   <input id="s_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_klasikaj_submit" value="Serĉo ĝis 1940"/>
                   <!--
@@ -208,7 +212,6 @@
                   &nbsp;
                   -->
                   <input id="s_postaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_postaj_submit" value="Elektitaj"/>
-                  <input id="sa_postaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_postaj_submit" value="&#x22ee;" title="Elekti unuopajn tekstojn"/>
 
                   <!--
                   <input id="s_postaj_periodo" type="text" class="s_int" id="periodo">
@@ -218,6 +221,7 @@
                     <div id="periodilo_manilo_1" class="manilo ui-slider-handle"></div>
                     <div id="periodilo_manilo_2" class="manilo ui-slider-handle"></div>
                   </div>
+                  <input id="sa_postaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_postaj_submit" value="&#x22ee;" title="Elekti unuopajn tekstojn"/>
 
                   <input id="s_vikipedio" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_vikipedio_submit" value="Vikipedio"/>
                   <input id="s_bildoj" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_bildoj_submit" value="Bildoj"/>
