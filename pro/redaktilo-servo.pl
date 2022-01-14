@@ -427,7 +427,7 @@ citajho_sercho(Request) :-
 verko_listo(Request) :-
     http_parameters(Request,
     [
-	    kiu(Kiu, [oneof([klasikaj,postaj])]) 
+	    kiu(Kiu, [oneof([klasikaj,postaj,chiuj])]) 
     ]),
     verkaro(Kiu).
 

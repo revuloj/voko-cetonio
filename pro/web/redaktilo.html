@@ -154,8 +154,7 @@
                 <div  id="regexes">
                   <fieldset class="s_int">
                     <legend>regulesprimo:</legend>
-                    <label for="re_rad">radiko:</label>
-                    <input id="re_rad" type="text" readonly/>
+                    radiko: <span id="re_radiko"></span>
                     <label for="re_rvrb">aga</label>
                     <input id="re_rvrb" name="re_rk" value="i" type="radio">
                     <label for="re_rsbst">aĵa</label>
@@ -203,11 +202,22 @@
                   </fieldset>
                 </div>
                 <div id="serch_btnj">
-                  <input id="s_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_klasikaj_submit" value="Klasikaj tekstoj"/>
+                  <input id="s_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_klasikaj_submit" value="Serĉo ĝis 1940"/>
+                  <!--
                   <input id="sa_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_klasikaj_submit" value="&#x22ee;" title="Agordi elekton de klasikaj tekstoj"/>
                   &nbsp;
-                  <input id="s_postaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_postaj_submit" value="Postaj tekstoj"/>
-                  <input id="sa_postaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_postaj_submit" value="&#x22ee;" title="Agordi elekton de postaj tekstoj"/>
+                  -->
+                  <input id="s_postaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_postaj_submit" value="Elektitaj"/>
+                  <input id="sa_postaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_postaj_submit" value="&#x22ee;" title="Elekti unuopajn tekstojn"/>
+
+                  <!--
+                  <input id="s_postaj_periodo" type="text" class="s_int" id="periodo">
+                  -->
+                  <div id="s_postaj_periodilo" data-min="1887" data-max="2020" 
+                    data-val="1940 - 2010" class="s_int periodilo">
+                    <div id="periodilo_manilo_1" class="manilo ui-slider-handle"></div>
+                    <div id="periodilo_manilo_2" class="manilo ui-slider-handle"></div>
+                  </div>
 
                   <input id="s_vikipedio" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_vikipedio_submit" value="Vikipedio"/>
                   <input id="s_bildoj" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_bildoj_submit" value="Bildoj"/>
@@ -215,6 +225,7 @@
                 </div>
                 <!-- input type="submit" name="sercho_guglo_submit" value="Guglo"/ -->
             </form>
+            <!--
             <div id="sercho_klasikaj" class="kasxita">
               <button id="s_klasikaj_chiuj" class="ui-button ui-corner-all" value="1">Ĉiuj</button>
               <button id="s_klasikaj_neniuj" class="ui-button ui-corner-all" value="0">Neniu</button>
@@ -222,13 +233,15 @@
               <input id="s_klasikaj_periodo" type="text" id="periodo">
               <div id="s_klasikaj_periodilo" data-min="1887" data-max="1939"></div>
               <div id="sercho_klasikaj_vl"></div>
-            </div>
+            </div> -->
             <div id="sercho_postaj" class="kasxita">
               <button id="s_postaj_chiuj" class="ui-button ui-corner-all" value="1">Ĉiuj</button>
               <button id="s_postaj_neniuj" class="ui-button ui-corner-all" value="0">Neniu</button>
               <button id="s_postaj_preta" class="ui-button ui-corner-all" value="preta">Preta</button>
+              <!--
               <input id="s_postaj_periodo" type="text" id="periodo">
               <div id="s_postaj_periodilo" data-min="1940" data-max="2019"></div>
+              -->
               <div id="sercho_postaj_vl"></div>
             </div>
             <dl id="sercho_trovoj"></dl>
