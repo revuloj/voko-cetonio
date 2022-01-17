@@ -68,7 +68,7 @@ sercho_vrk(Vrkj,Sercho) :- % verkolisto
     close(Stream).
 
 verkaro(Kiu) :-
-    memberchk(Kiu,[klasikaj,postaj,chiuj]),
+    %memberchk(Kiu,[klasikaj,postaj,chiuj]),
     agordo:get_url(cikado,Url),
     uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
     atom_concat(Root,'/verkaro',Path),

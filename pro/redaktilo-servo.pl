@@ -412,14 +412,14 @@ citajho_sercho(Request) :-
     http_parameters(Request,
     [
 	    sercho(Sercho, [length>1,length<500]),
-	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj])]),
+	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj,vrk])]),
         vrk(Vrkj, [optional(true),length<500])
     ]),
     once((
-        Vrkj \= '', % ni ricevis detalan verko-liston
-        memberchk(Kie,[klasikaj,postaj]),
+        Kie = vrk, Vrkj \= '', % ni ricevis detalan verko-liston
         sercho_vrk(Vrkj,Sercho)
-        ;
+        ; 
+        % ni serĉas en antaŭdifinita kadro (klasikaj, postaj, vikipedio, anaso)
         sercho(Kie,Sercho)
     )).
 
