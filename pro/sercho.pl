@@ -3,6 +3,7 @@
     [ 
         sercho/2,
         sercho_vrk/2,
+        kunteksto/2,
         verkaro/1,
         bildo_sercho/2
         %bildo_info/1,
@@ -38,6 +39,8 @@ sercho(anaso,Sercho) :- !,
     close(Stream),
     debug(sercho(what),'<<< ANASO: ~w',[Sercho]).
 
+% PLIBONIGU: difino ĝeneralan predikaton cikado(pado,parametroj...)
+% kaj uzu en la sekvaj kvar
 sercho(Kie,Sercho) :-
     memberchk(Kie,[klasikaj,postaj]),
     agordo:get_url(cikado,Url),
@@ -66,6 +69,22 @@ sercho_vrk(Vrkj,Sercho) :- % verkolisto
     set_stream(current_output,encoding(utf8)),
     copy_stream_data(Stream,current_output),
     close(Stream).
+
+
+kunteksto(Frazo,N) :-
+    agordo:get_url(cikado,Url),
+    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
+    atom_concat(Root,'/kunteksto',Path),
+    uri_query_components(Search,[frazo(Frazo),n(N)]),
+    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
+    debug(redaktilo(kunteksto),'frazo ~q',[Frazo]),
+    http_open(Url1,Stream,[header(content_type,ContentType)]),
+    format('Content-type: ~w~n~n',[ContentType]),
+    set_stream(Stream,encoding(utf8)),
+    set_stream(current_output,encoding(utf8)),
+    copy_stream_data(Stream,current_output),
+    close(Stream).
+
 
 verkaro(Kiu) :-
     %memberchk(Kiu,[klasikaj,postaj,chiuj]),

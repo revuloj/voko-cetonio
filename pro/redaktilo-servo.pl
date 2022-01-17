@@ -100,6 +100,7 @@ init :-
 :- http_handler(red(revo_rigardo), revo_rigardo, [authentication(ajaxid)]).
 %:- http_handler(red(revo_bibliogr), revo_bibliogr, []).
 :- http_handler(red(citajho_sercho), citajho_sercho, [authentication(ajaxid)]).
+:- http_handler(red(kunteksto), kunteksto, [authentication(ajaxid)]).
 :- http_handler(red(verkaro), verko_listo, [authentication(ajaxid)]).
 :- http_handler(red(bildo_sercho), bildo_sercho, [authentication(ajaxid)]).
 :- http_handler(red(bildo_info), bildo_info, [authentication(ajaxid)]).
@@ -422,6 +423,17 @@ citajho_sercho(Request) :-
         % ni serĉas en antaŭdifinita kadro (klasikaj, postaj, vikipedio, anaso)
         sercho(Kie,Sercho)
     )).
+
+
+kunteksto(Request) :-
+    %%    ajax_auth(Request),
+        %debug(cikado(auth),'permesite',[]),
+        http_parameters(Request,
+            [
+            frazo(Frazo, [nonneg]),
+            n(N, [between(0,5)])
+            ]),
+        kunteksto(Frazo,N).
 
 
 verko_listo(Request) :-
