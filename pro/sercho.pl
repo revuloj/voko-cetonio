@@ -2,9 +2,7 @@
 :- module(sercho,
     [ 
         sercho/2,
-        sercho_vrk/2,
-        kunteksto/2,
-        verkaro/1,
+        cikado/2,
         bildo_sercho/2
         %bildo_info/1,
         %bildo_info_2/1,
@@ -39,16 +37,14 @@ sercho(anaso,Sercho) :- !,
     close(Stream),
     debug(sercho(what),'<<< ANASO: ~w',[Sercho]).
 
-% PLIBONIGU: difino ĝeneralan predikaton cikado(pado,parametroj...)
-% kaj uzu en la sekvaj kvar
-sercho(Kie,Sercho) :-
-    memberchk(Kie,[klasikaj,postaj]),
+
+cikado(Pado,Parametroj) :-
     agordo:get_url(cikado,Url),
     uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-    atom_concat(Root,'/cikado',Path),
-    uri_query_components(Search,[sercho(Sercho),kie(Kie)]),
-    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
-    debug(redaktilo(citajho),'url ~q',[Url1]),
+    atomic_list_concat([Root,Pado],'/',UrlPath),
+    uri_query_components(Search,Parametroj),
+    uri_components(Url1,uri_components(Scheme,Auth,UrlPath,Search,_)),
+    debug(redaktilo(cikado),'url ~q',[Url1]),
     http_open(Url1,Stream,[header(content_type,ContentType)]),
     format('Content-type: ~w~n~n',[ContentType]),
     set_stream(Stream,encoding(utf8)),
@@ -56,50 +52,6 @@ sercho(Kie,Sercho) :-
     copy_stream_data(Stream,current_output),
     close(Stream).
 
-sercho_vrk(Vrkj,Sercho) :- % verkolisto    
-    agordo:get_url(cikado,Url),
-    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-    atom_concat(Root,'/cikado',Path),
-    uri_query_components(Search,[sercho(Sercho),vrk(Vrkj)]),
-    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
-    debug(redaktilo(citajho),'url ~q',[Url1]),
-    http_open(Url1,Stream,[header(content_type,ContentType)]),
-    format('Content-type: ~w~n~n',[ContentType]),
-    set_stream(Stream,encoding(utf8)),
-    set_stream(current_output,encoding(utf8)),
-    copy_stream_data(Stream,current_output),
-    close(Stream).
-
-
-kunteksto(Frazo,N) :-
-    agordo:get_url(cikado,Url),
-    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-    atom_concat(Root,'/kunteksto',Path),
-    uri_query_components(Search,[frazo(Frazo),n(N)]),
-    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
-    debug(redaktilo(kunteksto),'frazo ~q',[Frazo]),
-    http_open(Url1,Stream,[header(content_type,ContentType)]),
-    format('Content-type: ~w~n~n',[ContentType]),
-    set_stream(Stream,encoding(utf8)),
-    set_stream(current_output,encoding(utf8)),
-    copy_stream_data(Stream,current_output),
-    close(Stream).
-
-
-verkaro(Kiu) :-
-    %memberchk(Kiu,[klasikaj,postaj,chiuj]),
-    agordo:get_url(cikado,Url),
-    uri_components(Url,uri_components(Scheme,Auth,Root,_,_)),
-    atom_concat(Root,'/verkaro',Path),
-    uri_query_components(Search,[kiu(Kiu)]),
-    uri_components(Url1,uri_components(Scheme,Auth,Path,Search,_)),
-    debug(redaktilo(verkaro),'url ~q',[Url1]),
-    http_open(Url1,Stream,[header(content_type,ContentType)]),
-    format('Content-type: ~w~n~n',[ContentType]),
-    set_stream(Stream,encoding(utf8)),
-    set_stream(current_output,encoding(utf8)),
-    copy_stream_data(Stream,current_output),
-    close(Stream).
 
 
 % see https://commons.wikimedia.org/wiki/Special:ApiSandbox

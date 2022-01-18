@@ -418,9 +418,13 @@ citajho_sercho(Request) :-
     ]),
     once((
         Kie = vrk, Vrkj \= '', % ni ricevis detalan verko-liston
-        sercho_vrk(Vrkj,Sercho)
+        cikado(cikado,[sercho(Sercho),vrk(Vrkj)])
         ; 
-        % ni serĉas en antaŭdifinita kadro (klasikaj, postaj, vikipedio, anaso)
+        % ni serĉas en antaŭdifinita verkaro (klasikaj, postaj
+        memberchk(Kie,[klasikaj,postaj,chiuj]),
+        cikado(cikado,[sercho(Sercho),kie(Kie)])
+        ;
+        % retserĉo: vikipedio, anaso
         sercho(Kie,Sercho)
     )).
 
@@ -433,7 +437,7 @@ kunteksto(Request) :-
             frazo(Frazo, [nonneg]),
             n(N, [between(0,5)])
             ]),
-        kunteksto(Frazo,N).
+        cikado(kunteksto,[frazo(Frazo),n(N)]).
 
 
 verko_listo(Request) :-
@@ -441,7 +445,8 @@ verko_listo(Request) :-
     [
 	    kiu(Kiu, [oneof([klasikaj,postaj,chiuj])]) 
     ]),
-    verkaro(Kiu).
+    cikado(verkaro,[kiu(Kiu)]).
+
 
 bildo_sercho(Request) :-       
     http_parameters(Request,
