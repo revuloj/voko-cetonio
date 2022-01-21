@@ -221,7 +221,7 @@
                     <div id="periodilo_manilo_1" class="manilo ui-slider-handle"></div>
                     <div id="periodilo_manilo_2" class="manilo ui-slider-handle"></div>
                   </div>
-                  <input id="sa_postaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_postaj_submit" value="&#x22ee;" title="Elekti unuopajn tekstojn"/>
+                  <!--input id="sa_postaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_postaj_submit" value="&#x22ee;" title="Elekti unuopajn tekstojn"/ -->
 
                   <input id="s_vikipedio" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_vikipedio_submit" value="Vikipedio"/>
                   <input id="s_bildoj" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_bildoj_submit" value="Bildoj"/>
@@ -229,16 +229,19 @@
                 </div>
                 <!-- input type="submit" name="sercho_guglo_submit" value="Guglo"/ -->
             </form>
-            <div id="sercho_verklisto" class="kasxita">
-              <button id="s_verklisto_chiuj" class="ui-button ui-corner-all" value="1">Ĉiuj</button>
-              <button id="s_verklisto_neniuj" class="ui-button ui-corner-all" value="0">Neniu</button>
-              <button id="s_verklisto_preta" class="ui-button ui-corner-all" value="preta">Preta</button>
-              <!--
-              <input id="s_postaj_periodo" type="text" id="periodo">
-              <div id="s_postaj_periodilo" data-min="1940" data-max="2019"></div>
-              -->
-              <div id="sercho_verklisto_vl"></div>
-            </div>
+            <details id="sercho_det_verklisto"><summary>verkolisto</summary>
+              <div id="sercho_verklisto">
+                <!--
+                <button id="s_verklisto_chiuj" class="ui-button ui-corner-all" value="1">Ĉiuj</button>
+                <button id="s_verklisto_neniuj" class="ui-button ui-corner-all" value="0">Neniu</button>
+                -->
+                <!--button id="s_verklisto_preta" class="ui-button ui-corner-all" value="preta">Preta</button-->
+                <!--
+                <input id="s_postaj_periodo" type="text" id="periodo">
+                <div id="s_postaj_periodilo" data-min="1940" data-max="2019"></div>
+                -->
+                <div id="sercho_verklisto_vl"></div>
+              </div>            </details>
             <dl id="sercho_trovoj"></dl>
         </div>
       </div> <!-- #sercho -->
