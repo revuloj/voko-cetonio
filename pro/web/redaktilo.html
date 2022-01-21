@@ -183,23 +183,6 @@
                     <label for="re_vadv">-e</label>
                     <input id="re_vadv" name="re_vs" value="e" type="radio">
 
-                    <!--
-                    <input type="button" id="re_pref" value="pref-"/>
-                    <i>vort</i>
-                    <input type="button" id="re_osuf" value="-o-suf-"/>
-                    <input type="button" id="re_asuf" value="-a-suf-"/>
-                    <input type="button" id="re_isuf" value="-i-suf-"/>
-                    <input type="button" id="re_nsuf" value="-n-suf-"/>
-                    <input type="button" id="re_o" value="-o-"/>
-                    <input type="button" id="re_a" value="-a-"/>
-                    <input type="button" id="re_e" value="-e-"/>
-                    <input type="button" id="re_i" value="-i-"/>
-                    -->
-                    <!--
-                    &nbsp;<input type="button" id="re_helpo" value="&#x2754;"/>
-                    <br/>
-                    <label for="re_esprimo">regulesprimo:</label>
-                    -->                    
                     <div id="re_esprimo"></div>
 
                   </fieldset>
@@ -207,41 +190,20 @@
                 </details>
                 <div id="serch_btnj">
                   <input id="s_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_klasikaj_submit" value="Serĉo ĝis 1940"/>
-                  <!--
-                  <input id="sa_klasikaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_klasikaj_submit" value="&#x22ee;" title="Agordi elekton de klasikaj tekstoj"/>
-                  &nbsp;
-                  -->
-                  <input id="s_postaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_postaj_submit" value="Elektitaj"/>
-
-                  <!--
-                  <input id="s_postaj_periodo" type="text" class="s_int" id="periodo">
-                  -->
-                  <div id="s_postaj_periodilo" data-min="1887" data-max="2020" 
+                  <input id="s_elektitaj" type="submit" class="s_int ui-button ui-corner-all" name="sercho_elektitaj_submit" value="Elektitaj:"/>
+                  <div id="s_elektitaj_periodilo" data-min="1887" data-max="2020" 
                     data-val="1940 - 2010" class="s_int periodilo">
                     <div id="periodilo_manilo_1" class="manilo ui-slider-handle"></div>
                     <div id="periodilo_manilo_2" class="manilo ui-slider-handle"></div>
                   </div>
-                  <!--input id="sa_postaj" type="submit" class="s_int ui-button ui-corner-all" name="serchagord_postaj_submit" value="&#x22ee;" title="Elekti unuopajn tekstojn"/ -->
-
                   <input id="s_vikipedio" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_vikipedio_submit" value="Vikipedio"/>
                   <input id="s_bildoj" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_bildoj_submit" value="Bildoj"/>
                   <input id="s_anaso" type="submit" class="s_ext ui-button ui-corner-all" name="sercho_anaso_submit" value="Anaso"/>
                 </div>
-                <!-- input type="submit" name="sercho_guglo_submit" value="Guglo"/ -->
             </form>
             <details id="sercho_det_verklisto"><summary>verkolisto</summary>
-              <div id="sercho_verklisto">
-                <!--
-                <button id="s_verklisto_chiuj" class="ui-button ui-corner-all" value="1">Ĉiuj</button>
-                <button id="s_verklisto_neniuj" class="ui-button ui-corner-all" value="0">Neniu</button>
-                -->
-                <!--button id="s_verklisto_preta" class="ui-button ui-corner-all" value="preta">Preta</button-->
-                <!--
-                <input id="s_postaj_periodo" type="text" id="periodo">
-                <div id="s_postaj_periodilo" data-min="1940" data-max="2019"></div>
-                -->
-                <div id="sercho_verklisto_vl"></div>
-              </div>            </details>
+              <div id="sercho_verklisto"></div>
+            </details>
             <dl id="sercho_trovoj"></dl>
         </div>
       </div> <!-- #sercho -->
