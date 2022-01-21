@@ -5,11 +5,11 @@ FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} as grundo
 
 
 ##### staĝo 2: Nun ni kreos la propran procesumon por la redaktilo...
-FROM swipl:stable
+FROM swipl:8.4.1
 LABEL Author=<diestel@steloj.de>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    xsltproc sqlite3 unzip curl && rm -rf /var/lib/apt/lists/* 
+    binutils xsltproc sqlite3 unzip curl && rm -rf /var/lib/apt/lists/* 
 
 # ne plu bezonata pro oauth2.pl: RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
 
