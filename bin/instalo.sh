@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo ""; echo "Serĉante je jarperiodo..."
+curl -fLI "http://$HPORT/cikado/cikado?sercho=\bhun[dt]o&jar_de=1940&jar_ghis=1950"
+
 # URL por elŝuti la redaktanto-liston
 redaktantoj_url=https://reta-vortaro.de/cgi-bin/admin/redaktantoj.pl
 redaktantoj_trg=${HOME}/etc/redaktantoj
@@ -41,7 +44,7 @@ redaktantoj)
     fi
     # elsutu redaktanto-liston kaj aktualigu la datumbazon per ĝi
     echo "${redaktantoj_trg} <- ${redaktantoj_url}"
-    /usr/bin/curl -u ${CGI_USER}:${CGI_PWD} -o ${redaktantoj_trg} ${redaktantoj_url}
+    /usr/bin/curl -fu ${CGI_USER}:${CGI_PWD} -o ${redaktantoj_trg} ${redaktantoj_url}
     echo "aktualigante sql/redaktatoj.db..."
     /usr/bin/swipl -s ${redaktantoj_upd} -g "${redaktantoj_goal}" -t "halt"
     ;;

@@ -22,6 +22,11 @@ preparo)
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PAGE}
     sed -i 's/Cetonio "[1-9][a-z]";/Cetonio "'${release}'";/' ${PAGE}
     ;;
+etikedo)
+    echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
+    echo "kaj puŝante tiun staton al la centra deponejo"
+    git tag -f v${release} && git push && git push --tags -f
+    ;;    
 helpo | *)
     echo "---------------------------------------------------------------------------"
     echo "Per la celo 'preparo' oni povas krei git-branĉon kun nova eldono por tie "
