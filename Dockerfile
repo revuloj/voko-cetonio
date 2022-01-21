@@ -9,7 +9,7 @@ FROM swipl:stable
 LABEL Author=<diestel@steloj.de>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    xsltproc sqlite3 unzip curl && rm -rf /var/lib/apt/lists/* 
+    binutils xsltproc sqlite3 unzip curl && rm -rf /var/lib/apt/lists/* 
 
 # ne plu bezonata pro oauth2.pl: RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
 
