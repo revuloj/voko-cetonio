@@ -1,7 +1,8 @@
 #!/bin/bash
 
-echo ""; echo "Serĉante je jarperiodo..."
-curl -fLI "http://$HPORT/cikado/cikado?sercho=\bhun[dt]o&jar_de=1940&jar_ghis=1950"
+# tuj finu se unuopa komando fiaskas 
+# - necesas por distingi sukcesan de malsukcesa testaro
+set -e
 
 # URL por elŝuti la redaktanto-liston
 redaktantoj_url=https://reta-vortaro.de/cgi-bin/admin/redaktantoj.pl
