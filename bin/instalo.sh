@@ -10,6 +10,9 @@ redaktantoj_trg=${HOME}/etc/redaktantoj
 # Prolog-skripto por aktualigi redaktantojn
 redaktantoj_upd=pro/redaktantoj_upd.pl
 redaktantoj_goal=redaktantoj:update_redaktantoj
+# por vidi SQL-komandojn:
+#redaktantoj_dbg='debug(db(redaktantoj)),redaktantoj:update_redaktantoj.'
+
 # Prolog-skripto por aktualigi serĉdatumbazon
 revodb_upd=pro/db/revo_download.pl
 revodb_goal=sqlrevo:download
