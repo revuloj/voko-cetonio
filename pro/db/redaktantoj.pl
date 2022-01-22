@@ -74,24 +74,28 @@ editor_by_subid(SubId,Provider,Editor) :- % Oauth2 / OpenId Connect
     check_search(SubId),
     col_suffix(Provider,Sfx),
     format(atom(Query),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where subid_~w=''~w'';',[Sfx,SubId]),    
-    debug(sqlrevo,'query=~q',[Query]),
+    debug(db(redaktantoj),'~q',[Query]),
     sqlite_query(kontodb,Query,Editor).
 
 editor_by_email(Email,Editor) :-
     check_email(Email,EmailChecked),
     format(atom(Sel1),'select red_id from retposhto where retposhto=''~w'';',[EmailChecked]),
+    debug(db(redaktantoj),'~q',[Sel1]),
     sqlite_query(kontodb,Sel1,row(RedId)),
     format(atom(Sel2),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where red_id=''~w'';',[RedId]),
+    debug(db(redaktantoj),'~q',[Sel2]),
     sqlite_query(kontodb,Sel2,Editor).
 
 editor_by_redid(RedId,Editor) :-
     check_hash(RedId),
     format(atom(Query),'select red_id,nomo,retposhto from _redaktanto_poshto_unu where red_id=''~w'';',[RedId]),
+    debug(db(redaktantoj),'~q',[Query]),
     sqlite_query(kontodb,Query,Editor).
 
 editor_emails(RedId,Emails) :-
     check_hash(RedId),
     format(atom(Query),'select red_id,numero,retposhto from retposhto where red_id=''~w'';',[RedId]),
+    debug(db(redaktantoj),'~q',[Query]),
     findall(
 	    No-Email,
 	    sqlite_query(kontodb,Query,row(_,No,Email)),
@@ -104,13 +108,14 @@ editor_add(Nomo,[Email|Emails]) :-
     email_redid(Email,RedId),
     replace_apos(Nomo,N),
     format(atom(Ins),'insert into redaktanto (red_id,nomo) values ("~w","~w");',[RedId,N]),
-    debug(redaktilo(redaktantoj),Ins,[]),
+    debug(db(redaktantoj),'~q',[Ins]),
     sqlite_query(kontodb,Ins,row(1)),
     emails_add(RedId,1,[Email|Emails]).
 
 emails_add(_,_,[]).
 emails_add(RedId,No,[Email|Emails]) :-    
     format(atom(Ins),'insert into retposhto(red_id,numero,retposhto) values (''~w'',''~d'',''~w'');',[RedId,No,Email]),
+    debug(db(redaktantoj),'~q',[Ins]),
     sqlite_query(kontodb,Ins,row(1)),
     No_1 is No+1,
     emails_add(RedId,No_1,Emails).
@@ -119,18 +124,19 @@ emails_add(RedId,No,[Email|Emails]) :-
 editor_update(Nomo,[Email|Emails]) :-
     email_redid(Email,RedId),
     once((
-	% jam ekzistas -> aktualigu
-	editor_by_redid(RedId,row(RedId,_,_)),
-	editor_update_nomo(RedId,Nomo),
-	editor_update_emails(RedId,[Email|Emails])
+        % jam ekzistas -> aktualigu
+        editor_by_redid(RedId,row(RedId,_,_)),
+        editor_update_nomo(RedId,Nomo),
+        editor_update_emails(RedId,[Email|Emails])
 	;
-	% ne jam ekzistas -> aldonu     
-	editor_add(Nomo,[Email|Emails])
+        % ne jam ekzistas -> aldonu     
+        editor_add(Nomo,[Email|Emails])
     )).
 
 editor_update_nomo(RedId,Nomo) :-
     replace_apos(Nomo,N),
     format(atom(Upd),'update redaktanto set nomo=''~w'' where red_id = ''~w'' and nomo <> ''~w'';',[N,RedId,N]),
+    debug(db(redaktantoj),'~q',[Upd]),
     sqlite_query(kontodb,Upd,_).
 
 editor_update_emails(RedId,Emails) :-
@@ -147,10 +153,12 @@ num_emails_del(RedId,ToBeDeleted) :-
     pairs_keys(ToBeDeleted,DelKeys),
     atomic_list_concat(DelKeys,''',''',InNoStr),
     format(atom(Del),'delete from retposhto where red_id=''~w'' and numero in (''~w'');',[RedId,InNoStr]),
+    debug(db(redaktantoj),'~q',[Del]),
     sqlite_query(kontodb,Del,row(_)).
 
 num_emails_add(RedId,[No-Email|MoreToBeAdded]) :-
    format(atom(Ins),'insert into retposhto (red_id,numero,retposhto) values (''~w'',''~w'',''~w'');',[RedId,No,Email]),
+   debug(db(redaktantoj),'~q',[Ins]),
    sqlite_query(kontodb,Ins,row(1)),
    num_emails_add(RedId,MoreToBeAdded).
 num_emails_add(_,[]).		   
@@ -166,8 +174,10 @@ editor_update_subid(Email,Provider,SubId) :-
     check_search(SubId),
     col_suffix(Provider,Sfx),
     format(atom(Sel),'select red_id from retposhto where retposhto=''~w'';',[Email]),
+    debug(db(redaktantoj),'~q',[Sel]),
     sqlite_query(kontodb,Sel,row(RedId)),
     format(atom(Upd),'update redaktanto set subid_~w=''~w'' where red_id = ''~w'';',[Sfx,SubId,RedId]),
+    debug(db(redaktantoj),'~q',[Upd]),
     sqlite_query(kontodb,Upd,row(1)).
 
 
