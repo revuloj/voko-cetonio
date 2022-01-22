@@ -5,7 +5,7 @@ FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} as grundo
 
 
 ##### staĝo 2: Nun ni kreos la propran procesumon por la redaktilo...
-FROM swipl:stable
+FROM swipl:8.4.1
 LABEL Author=<diestel@steloj.de>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
