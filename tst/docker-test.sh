@@ -44,28 +44,28 @@ done
 # ni povus ankaŭ pli detale rigardi ĉu la enhavo estas kiel atendita...
 
 echo ""; echo "Petante indeks-paĝon..."
-curl -fI "http://$HPORT/"
+curl -fsI "http://$HPORT/"
 
 echo ""; echo "Petante Revo-piktogramon..."
-curl -fI "http://$HPORT/redaktilo/static/revo.png"
+curl -fsI "http://$HPORT/redaktilo/static/revo.png"
 
 echo ""; echo "Petante piktogramon por fako..."
-curl -fI "http://$HPORT/redaktilo/smb/ESP.png"
+curl -fsI "http://$HPORT/redaktilo/smb/ESP.png"
 
 echo ""; echo "Petante klasliston..."
-curl -fI "http://$HPORT/redaktilo/voko/klasoj.xml"
+curl -fsI "http://$HPORT/redaktilo/voko/klasoj.xml"
 
 echo ""; echo "Petante lingvoliston..."
-curl -fI "http://$HPORT/redaktilo/voko/lingvoj.xml"
+curl -fsI "http://$HPORT/redaktilo/voko/lingvoj.xml"
 
 echo ""; echo "Petante bibliografion..."
-curl -fI "http://$HPORT/redaktilo/voko/biblist.xml"
+curl -fsI "http://$HPORT/redaktilo/voko/biblist.xml"
 
 echo ""; echo "Petante indeks-paĝon kaj akiru la seanco-kuketon..."
-curl -L -c .cetonio-kuketo -fI "http://$HPORT/"
+curl -L -c .cetonio-kuketo -fsI "http://$HPORT/"
 
 echo ""; echo "Petante preferatajn lingvojn..."
-curl -b .cetonio-kuketo -f "http://$HPORT/redaktilo/red/revo_preflng" -H 'Accept-Language: eo,fr,de-DE;q=0.8,en-US;q=0.5,en;q=0.3'
+curl -b .cetonio-kuketo -fs "http://$HPORT/redaktilo/red/revo_preflng" -H 'Accept-Language: eo,fr,de-DE;q=0.8,en-US;q=0.5,en;q=0.3'
 
 echo ""; echo "Forigi..."
 docker kill cetonio-test
