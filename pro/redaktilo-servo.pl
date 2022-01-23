@@ -174,7 +174,7 @@ reply_static_files(Request) :-
 
 % preferataj lingvoj
 revo_preflng(Request) :-   
-        once((
+    once((
         member(accept_language(AccLng),Request),
         preferataj_lingvoj(AccLng,Lingvoj)
         ;
