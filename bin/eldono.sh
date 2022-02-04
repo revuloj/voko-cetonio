@@ -22,6 +22,10 @@ preparo)
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PAGE}
     sed -i 's/Cetonio "[1-9][a-z]";/Cetonio "'${release}'";/' ${PAGE}
     ;;
+kreo)
+    echo "Kreante lokan procezujon (por docker) voko-cetonio"
+    docker pull ghcr.io/revuloj/voko-grundo/voko-grundo:${release}
+    docker build -t voko-cetonio .
 etikedo)
     echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
     echo "kaj puŝante tiun staton al la centra deponejo"
