@@ -26,6 +26,7 @@ kreo)
     echo "Kreante lokan procezujon (por docker) voko-cetonio"
     docker pull ghcr.io/revuloj/voko-grundo/voko-grundo:${release}
     docker build -t voko-cetonio .
+    ;;
 etikedo)
     echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
     echo "kaj puŝante tiun staton al la centra deponejo"
