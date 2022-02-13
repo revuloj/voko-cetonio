@@ -17,7 +17,7 @@ RUN useradd -ms /bin/bash -u 1088 cetonio
 WORKDIR /home/cetonio
 
 ADD . ./
-#  ??? --chown=root:root
+# ??? --chown=root:root
 #COPY --from=metapost --chown=root:root voko-grundo-master/smb/ /home/cetonio/voko/smb/
 #COPY --from=builder --chown=root:root redaktilo-gen.js /home/cetonio/pro/web/
 #COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
