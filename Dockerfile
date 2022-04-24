@@ -24,7 +24,7 @@ ADD . ./
 
 RUN chown cetonio etc \
   && curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
-  && unzip master.zip voko-grundo-master/xsl/* voko-grundo-master/dtd/*  \
+  && unzip master.zip voko-grundo-master/xsl/* voko-grundo-master/dtd/* \
      voko-grundo-master/cfg/* voko-grundo-master/smb/*.gif voko-grundo-master/owl/voko.rdf \
   && rm master.zip && mv voko-grundo-master voko \
   && cd voko/cfg \
