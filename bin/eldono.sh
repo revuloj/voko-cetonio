@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-release=2e
+release=2f
 
 # ni komprenas preparo 
 target="${1:-helpo}"
@@ -20,7 +20,7 @@ preparo)
 
     echo "Aktualigante skriptojn al nova eldono ${release}..."
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PAGE}
-    sed -i 's/Cetonio [1-9][a-z];/Cetonio '${release}';/' ${PAGE}
+    sed -i 's/Cetonio [1-9][a-z]/Cetonio '${release}'/' ${PAGE}
     ;;
 kreo)
     echo "Kreante lokan procezujon (por docker) voko-cetonio"
