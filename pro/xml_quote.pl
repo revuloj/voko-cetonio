@@ -119,6 +119,7 @@ quote_at_start(In,QuHead,Tail,[Len|Lengths],ReverseEntInx,Encoding) :-
 	atom_codes(HeadA,Head),
 	get_assoc(HeadA,ReverseEntInx,Entity),
 	atom_codes(Entity,EntityC),
+  % kunmetu &+EntityC+;
 	append([0'&|EntityC],[0';],QuHead)
 	;
 	quote_at_start(In,QuHead,Tail,Lengths,ReverseEntInx,Encoding)
@@ -200,6 +201,11 @@ entity_pairs(Goal,Pairs) :-
     Pairs
   ).
 
+%! reverse_entity_index(+Goal,-Index) is det.
+%
+% Kreas indekson por inversa serĉo de XML-unuo-nomoj per ties valoro.
+% =Goal= redonas la erojn indeksendajn, en nia kazo tio estas la faktoj entity/2.
+
 reverse_entity_index(Goal,Index) :-
   \+ (
     check_unique_entity_values(Goal,N1,N2,V),
@@ -209,11 +215,10 @@ reverse_entity_index(Goal,Index) :-
   ord_list_to_assoc(Items,Index).
 
 
-%%
+%! entity_value_length_index(+Goal,-LengthIndex) is det.
 %
-% e.g. Goal = entity for entity(Key,Value)
-
-% indekso de unuaj literoj de unuoj kaj ordigitaj longecoj de ĉiuj ili
+% e.g. =Goal= = =entity= for =entity(Key,Value)=
+% Kreas indekson de unuaj literoj de unuoj kaj ordigitaj longecoj de ĉiuj ili
 % ekz. [a-[5,2,1],c-[9,4,2,1]|_]
 entity_value_length_index(Goal,LengthIndex) :-
   setof(
@@ -226,8 +231,11 @@ entity_value_length_index(Goal,LengthIndex) :-
   list_to_assoc(LetterLensSorted,LengthIndex).
 
 
-% indekso de literaj por kiuj ekzistas unuo, sama
-% strukturo kiel supre por povi uzo la saman predikaton por anstataŭigado
+%! entity_value_1_index(+Goal,-Index) is det.
+%
+% Kreas indekson de literaj por kiuj ekzistas unuo, sama
+% strukturo kiel ĉe =entity_value_length_index=, por povi 
+% uzi la saman predikaton por anstataŭigado
 % ekz. [a-[1],c-[1]|_]
 entity_value_1_index(Goal,Index) :-
   setof(

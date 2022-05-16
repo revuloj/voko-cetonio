@@ -1,4 +1,5 @@
 :-encoding(utf8).
+% kreita per: swipl loaddtd.pl -g dtd2pl_entities.
 entity(amp,&).
 entity(lt,<).
 entity(gt,>).
@@ -76,7 +77,7 @@ entity(para,§).
 entity(dash,―).
 entity(mdash,—).
 entity(ndash,–).
-entity(nbsp,'\240\').
+entity(nbsp,'\u00A0').
 entity('Euml','Ë').
 entity(euml,ë).
 entity('Iuml','Ï').
@@ -719,15 +720,15 @@ entity(t_shata,'ྴ').
 entity(t_sata,'ྶ').
 entity(t_hata,'ྷ').
 entity(t_ata,'ྸ').
-entity(zwnj,'‌').
-entity(zwj,'‍').
-entity(lrm,'‎').
-entity(rlm,'‏').
-entity(lre,'‪').
-entity(rle,'‫').
-entity(pdf,'‬').
-entity(lro,'‭').
-entity(rlo,'‮').
+entity(zwnj,'\u200C').
+entity(zwj,'\u200D').
+entity(lrm,'\u200E').
+entity(rlm,'\u200F').
+entity(lre,'\u202A').
+entity(rle,'\u202B').
+entity(pdf,'\u202C').
+entity(lro,'\u202D').
+entity(rlo,'\u202E').
 entity('Z','Zamenhof').
 entity(tZ,'trad. Zamenhof').
 entity('B','Kabe').
@@ -811,15 +812,27 @@ entity('Jo2','II. Johano').
 entity('Jo3','III. Johano').
 entity('Jud','De Judas').
 entity('Apo','Apokalipso').
-entity('KompLeks','http://www.esperanto.mv.ru/ESP/kframe.html').
+entity('KompLeks','https://www.esperanto.mv.ru/ESP/kframe.html').
 entity('Bib','../dok/bibliogr.html#').
 entity('Monato','https://www.monato.be').
-entity('Viki','http://eo.wikipedia.org/wiki').
-entity('Vikio','http://eo.wikipedia.org/w/index.php?title=').
-entity(dbp,'http://dbpedia.org/').
-entity(dbpr,'http://dbpedia.org/resource/').
+entity('CRI','http://esperanto.cri.cn/').
+entity('Mondediplo','https://eo.mondediplo.com/').
+entity('Viki','https://eo.wikipedia.org/wiki').
+entity('Vikio','https://eo.wikipedia.org/w/index.php?title=').
+entity(dbp,'https://dbpedia.org/').
+entity(dbpr,'https://dbpedia.org/resource/').
+entity('SCE','https://groups.google.com/g/soc.culture.esperanto?hl=eo').
 entity('ViVo','http://kono.be/cgi-bin/vivo/').
 entity('ViVoTrd','http://kono.be/cgi-bin/vivo/ViVo.cgi?pagxo=').
-entity('AdE','http://www.akademio-de-esperanto.org').
+entity('AdE','https://www.akademio-de-esperanto.org').
+entity('PMEG','https://bertilow.com/pmeg/').
+entity('STEB','https://www.eventoj.hu/steb/').
+entity('DonH','http://literaturo.org/HARLOW-Don/Esperanto/Literaturo/').
+entity('EduInf','https://eduinf.waw.pl/esp/').
+entity('LOdE','https://esperanto-ondo.ru/').
+entity('Sezonoj','https://sezonoj.ru/').
+entity('Gutenberg','https://www.gutenberg.org/').
+entity('Steloj','https://www.steloj.de/esperanto/').
 entity('WCU','https://upload.wikimedia.org/wikipedia/commons').
 entity('WCW','https://commons.wikimedia.org/wiki').
+entity('WA','https://web.archive.org/web').

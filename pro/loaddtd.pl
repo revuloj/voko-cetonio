@@ -72,6 +72,7 @@ save_entities(FileName,EntityList) :-
     open(FileName,write,Out,[encoding(utf8)]),
     (
       writeln(Out,':-encoding(utf8).'),
+      writeln(Out,'% kreita per: swipl -s loaddtd.pl -g dtd2pl_entities -g halt'),
       with_output_to(Out,
         write_entities(EntityList))
     ),  
@@ -83,6 +84,7 @@ save_entities_json(FileName,EntityList) :-
     open(FileName,write,Out,[encoding(utf8)]),
     (
       writeln(Out,'/* jshint esversion: 6 */'),
+      writeln(Out,'/* kreita per: swipl -s loaddtd.pl -g dtd2json_entities -g halt */'),
       writeln(Out,'const voko_entities={'),
       json_write_entries(EntityList,Out),
       writeln(Out,'}')
