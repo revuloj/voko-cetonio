@@ -23,7 +23,7 @@ ADD . ./
 #COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
 
 RUN chown cetonio etc \
-  && curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip \
+  && curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip  \
   && unzip master.zip voko-grundo-master/xsl/* voko-grundo-master/dtd/* \
      voko-grundo-master/cfg/* voko-grundo-master/smb/*.gif voko-grundo-master/owl/voko.rdf \
   && rm master.zip && mv voko-grundo-master voko \
