@@ -21,6 +21,7 @@ preparo)
     echo "Aktualigante skriptojn al nova eldono ${release}..."
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PAGE}
     sed -i 's/Cetonio [1-9][a-z]/Cetonio '${release}'/' ${PAGE}
+    sed -i 's/ARG VERSION=[1-9][a-z]/ARG VERSION='${release}'/' Dockerfile
     ;;
 kreo)
     echo "Kreante lokan procezujon (por docker) voko-cetonio"
