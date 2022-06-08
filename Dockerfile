@@ -42,8 +42,9 @@ COPY --from=grundo build/stl/ /home/cetonio/pro/web/static/
 COPY --from=grundo build/jsc/ /home/cetonio/voko/jsc/
 COPY --from=grundo build/rsj/ /home/cetonio/pro/web/static/
 
-COPY --from=grundo build/xsl/ ${HOME_DIR}/files/xsl/
-# PLIBONIGU: tion prefere ni jam faru en voko-grundo...?
+# tio ŝajnas momente superflua, ĉar identa kun voko-grundo-master/xsl (supre)
+# sed ĝi povas devii iom se master != ${VERSION}
+COPY --from=grundo build/xsl/ /home/cetonio/voko/xsl/
 
 RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml && \
     xsltproc voko/xsl/cfg_klasoj.xsl voko/owl/voko.rdf > voko/cfg/klasoj.xml
