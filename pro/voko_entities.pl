@@ -1,5 +1,5 @@
 :-encoding(utf8).
-% kreita per: swipl loaddtd.pl -g dtd2pl_entities.
+% kreita per: swipl -s loaddtd.pl -g dtd2pl_entities -g halt
 entity(amp,&).
 entity(lt,<).
 entity(gt,>).
@@ -68,6 +68,8 @@ entity(minute,′).
 entity(second,″).
 entity(leftquot,„).
 entity(rightquot,“).
+entity(leftbad,✱).
+entity(rightbad,✱).
 entity(deg,°).
 entity('Celsius',℃).
 entity('Fahrenheit',℉).
@@ -822,6 +824,7 @@ entity('Vikio','https://eo.wikipedia.org/w/index.php?title=').
 entity(dbp,'https://dbpedia.org/').
 entity(dbpr,'https://dbpedia.org/resource/').
 entity('SCE','https://groups.google.com/g/soc.culture.esperanto?hl=eo').
+entity('UEA','https://uea.org/').
 entity('ViVo','http://kono.be/cgi-bin/vivo/').
 entity('ViVoTrd','http://kono.be/cgi-bin/vivo/ViVo.cgi?pagxo=').
 entity('AdE','https://www.akademio-de-esperanto.org').
@@ -833,6 +836,7 @@ entity('LOdE','https://esperanto-ondo.ru/').
 entity('Sezonoj','https://sezonoj.ru/').
 entity('Gutenberg','https://www.gutenberg.org/').
 entity('Steloj','https://www.steloj.de/esperanto/').
+entity('Tekstaro','https://tekstaro.com/t').
 entity('WCU','https://upload.wikimedia.org/wikipedia/commons').
 entity('WCW','https://commons.wikimedia.org/wiki').
 entity('WA','https://web.archive.org/web').

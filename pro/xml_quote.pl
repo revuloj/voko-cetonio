@@ -4,13 +4,13 @@
 	reverse_entity_index/2,
 	check_unique_entity_values/4,
 	entity_pairs/2,
-        entity_value_length_index/2,
+  entity_value_length_index/2,
 	entity_value_1_index/2,
 	get_entity_index/3,
 	dom_cnodes/2,
 	xml_quote_cdata/5,
 	xml_unquote_cdata/2
-    ]).
+  ]).
 
 :- use_module(library(dcg/basics)).
 %:- dynamic entity/1.
