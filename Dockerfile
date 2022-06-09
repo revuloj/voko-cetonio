@@ -1,5 +1,5 @@
 #### staĝo 1: certigu, ke vi antaŭe kompilis voko-grundo aŭ ŝargis de Github kiel pakaĵo
-ARG VERSION=2f
+ARG VERSION=latest
 FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} as grundo 
   # ni bezonos la enhavon de voko-grundo build poste por kopii jsc, stl, dok
 
@@ -7,6 +7,12 @@ FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} as grundo
 ##### staĝo 2: Nun ni kreos la propran procesumon por la redaktilo...
 FROM swipl:stable
 LABEL Author=<diestel@steloj.de>
+
+# normale: master aŭ v1e ks, 'bin/eldono.sh kreo' metas tion de ekstere per --build-arg
+ARG VG_TAG=master
+# por etikedoj kun nomo vXXX estas la problemo, ke GH en la ZIP-nomo kaj dosierujo forprenas la "v"
+# do se VG_TAG estas "v1e", ZIP_SUFFIX estu "1e", en 'bin/eldono.sh kreo' tio estas jam konsiderata
+ARG ZIP_SUFFIX=master
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     binutils xsltproc sqlite3 unzip curl && rm -rf /var/lib/apt/lists/* 
@@ -23,10 +29,10 @@ ADD . ./
 #COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
 
 RUN chown cetonio etc \
-  && curl -LO https://github.com/revuloj/voko-grundo/archive/master.zip  \
-  && unzip master.zip voko-grundo-master/xsl/* voko-grundo-master/dtd/* \
-     voko-grundo-master/cfg/* voko-grundo-master/smb/*.gif voko-grundo-master/owl/voko.rdf \
-  && rm master.zip && mv voko-grundo-master voko \
+  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip  \
+  && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/xsl/* voko-grundo-${ZIP_SUFFIX}/dtd/* \
+     voko-grundo-${ZIP_SUFFIX}/cfg/* voko-grundo-${ZIP_SUFFIX}/smb/*.gif voko-grundo-${ZIP_SUFFIX}/owl/voko.rdf \
+  && rm ${VG_TAG}.zip && mv voko-grundo-${ZIP_SUFFIX} voko \
   && cd voko/cfg \
   && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/bibliogr.xml \
   && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/klasoj.xml
