@@ -68,8 +68,7 @@ entity(minute,′).
 entity(second,″).
 entity(leftquot,„).
 entity(rightquot,“).
-entity(leftbad,✱).
-entity(rightbad,✱).
+entity(parsl,⫽).
 entity(deg,°).
 entity('Celsius',℃).
 entity('Fahrenheit',℉).

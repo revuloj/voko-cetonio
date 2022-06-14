@@ -29,4 +29,7 @@ docker)
         docker cp ${css} ${cetonio_id}:${todir}/web/static/
     done
     ;;
+signoj)
+    cd pro && swipl -s loaddtd.pl -g dtd2json_entities -g dtd2pl_entities -g halt \
+    && cd .. && cp pro/voko_entities.js ../voko-grundo/jsc/x/
 esac
