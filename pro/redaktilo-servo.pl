@@ -214,7 +214,8 @@ xml_stream(FileName,XmlStream,Status) :-
     % antaŭŝargu DTD
     %%  vokodtd(vortaro,VokoDTD),
     % elŝutu XML
-    atomic_list_concat([Revo,'xml/',FileName,'.xml'],Url),
+    %atomic_list_concat([Revo,'xml/',FileName,'.xml'],Url),
+    atomic_list_concat([Revo,FileName,'.xml'],Url),
     http_open(Url,XmlStream,[status_code(Status)]),!.
 
 
