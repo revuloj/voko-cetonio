@@ -29,7 +29,7 @@ ADD . ./
 #COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
 
 RUN chown cetonio etc \
-  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip  \
+  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip \
   && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/xsl/* voko-grundo-${ZIP_SUFFIX}/dtd/* \
      voko-grundo-${ZIP_SUFFIX}/cfg/* voko-grundo-${ZIP_SUFFIX}/smb/*.gif voko-grundo-${ZIP_SUFFIX}/owl/voko.rdf \
   && rm ${VG_TAG}.zip && mv voko-grundo-${ZIP_SUFFIX} voko \
