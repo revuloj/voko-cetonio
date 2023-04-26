@@ -6,29 +6,37 @@
 	      new_ajax_id/2
 	  ]).
 
-%:- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
-%:- use_module(library(http/http_parameters)). % reading post data
 :- use_module(library(http/http_session)).
 :- use_module(library(http/http_header)).
-%:- use_module(library(http/http_host)).
-%:- use_module(library(http/html_write)).
-%:- use_module(library(http/json)).
-%:- use_module(library(settings)).
 
 :- use_module(library(debug)).
 
 :- use_module(pro(cfg/agordo)).
 :- use_module(pro(db/redaktantoj)).
-%:- use_module(pro(param_checks)).
 
-% iel aŭtomata utf8 ne funkcias kiam redaktilo-test 
-% lanĉiĝas kiel systemd servo (per sistemestro "root")
-% eble pro LC_LANG medio-variablo aŭ simile?
+% Iel aŭtomata utf8 ne funkcias kiam redaktilo-test 
+% lanĉiĝas kiel systemd-servo (per sistemestro "root")
+% eble pro medio-variablo LC_LANG aŭ simile?
 :- encoding(utf8).
 
 :- multifile http:authenticate/3.
-http:authenticate(ajaxid,Request,[user(User),email(Email)]) :-  ajax_auth(Request,User,Email).
+
+/** <module> auth_ajax
+ * 
+ * Tiu ĉi modulo ebligas aŭtentigi Ajax-petojn (JavaSkripto XMLHttpRequest).
+ * Ĉar tiuj okazas fone de retpaĝo, oni ne povas peti uzanton ensaluti. Anstataŭe ĉe la komenca
+ * saluto al la retpaĝo ni kreas kuketon, kiu entenas identigajn informojn pri la uzanto
+ * kaj ĉe Ajax-petoj malpakas kaj kontrolas tiun kuketon.
+ * La modulo eluzas la SWIPL-modulon https://www.swi-prolog.org/pldoc/man?section=httpauthenticate
+ * kaj registras ĝin en ties kadro.
+ * Poste la aŭtentigo-metodon vi povas registri por certa petfunkcio ekz-e tiel:
+ * :- http_handler(red(revo_artikolo), revo_artikolo, [authentication(ajaxid)]).
+*/
+
+
+% registri la aŭtentigan predikaton ajax_auth kadre de httpauthenticate
+http:authenticate(ajaxid,Request,[user(User),email(Email)]) :- ajax_auth(Request,User,Email).
 
 %%/*** workaround bug in SWI 8.0.3 - exchanged Request / Request0 in append ***/
 %%:- http_request_expansion(my_auth_expansion, 10). % 110?
@@ -39,6 +47,14 @@ http:authenticate(ajaxid,Request,[user(User),email(Email)]) :-  ajax_auth(Reques
 %%	%debug(auth,'<< my_auth_exp ~q',[Request]).
 %%/*****************/	
 
+%! ajax_auth(+Request,-RedID,-Email)
+%
+% Kontroli ĉu la peto enhavas identigan kuketon, se jes ni ricevas
+% la identigilon de la redaktanto kune kun ties registrita retadreso
+% se la kuketo mankas, sed ni havas validan seancon, ni povas krei la
+% kuketon resendonte ĝin al la retumilo por postaj petoj.
+% Fine, se la kuketo ne plu validas, ni rifuzas la peton kaj
+% postulas resaluton al la retpaĝo.
 ajax_auth(Request,RedID,Email) :-
     %debug(redaktilo(ajaxid),'AjaxAuth...',[]),
 	once((
@@ -56,10 +72,12 @@ ajax_auth(Request,RedID,Email) :-
 		throw(http_reply(html([': Tro longa tempo pasis post saluto, necesas resaluti nun.\n'])))
     )). 
 
-% identigo per kuketo AjaxID, kiu konsistas el redaktanto ID kaj kuketo-kreo-tempo signitaj per HMAC
-% en la kalkulado de HMAC eniras ankaŭ la klienta IP, tiel ke ĝi ne validas por alia kliento se li
-% ŝtelis ĝin
 
+%! ajax_user(+Request,RedID,ClientIP,Retadreso) is det.
+%
+% Identigo per kuketo AjaxID, kiu konsistas el redaktanto ID kaj kuketo-kreo-tempo signitaj per HMAC.
+% En la kalkuladon de HMAC eniras ankaŭ la klienta IP, tiel ke ĝi ne validas por alia kliento, se li
+% ŝtelis ĝin
 ajax_user(Request,RedID,ClientIP,Retadreso) :-
     %debug(redaktilo(ajaxid),'AjaxRequest ~q',[Request]),
     member(peer(ip(A,B,C,D)),Request),
@@ -72,11 +90,11 @@ ajax_user(Request,RedID,ClientIP,Retadreso) :-
     sub_atom(AjaxID,20,8,_,HexTime),
     sub_atom(AjaxID,28,20,0,HexMac),
     %debug(redaktilo(ajaxid),'AjaxID_d ~q ~q ~q',[RedID,HexTime,HexMac]),
-    % is the cookie still valid?
+    % ĉu la kuketo estas ankoraŭ valida (laŭ tempo)?
     ajax_id_time_valid(AjaxID),
-    % is the hmac hash valid?
+    % ĉu HMAC estas valida, t.e. kongrua kun la enhavo de la kuketo?
     ajax_hmac(RedID,ClientIP,HexTime,HexMac),
-    % save in session if already closed
+    % legu la retadreson per RedID el la redaktanto-db
 	db_redaktantoj:email_redid(Retadreso,RedID).
     %debug(redaktilo(ajaxid),'AuthOK ~q',[Retadreso]).
 
@@ -112,9 +130,19 @@ hex_value_([H|T],Shift,Val) :-
 
 hex_value_([],0,0).
 	     
+%! new_ajax_id(+Request,-AjaxID) is det.
+%
+% Kreas novan identigilon por Ajax-petoj.
+
 new_ajax_id(Request,AjaxID) :-
     new_ajax_id(Request,_,AjaxID,_).
 	   
+
+%! new_ajax_id(+Request,+RedId,-AjaxID,-Time) is det.
+%
+% Kreas novan identigilon el RedID, IP kaj tempo
+% subskribitan per HMAC
+
 new_ajax_id(Request,RedId,AjaxID,Time) :-
     % get client information
     %debug(redaktilo(ajaxid),'AjaxID_1 ~q',Request),
@@ -133,6 +161,9 @@ new_ajax_id(Request,RedId,AjaxID,Time) :-
     atomic_list_concat([RedId,HexTime,HexMac20],'',AjaxID).
     %debug(redaktilo(ajaxid),'AjaxID_6 ~q ~q',[String,AjaxID]),
  
+%! new_ajax_id_cookie(+Request,+RedID,-Cookie) is det.
+%
+% Kreas identigan kuketon el RedID, IP kaj tempo
 new_ajax_id_cookie(Request,RedID,Cookie) :-
     new_ajax_id(Request,RedID,AjaxID,Time),	
     setting(http:prefix,Prefix),
@@ -141,6 +172,12 @@ new_ajax_id_cookie(Request,RedID,Cookie) :-
     format(atom(Cookie),'redaktilo_ajax=~w;Expires=~w;Path=~w; Version=1',
 	   [AjaxID,Expires,Prefix]).
 
+%! ajax_hmac(+RedId,+ClientIP,+HexTime,?HexMac20) is det.
+%
+% La predikato redonas True, se la unuaj 20 ciferoj de HMAC
+% kongruas kun la kunaĵo de RedId, ClientIP kaj HexTime
+% Krom kontroli, per la predikato vi ankaŭ povas kalkuli novan HMAC
+% por subskribi la inform-triopon
 ajax_hmac(RedId,ClientIP,HexTime,HexMac20) :-
     %debug(redaktilo(ajaxid),'AjaxID_hmac ~q ~q ~q',[RedId,ClientIP,HexTime]),
     atomic_list_concat([RedId,ClientIP,HexTime],String),
