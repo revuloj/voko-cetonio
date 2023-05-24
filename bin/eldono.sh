@@ -6,7 +6,7 @@
 # Ni ankaŭ supozas, ke nova eldono okazas en git-branĉo kun la sama nomo
 # Ĉe publikigo marku la kodstaton per etikedo (git-tag) v${eldono}.
 # Dum la realigo vi povas ŝovi la etikedon ĉiam per celo "etikedo".
-eldono=2g
+eldono=2i
 
 # ni komprenas preparo 
 target="${1:-helpo}"
