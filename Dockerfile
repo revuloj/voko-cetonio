@@ -29,8 +29,8 @@ ADD . ./
 #COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
 
 RUN chown cetonio etc \
-  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip \
-  && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/xsl/* voko-grundo-${ZIP_SUFFIX}/dtd/* \
+#  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip \
+#  && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/xsl/* voko-grundo-${ZIP_SUFFIX}/dtd/* \  
      voko-grundo-${ZIP_SUFFIX}/cfg/* voko-grundo-${ZIP_SUFFIX}/smb/*.gif voko-grundo-${ZIP_SUFFIX}/owl/voko.rdf \
   && rm ${VG_TAG}.zip && mv voko-grundo-${ZIP_SUFFIX} voko \
   && cd voko/cfg \
@@ -39,8 +39,9 @@ RUN chown cetonio etc \
 
 #  voko-grundo-master/stl/* 
 
+COPY --from=grundo build/dtd/ /home/cetonio/voko/dtd/
+COPY --from=grundo build/xsl/ /home/cetonio/voko/xsl/
 COPY --from=grundo build/smb/ /home/cetonio/voko/smb/
-
 # eble ni pli bone dividu kiujn CSS-dosierojn ni bezonas en kiu ujo?
 COPY --from=grundo build/stl/ /home/cetonio/voko/stl/
 COPY --from=grundo build/stl/ /home/cetonio/pro/web/static/
