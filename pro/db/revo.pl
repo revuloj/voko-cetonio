@@ -61,7 +61,7 @@ connect :-
 
 search_eo(Kion,Row) :-
     check_search(Kion),
-    format(atom(Query),'select kap,num,art,mrk from nodo where kap like ''~w%'' collate nocase order by kap collate nocase, num',[Kion]),
+    format(atom(Query),'select kap,dis,art,mrk from _kap where kap like ''~w%'' collate nocase order by kap collate nocase, dis',[Kion]),
      debug(sqlrevo,'query=~q',[Query]),
     sqlite_query(revodb,Query,Row).
 %    sqlite_disconnect().
@@ -69,7 +69,7 @@ search_eo(Kion,Row) :-
 search_eo_limit(Kion,Row,Limit) :-
     check_search(Kion),
     format(atom(Query),
-	   'select kap,num,art,mrk from nodo where kap like ''~w%'' order by kap collate nocase, num limit ''~d''',[Kion,Limit]),
+	   'select kap,dis,art,mrk from _kap where kap like ''~w%'' order by kap collate nocase, dis limit ''~d''',[Kion,Limit]),
     debug(sqlrevo,'query=~q',[Query]),
     sqlite_query(revodb,Query,Row).
 
