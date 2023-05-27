@@ -1,6 +1,13 @@
 #!/bin/bash
 
-# Tio estas la eldono de voko-grundo kontraŭ kiu ni kompilas ĉion
+## | Subtenas prepari kaj publikigi eldonojn
+##
+## Voku kiel:
+##    eldono <celo>
+##
+## kie <celo> estas unu el la sekvaj:
+
+# La malsupra agordo estas la eldono de voko-grundo kontraŭ kiu ni kompilas ĉion
 # ĝi devas ekzisti jam kiel git-tag (kaj sekve kiel kodarĥivo kaj procezujo) en Github
 # en celo "preparo" ni metas tiun eldonon ankaŭ por dosiernomoj kc. de voko-araneo
 # Ni ankaŭ supozas, ke nova eldono okazas en git-branĉo kun la sama nomo
@@ -15,6 +22,8 @@ PAGE=pro/web/redaktilo.html
 
 case $target in
 preparo)
+    ## preparo    : preparas novan eldonon. Antaŭe kreu branĉon kun la nomo de la eldono
+    ##              kaj adaptu la parametron 'eldono' en ambaŭ skriptoj 'eldono' kaj 'deplojo'
     # kontrolu ĉu la branĉo kongruas kun la agordita versio
     branch=$(git symbolic-ref --short HEAD)
     if [ "${branch}" != "${eldono}" ]; then
@@ -29,17 +38,22 @@ preparo)
     #sed -i 's/ARG VERSION=[1-9][a-z]/ARG VERSION='${eldono}'/' Dockerfile
     ;;
 kreo)
+    ## kreo       : kompilas la procezujon voko-cetonio. Antaŭe kreu la koncernan eldonon de
+    ##              voko-grundo, ĝi elŝutiĝos el la Github-deponejo (Ghcr)  
     echo "Kreante lokan procezujon (por docker) voko-cetonio"
     docker pull ghcr.io/revuloj/voko-grundo/voko-grundo:${eldono}
     docker build --build-arg VERSION=${eldono} --build-arg VG_TAG=v${eldono} --build-arg ZIP_SUFFIX=${eldono} \
         -t voko-cetonio .
     ;;
 etikedo)
+    ## etikedo    : puŝas la lastajn ŝanĝojn al Github ŝovante la eldonetikedon tiel,
+    ##              ke en Github kompiliĝu nova aktuala pakaĵo
     echo "Provizante la aktualan staton per etikedo (git tag) v${eldono}"
     echo "kaj puŝante tiun staton al la centra deponejo"
     git tag -f v${eldono} && git push && git push --tags -f
     ;;    
 helpo | *)
+    ## helpo      : baza informo  
     echo "---------------------------------------------------------------------------"
     echo "Per la celo 'preparo' oni povas krei git-branĉon kun nova eldono por tie "
     echo "komenci programadon de novaj funkcioj, ŝanĝoj ktp. Antaŭ adaptu en la kapo de ĉi-skripto"

@@ -1,0 +1,52 @@
+
+==== deplojo ====
+
+ | Deplojas (post eventuala kompilo) partojn de la kodo al procezujo cetoniujo_cetonio
+
+ Voku kiel:
+    depolojo <celo>
+
+ kie <celo> estas unu el la sekvaj:
+     docker : kopias retpaĝojn el web/ al la procezujo
+     signoj : kompilas la XML-unojn el la DTD al JSON kaj Prolog-agordo
+              kaj kopias la JSON-dosieron al ../voko-grundo/jsc/x/
+
+==== docker-entrypoint.sh ====
+
+
+==== eldono ====
+
+ | Subtenas prepari kaj publikigi eldonojn
+
+ Voku kiel:
+    eldono <celo>
+
+ kie <celo> estas unu el la sekvaj:
+     preparo    : preparas novan eldonon. Antaŭe kreu branĉon kun la nomo de la eldono
+                  kaj adaptu la parametrojn eldono kaj nodo_eldono en ambaŭ skriptoj 'eldono' kaj 'deplojo'
+     kreo       : kompilas la procezujon voko-cetonio. Antaŭe kreu la koncernan eldonon de
+                  voko-grundo, ĝi elŝutiĝos el la Github-deponejo (Ghcr)  
+     etikedo    : puŝas la lastajn ŝanĝojn al Github ŝovante la eldonetikedon tiel,
+                  ke en Github kompiliĝu nova aktuala pakaĵo
+     helpo      : baza informo  
+
+==== helpo ====
+
+ | Elfiltras helpinformojn el la diversaj komanddosieroj
+
+ - Sen argumento ĝi listigas koncizajn informojn pri la unuopaj skriptoj
+   trovitaj en dosierujo respektiva ./bin (relative al aktuala situo)
+ - Kun skriptnomo kiel argumento ĝi montras helpinformojn pri ĝuste tiu
+ - Kun argumento 'komandoj' kreiĝas dosiero LEGUMIN kun helpinformoj 
+   pri la skriptoj en ./bin
+
+==== instalo.sh ====
+
+
+==== konto-skemo.sql ====
+
+
+==== starti-loke ====
+
+ | "Lanĉo loka de la redaktilo-servo kiel Prolog-programo kun limigita funkcio: nur por testado dum programado!!!"
+ | "Prefere uzu la kunaranĝitan aplikaĵon revo-medioj/cetonio-s aŭ revo-medioj/cetonio-c"

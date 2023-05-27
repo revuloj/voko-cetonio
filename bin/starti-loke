@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## | "Lanĉo loka de la redaktilo-servo kiel Prolog-programo kun limigita funkcio: nur por testado dum programado!!!"
+## | "Prefere uzu la kunaranĝitan aplikaĵon revo-medioj/cetonio-s aŭ revo-medioj/cetonio-c"
+
 echo "AVERTO: lanĉante la redaktilo-servon loke kun limigita funkcio: nur por testado dum programado!!!"
 echo "REDAKTANTO_RETPOSHTO: $REDAKTANTO_RETPOSHTO"
 echo ""

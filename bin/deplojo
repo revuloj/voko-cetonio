@@ -1,5 +1,12 @@
 #!/bin/bash
 
+## | Deplojas (post eventuala kompilo) partojn de la kodo al procezujo cetoniujo_cetonio
+##
+## Voku kiel:
+##    depolojo <celo>
+##
+## kie <celo> estas unu el la sekvaj:
+
 target="${1:-docker}"
 
 HTML=pro/web/redaktilo.html
@@ -9,6 +16,7 @@ CSS=pro/web/static/*.css
 case $target in
 
 docker)
+    ## docker : kopias retpaĝojn el web/ al la procezujo
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
     todir=/home/cetonio/pro
 
@@ -30,6 +38,8 @@ docker)
     done
     ;;
 signoj)
+    ## signoj : kompilas la XML-unojn el la DTD al JSON kaj Prolog-agordo
+    ##          kaj kopias la JSON-dosieron al ../voko-grundo/jsc/x/
     cd pro && swipl -s loaddtd.pl -g dtd2json_entities -g dtd2pl_entities -g halt \
     && cd .. && cp pro/voko_entities.js ../voko-grundo/jsc/x/
 esac
