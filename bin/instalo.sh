@@ -29,6 +29,7 @@ kreu-db)
     echo "kreante iniciale la sqlite-datumbazojn..."
     #${sqlite3} ${sql_dir}/revo-inx.db -init ${sql_dir}/revo-skemo.sql
     echo .quit | ${sqlite3} ${sql_dir}/redaktantoj.db -init bin/konto-skemo.sql
+    echo .quit | ${sqlite3} ${sql_dir}/submetoj.db -init bin/submeto-skemo.sql
     ;;
 update-db)
     echo "aktualigante datumbazon de artikoloj el la ĉiutaga eldono..."
