@@ -28,7 +28,17 @@ case $target in
 kreu-db)
     echo "kreante iniciale la sqlite-datumbazojn..."
     #${sqlite3} ${sql_dir}/revo-inx.db -init ${sql_dir}/revo-skemo.sql
-    echo .quit | ${sqlite3} ${sql_dir}/redaktantoj.db -init bin/konto-skemo.sql
+    if [[ -f ${sql_dir}/redaktantoj.db ]]; then
+        echo "redaktantoj.db jam ekzistas!"
+    else
+        echo .quit | ${sqlite3} ${sql_dir}/redaktantoj.db -init bin/konto-skemo.sql
+    fi
+
+    if [[ -f ${sql_dir}/submetoj.db ]]; then
+        echo "submetoj.db jam ekzistas!"
+    else
+        echo .quit | ${sqlite3} ${sql_dir}/submetoj.db -init bin/submeto-skemo.sql
+    fi
     ;;
 update-db)
     echo "aktualigante datumbazon de artikoloj el la ĉiutaga eldono..."
