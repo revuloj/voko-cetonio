@@ -28,32 +28,34 @@ ADD . ./
 #COPY --from=builder --chown=root:root redaktilo-gen.js /home/cetonio/pro/web/
 #COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
 
-RUN chown cetonio etc \
-  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip \
-  # && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/xsl/* voko-grundo-${ZIP_SUFFIX}/dtd/* \  
-  && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/cfg/* voko-grundo-${ZIP_SUFFIX}/smb/*.gif voko-grundo-${ZIP_SUFFIX}/owl/voko.rdf \
-  && rm ${VG_TAG}.zip && mv voko-grundo-${ZIP_SUFFIX} voko \
-  && cd voko/cfg \
-  && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/bibliogr.xml \
-  && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/klasoj.xml
+
 
 #  voko-grundo-master/stl/* 
+COPY --from=grundo build/ /home/cetonio/voko/
 
-COPY --from=grundo build/dtd/ /home/cetonio/voko/dtd/
-COPY --from=grundo build/xsl/ /home/cetonio/voko/xsl/
-COPY --from=grundo build/smb/ /home/cetonio/voko/smb/
+# COPY --from=grundo build/dtd/ /home/cetonio/voko/dtd/
+# COPY --from=grundo build/smb/ /home/cetonio/voko/smb/
+
 # eble ni pli bone dividu kiujn CSS-dosierojn ni bezonas en kiu ujo?
-COPY --from=grundo build/stl/ /home/cetonio/voko/stl/
+# COPY --from=grundo build/stl/ /home/cetonio/voko/stl/
 COPY --from=grundo build/stl/ /home/cetonio/pro/web/static/
-
-COPY --from=grundo build/jsc/ /home/cetonio/voko/jsc/
+# COPY --from=grundo build/jsc/ /home/cetonio/voko/jsc/
 COPY --from=grundo build/rsj/ /home/cetonio/pro/web/static/
 
 # tio ŝajnas momente superflua, ĉar identa kun voko-grundo-master/xsl (supre)
 # sed ĝi povas devii iom se master != ${VERSION}
-COPY --from=grundo build/xsl/ /home/cetonio/voko/xsl/
+#COPY --from=grundo build/xsl/ /home/cetonio/voko/xsl/
 
-RUN xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml && \
+RUN chown cetonio etc \
+#  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip \
+#  # && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/xsl/* voko-grundo-${ZIP_SUFFIX}/dtd/* \  
+#  && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/cfg/* voko-grundo-${ZIP_SUFFIX}/smb/*.gif voko-grundo-${ZIP_SUFFIX}/owl/voko.rdf \
+#  && rm ${VG_TAG}.zip && mv voko-grundo-${ZIP_SUFFIX} voko \
+  && cd voko/cfg \
+  && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/bibliogr.xml \
+  && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/klasoj.xml \
+  && cd /home/cetonio \
+  && xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml && \
     xsltproc voko/xsl/cfg_klasoj.xsl voko/owl/voko.rdf > voko/cfg/klasoj.xml
 
 USER cetonio:users
