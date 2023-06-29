@@ -37,7 +37,7 @@
   <body>
 
     <div id="tabs">
-      <div id="right_side">
+      <nav id="right_side">
         <div id="rs_dist"></div>
         <ul id="tab-buttons">
   <!--            <li><a href="#vrt">vrt - redakti</a></li> -->
@@ -58,13 +58,13 @@
           <button id="logout_btn" class="ui-button logout_btn" title="Adiaŭ">&#x23FB;</button>
         </div>
 
-      </div>
+      </nav>
 <!--          <div id="vrt">
         <p>funkcio mankas ankoraŭ.</p>
       </div> -->
       <div id="xml">
 
-        <div id="xml_sidebar">
+        <nav id="xml_sidebar">
           
           <ul id="menu">
               <li class="ui-widget-header"><div>Artikolon</div></li>
@@ -91,18 +91,8 @@
                   <li id="datumprotekto_menu_item"><div>Datumprotekto...</div></li> 
           </ul>
             
-          <!--
-          <div id="positions" class="ui-widget ui-widget-content">
-               <div class="butonoj">
-                    <div id="kromklavaro" class='reghim_btn' data-cmd="klavaro" title='montru kromklavaron'>&nbsp;~][&hellip;]</div>
-               </div>
-               <div id="collapse_outline">
-                   <h3><span id="edit_position">linio &dash;, &dash;</span></h3>
-                   <div id="art_outline"></div>
-               </div>
-          </div>-->
           <div class="versio"><a href="https://github.com/revuloj/voko-cetonio">Cetonio 2j</a></div> 
-        </div> <!-- sidebar -->
+        </nav> <!-- sidebar -->
 
 
         <div id="xml_redakto">
@@ -213,7 +203,7 @@
            
 <!--  ### dialogoj ### -->      
       
-    <div id="shargi_dlg" title="Ŝargi artikolon">
+    <dialog id="shargi_dlg" title="Ŝargi artikolon">
       <form id="shargi_form">
         <p id="shargi_error" class="ui-state-error ui-corner-all"></p>
         <table>
@@ -229,9 +219,9 @@
           </tr>  
         </table>
       </form>
-    </div>
+    </dialog>
 
-    <div id="lastaj_dlg" title="Lastaj redaktoj">
+    <dialog id="lastaj_dlg" title="Lastaj redaktoj">
       <p id="lastaj_error" class="ui-state-error ui-corner-all"></p>          
       <form id="lastaj_form"> <!--enctype="text/plain" > -->
         <div id="lastaj_tabelo" class="dlg_tab_div">
@@ -254,9 +244,9 @@
           </div> 
           </fieldset>
       </form>
-    </div>
+    </dialog>
       
-    <div id="sendiservile_dlg" title="Sendi al la redaktoservo">
+    <dialog id="sendiservile_dlg" title="Sendi al la redaktoservo">
         <p style="max-width: 30em">
           <em>Submeti</em> tra gist.github.com estas la preferinda metodo, 
           kiu evitas problemojn pro spamfiltriloj kaj
@@ -268,9 +258,9 @@
         <form id="sendiservile_form" method="post" action="revo_sendo" enctype="multipart/formdata"> <!--enctype="text/plain" > -->
           <input type="text" id="sendiservile_komento" size=30 name="shangho" placeholder="Priskribo de la ŝanĝoj" />
         </form>
-    </div>
+      </dialog>
       
-    <div id="referenco_dlg" title="Enmeti referencon">
+    <dialog id="referenco_dlg" title="Enmeti referencon">
       <p id="referenco_error" class="ui-state-error ui-corner-all"></p>
       <form id="referenco_form">
         <table>
@@ -337,9 +327,9 @@
           </table>
         </fieldset>
       </form>
-    </div> 
+    </dialog> 
       
-    <div id="ekzemplo_dlg" title="Enmeti ekzemplon">
+    <dialog id="ekzemplo_dlg" title="Enmeti ekzemplon">
       <p id="ekzemplo_error" class="ui-state-error ui-corner-all"></p>
             
         <label for="ekzemplo_frazo">citfrazo: </label><br/>
@@ -388,9 +378,9 @@
       <div id="ekzemplo_butonoj" class="butonoj">
         &#x2015; &#x2013; &middot; &#x2AFD; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
       </div>
-    </div>
+    </dialog>
 
-    <div id="bildo_dlg" title="Enmeti bildon">
+    <dialog id="bildo_dlg" title="Enmeti bildon">
       <p id="bildo_error" class="ui-state-error ui-corner-all"></p>
         
         <table><tr valign="bottom">
@@ -464,9 +454,9 @@
           </table>
         </form>
       </fieldset>
-  </div>    
+    </dialog>    
       
-  <div id="krei_dlg" title="Krei artikolon">
+  <dialog id="krei_dlg" title="Krei artikolon">
     <p id="krei_error" class="ui-state-error ui-corner-all"></p>
     <form id="krei_form" class="flex-form">              
       <label for="krei_dos">dosiernomo: 
@@ -488,10 +478,10 @@
     <div id="krei_butonoj" class="butonoj">
       &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld () &#x201e;&#x201c; &sbquo;&#x2018; [blank]
     </div>  
-  </div>
+  </dialog>
       
       
-  <div id="derivajho_dlg" title="Enmeti derivaĵon">
+  <dialog id="derivajho_dlg" title="Enmeti derivaĵon">
     <p id="derivajho_error" class="ui-state-error ui-corner-all"></p>
     <form id="derivajho_form" class="flex-form">              
         <label for="derivajho_kap">kapvorto:
@@ -510,9 +500,9 @@
     <div id="derivajho_butonoj" class="butonoj">
       &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
     </div>
-  </div>
+  </dialog>
       
-  <div id="senco_dlg" title="Enmeti sencon">
+  <dialog id="senco_dlg" title="Enmeti sencon">
       <p id="senco_error" class="ui-state-error ui-corner-all"></p>
       <form id="senco_form" class="flex-form">              
         <label for="senco_mrk">distingilo: 
@@ -526,83 +516,83 @@
       <div id="senco_butonoj" class="butonoj">
         &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
       </div>
-  </div>      
+    </dialog>      
       
-    <div id="traduko_dlg" title="Tradukoj">
-        
-        <p id="traduko_error" class="ui-state-error ui-corner-all"></p>
-        
-        <div id="traduko_sidebar">
-           <ul id="traduko_menuo">
-             <!-- <li id="traduko_viaj" class="ui-widget-header"><div>viaj lingvoj</div></li> -->
-             <li id="traduko_aliaj">-</li>
-             <li><span>aliaj tradukoj</span><ul id="traduko_artikolaj"></ul></li>
-             <!-- <li class="ui-widget-header"><div>ĉiuj lingvoj</div></li> -->
-             <li>-</li>
-             <li><span>lingvoj a..b</span><ul id="traduko_chiuj_a_b"></ul></li>
-             <li><span>lingvoj c..g</span><ul id="traduko_chiuj_c_g"></ul></li>
-             <li><span>lingvoj h..j</span><ul id="traduko_chiuj_h_j"></ul></li>
-             <li><span>lingvoj k..l</span><ul id="traduko_chiuj_k_l"></ul></li>
-             <li><span>lingvoj m..o</span><ul id="traduko_chiuj_m_o"></ul></li>
-             <li><span>lingvoj p..s</span><ul id="traduko_chiuj_p_s"></ul></li>
-             <li><span>lingvoj t..z</span><ul id="traduko_chiuj_t_z"></ul></li>
-           </ul>
-            
-           <div id="traduko_butonoj" class="butonoj">
-            <div data-cmd="ind">&lt;ind&gt;</div>
-            <div data-cmd="()">(&hellip;)</div>
-           </div>
-        </div>
-        
-        <div id="traduko_tabelo" class="dlg_tab_div">
-          <table class="dlg_tabelo" id="traduko_table">
-            <thead><tr><th>eo</th><th><span id="traduko_lingvo"></span></th><th>pli</th></tr></thead>
-            <tbody id="traduko_tradukoj">
-            </tbody>
-          </table>
-        </div>
-    </div>
+    <dialog id="traduko_dlg" title="Tradukoj">
+      
+      <p id="traduko_error" class="ui-state-error ui-corner-all"></p>
+      
+      <div id="traduko_sidebar">
+          <ul id="traduko_menuo">
+            <!-- <li id="traduko_viaj" class="ui-widget-header"><div>viaj lingvoj</div></li> -->
+            <li id="traduko_aliaj">-</li>
+            <li><span>aliaj tradukoj</span><ul id="traduko_artikolaj"></ul></li>
+            <!-- <li class="ui-widget-header"><div>ĉiuj lingvoj</div></li> -->
+            <li>-</li>
+            <li><span>lingvoj a..b</span><ul id="traduko_chiuj_a_b"></ul></li>
+            <li><span>lingvoj c..g</span><ul id="traduko_chiuj_c_g"></ul></li>
+            <li><span>lingvoj h..j</span><ul id="traduko_chiuj_h_j"></ul></li>
+            <li><span>lingvoj k..l</span><ul id="traduko_chiuj_k_l"></ul></li>
+            <li><span>lingvoj m..o</span><ul id="traduko_chiuj_m_o"></ul></li>
+            <li><span>lingvoj p..s</span><ul id="traduko_chiuj_p_s"></ul></li>
+            <li><span>lingvoj t..z</span><ul id="traduko_chiuj_t_z"></ul></li>
+          </ul>
+          
+          <div id="traduko_butonoj" class="butonoj">
+          <div data-cmd="ind">&lt;ind&gt;</div>
+          <div data-cmd="()">(&hellip;)</div>
+          </div>
+      </div>
+      
+      <div id="traduko_tabelo" class="dlg_tab_div">
+        <table class="dlg_tabelo" id="traduko_table">
+          <thead><tr><th>eo</th><th><span id="traduko_lingvo"></span></th><th>pli</th></tr></thead>
+          <tbody id="traduko_tradukoj">
+          </tbody>
+        </table>
+      </div>
+    </dialog>
       
            
-    <div id="sxablono_dlg" title="Enmeti per ŝablono">
-        <p id="sxablono_error" class="ui-state-error ui-corner-all"></p>
-        <form id="sxablono_form">              
-          <label for="sxablono_elekto">ŝablonoj: </label>
-              <select name="sxablono_elekto" id="sxablono_elekto">
-                <option disabled selected>Elektu ŝablonon!</option>
-              </select><br/>
+    <dialog id="sxablono_dlg" title="Enmeti per ŝablono">
+      <p id="sxablono_error" class="ui-state-error ui-corner-all"></p>
+      <form id="sxablono_form">              
+        <label for="sxablono_elekto">ŝablonoj: </label>
+            <select name="sxablono_elekto" id="sxablono_elekto">
+              <option disabled selected>Elektu ŝablonon!</option>
+            </select><br/>
 <!--          <textarea id="sxablono_xml" name="sxablono_xml" rows="13" cols="80" readonly="readonly" placeholder="Elektu ŝablonon por antaŭrigardi ĝin"></textarea>
 -->
-            <table id="sxablono_xml"></table>
-        </form>
-    </div>  
+          <table id="sxablono_xml"></table>
+      </form>
+    </dialog>  
       
       
-    <div id="rimarko_dlg" title="Enmeti rimarkon">
-        <p id="rimarko_error" class="ui-state-error ui-corner-all"></p>
-        <form id="rimarko_form">              
+    <dialog id="rimarko_dlg" title="Enmeti rimarkon">
+      <p id="rimarko_error" class="ui-state-error ui-corner-all"></p>
+      <form id="rimarko_form">              
 
-          <label for="rimarko_rim">rimarko: </label><br/>
-          <textarea id="rimarko_rim" name="rimarko_rim" rows="3" cols="60" placeholder="Rimarko - vi povas uzi tildon (~)"></textarea>
-          <br/>
+        <label for="rimarko_rim">rimarko: </label><br/>
+        <textarea id="rimarko_rim" name="rimarko_rim" rows="3" cols="60" placeholder="Rimarko - vi povas uzi tildon (~)"></textarea>
+        <br/>
+        
+        <div>
+          <input id="rimarko_adm" name="rimarko_adm" type="checkbox" />
+          <label for="rimarko_adm">administra noto: &lt;adm&gt;...</label>
+        </div>              
+        <br/>
           
-          <div>
-            <input id="rimarko_adm" name="rimarko_adm" type="checkbox" />
-            <label for="rimarko_adm">administra noto: &lt;adm&gt;...</label>
-          </div>              
-          <br/>
-            
-          <label for="rimarko_aut">aŭtoro: </label><br/>
-          <input id="rimarko_aut" type="text" name="rimarko_aut" placeholder="Aŭtoro"/> 
-            
-        </form>
-        <div id="rimarko_butonoj" class="butonoj">
-          &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
-        </div>
-    </div>    
+        <label for="rimarko_aut">aŭtoro: </label><br/>
+        <input id="rimarko_aut" type="text" name="rimarko_aut" placeholder="Aŭtoro"/> 
+          
+      </form>
+      <div id="rimarko_butonoj" class="butonoj">
+        &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
+      </div>
+    </dialog>    
       
     <!--
-    <div id="homonimo_dlg" title="Homonimoj sen interreferenco">
+    <dialog id="homonimo_dlg" title="Homonimoj sen interreferenco">
         <p id="homonimo_error" class="ui-state-error ui-corner-all">
           Kreado de la listo daŭras momenton...
         </p>
@@ -619,17 +609,17 @@
               <input id="homonimo_dos" name="homonimo_dos" placeholder="Dosiero (klaku supre)"/>  
             </div> 
         </form>
-    </div>   
+      </dialog>   
     -->       
       
-    <div id="error_dlg" title="Eraro">    
+    <dialog id="error_dlg" title="Eraro">    
       <p id="error_msg" class="ui-state-error ui-corner-all"></p>
-    </div>
+    </dialog>
 
-    <div id="surmetita_dlg" title="Klarigoj">    
+    <dialog id="surmetita_dlg" title="Klarigoj">    
          <p id="surmetita_error" class="ui-state-error ui-corner-all"></p>
        <div id="surmetita"></div>
-    </div>
+    </dialog>
       
   </body>
 </html>
