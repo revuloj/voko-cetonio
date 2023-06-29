@@ -66,29 +66,29 @@
 
         <nav id="xml_sidebar">
           
-          <ul id="menu">
-              <li class="ui-widget-header"><div>Artikolon</div></li>
-                  <li id="nova_menu_item"><div>Krei...</div></li> 
-                  <li id="shargi_menu_item"><div>Ŝargi...</div></li>
-                  <li id="lastaj_menu_item"><div>Lastaj...</div></li>
-                  <li id="sendiservile_menu_item"><div>Sendi...</div></li>
-                  <li id="kontroli_menu_item"><div>Kontroli...</div></li>
-              <li class="ui-widget-header"><div>Enmeti</div></li>
-                  <li id="tradukoj_menu_item"><div>Tradukojn...</div></li> 
-                  <li id="referenco_menu_item"><div>Referencon...</div></li>
-                  <li id="indiko_menu_item"><div>Indikon...</div></li> 
-                  <li id="ekzemplo_menu_item"><div>Ekzemplon...</div></li> 
-                  <li id="bildo_menu_item"><div>Bildon...</div></li> 
-                  <li id="derivajho_menu_item"><div>Derivaĵon...</div></li> 
-                  <li id="senco_menu_item"><div>Sencon...</div></li> 
-                  <li id="sxablono_menu_item"><div>Sencon ŝablone...</div></li> 
-                  <li id="rimarko_menu_item"><div>Rimarkon...</div></li> 
+          <ul id="menu" class="ui-menu">
+              <li class="ui-widget-header">Artikolon</li>
+                  <li id="nova_menu_item">Krei...</li> 
+                  <li id="shargi_menu_item">Ŝargi...</li>
+                  <li id="lastaj_menu_item">Lastaj...</li>
+                  <li id="sendiservile_menu_item">Sendi...</li>
+                  <li id="kontroli_menu_item">Kontroli...</li>
+              <li class="ui-widget-header">Enmeti</li>
+                  <li id="tradukoj_menu_item">Tradukojn...</li> 
+                  <li id="referenco_menu_item">Referencon...</li>
+                  <li id="indiko_menu_item">Indikon...</li> 
+                  <li id="ekzemplo_menu_item">Ekzemplon...</li> 
+                  <li id="bildo_menu_item">Bildon...</li> 
+                  <li id="derivajho_menu_item">Derivaĵon...</li> 
+                  <li id="senco_menu_item">Sencon...</li> 
+                  <li id="sxablono_menu_item">Sencon ŝablone...</li> 
+                  <li id="rimarko_menu_item">Rimarkon...</li> 
               <!--
-              <li class="ui-widget-header"><div>Kontroli</div></li>
-                  <li id="homonimoj_menu_item"><div>Homonimojn...</div></li> 
+              <li class="ui-widget-header">Kontroli</li>
+                  <li id="homonimoj_menu_item">Homonimojn...</li> 
                   -->
-              <li class="ui-widget-header"><div>Pri</div></li>
-                  <li id="datumprotekto_menu_item"><div>Datumprotekto...</div></li> 
+              <li class="ui-widget-header">Pri</li>
+                  <li id="datumprotekto_menu_item">Datumprotekto...</li> 
           </ul>
             
           <div class="versio"><a href="https://github.com/revuloj/voko-cetonio">Cetonio 2j</a></div> 
@@ -203,14 +203,15 @@
            
 <!--  ### dialogoj ### -->      
       
-    <dialog id="shargi_dlg" title="Ŝargi artikolon">
+    <dialog id="shargi_dlg">
+      <h2>Ŝargi artikolon</h2>
       <form id="shargi_form">
         <p id="shargi_error" class="ui-state-error ui-corner-all"></p>
         <table>
           <tr style="vertical-align:top">
             <td><p>Serĉo:</p></td>
             <td>
-              <p><input type="text" id="shargi_sercho" name="shargi_sercho" placeholder="Komenco de kapvorto" /></p>
+              <p><input type="text" id="shargi_sercho" name="shargi_sercho" tabindex="1" placeholder="Komenco de kapvorto" /></p>
             </td>
           </tr><tr>
             <td>Dosiero:</td><td>
@@ -221,7 +222,8 @@
       </form>
     </dialog>
 
-    <dialog id="lastaj_dlg" title="Lastaj redaktoj">
+    <dialog id="lastaj_dlg">
+      <h2>Lastaj redaktoj</h2>
       <p id="lastaj_error" class="ui-state-error ui-corner-all"></p>          
       <form id="lastaj_form"> <!--enctype="text/plain" > -->
         <div id="lastaj_tabelo" class="dlg_tab_div">
@@ -246,7 +248,8 @@
       </form>
     </dialog>
       
-    <dialog id="sendiservile_dlg" title="Sendi al la redaktoservo">
+    <dialog id="sendiservile_dlg">
+      <h2>Sendi al la redaktoservo</h2>
         <p style="max-width: 30em">
           <em>Submeti</em> tra gist.github.com estas la preferinda metodo, 
           kiu evitas problemojn pro spamfiltriloj kaj
@@ -256,11 +259,12 @@
         </p>
         <p id="sendiservile_error" class="ui-state-error ui-corner-all"></p>        
         <form id="sendiservile_form" method="post" action="revo_sendo" enctype="multipart/formdata"> <!--enctype="text/plain" > -->
-          <input type="text" id="sendiservile_komento" size=30 name="shangho" placeholder="Priskribo de la ŝanĝoj" />
+          <input type="text" id="sendiservile_komento" size=30 name="shangho" tabindex="1" placeholder="Priskribo de la ŝanĝoj" />
         </form>
       </dialog>
       
-    <dialog id="referenco_dlg" title="Enmeti referencon">
+    <dialog id="referenco_dlg">
+      <h2>Enmeti referencon</h2>
       <p id="referenco_error" class="ui-state-error ui-corner-all"></p>
       <form id="referenco_form">
         <table>
@@ -307,7 +311,7 @@
               <td>  
                 <label for="referenco_sercho">serĉo:</label>
               </td><td>
-                <p><input type="text" id="referenco_sercho" name="referenco_sercho" placeholder="Komenco de kapvorto" /></p>
+                <p><input type="text" id="referenco_sercho" name="referenco_sercho" tabindex="1" placeholder="Komenco de kapvorto" /></p>
               </td>
             </tr><!-- tr>
               <td>&nbsp;</td><td></td>
@@ -329,13 +333,15 @@
       </form>
     </dialog> 
       
-    <dialog id="ekzemplo_dlg" title="Enmeti ekzemplon">
+    <dialog id="ekzemplo_dlg">
+      <h2>Enmeti ekzemplon</h2>
       <p id="ekzemplo_error" class="ui-state-error ui-corner-all"></p>
             
         <label for="ekzemplo_frazo">citfrazo: </label><br/>
         <textarea id="ekzemplo_frazo" name="ekzemplo_frazo" rows="3" cols="60" 
-                  placeholder="Citita frazo por enmeti en la artikolon" 
-                  title="Citita frazo por enmeti en la artikolon"></textarea>            
+            tabindex="1"
+            placeholder="Citita frazo por enmeti en la artikolon" 
+            title="Citita frazo por enmeti en la artikolon"></textarea>            
         <fieldset>
             <legend>Fonto</legend>
             <form id="ekzemplo_form">
@@ -380,15 +386,17 @@
       </div>
     </dialog>
 
-    <dialog id="bildo_dlg" title="Enmeti bildon">
+    <dialog id="bildo_dlg">
+      <h2>Enmeti bildon</h2>
       <p id="bildo_error" class="ui-state-error ui-corner-all"></p>
         
         <table><tr valign="bottom">
           <td>
             <label for="bildo_frazo">priskribo: </label><br/>
             <textarea id="bildo_frazo" name="bildo_frazo" rows="3" cols="60" 
-                    placeholder="Priskribo montrendan sub la bildo" 
-                    title="Priskribo montrendan sub la bildo"></textarea>
+              tabindex="1"
+              placeholder="Priskribo montrendan sub la bildo" 
+              title="Priskribo montrendan sub la bildo"></textarea>
           </td><td>
             <a id="bildeto_url" target="_new" href=""><img id="bildo_eta" src=""/></a>
           </td>
@@ -456,11 +464,12 @@
       </fieldset>
     </dialog>    
       
-  <dialog id="krei_dlg" title="Krei artikolon">
+  <dialog id="krei_dlg">
+      <h2>Krei artikolon</h2>
     <p id="krei_error" class="ui-state-error ui-corner-all"></p>
     <form id="krei_form" class="flex-form">              
       <label for="krei_dos">dosiernomo: 
-        <input id="krei_dos" type="text" name="krei_dos" placeholder="Dosiernomo (unika, sen .xml)"/>
+        <input id="krei_dos" type="text" name="krei_dos" tabindex="1" placeholder="Dosiernomo (unika, sen .xml)"/>
       </label>
 
       <label for="krei_rad">kapvorto:
@@ -481,11 +490,12 @@
   </dialog>
       
       
-  <dialog id="derivajho_dlg" title="Enmeti derivaĵon">
+  <dialog id="derivajho_dlg">
+      <h2>Enmeti derivaĵon</h2>
     <p id="derivajho_error" class="ui-state-error ui-corner-all"></p>
     <form id="derivajho_form" class="flex-form">              
         <label for="derivajho_kap">kapvorto:
-          <input id="derivajho_kap" type="text" name="derivajho_kap" placeholder="Kapvorto, uzu tildon (~)"/>
+          <input id="derivajho_kap" type="text" name="derivajho_kap" tabindex="1" placeholder="Kapvorto, uzu tildon (~)"/>
         </label>
         <label for="derivajho_listo">enigu post:
           <select id="derivajho_listo" name="derivajho_listo">
@@ -502,11 +512,12 @@
     </div>
   </dialog>
       
-  <dialog id="senco_dlg" title="Enmeti sencon">
+  <dialog id="senco_dlg">
+      <h2>Enmeti sencon</h2>
       <p id="senco_error" class="ui-state-error ui-corner-all"></p>
       <form id="senco_form" class="flex-form">              
         <label for="senco_mrk">distingilo: 
-          <input id="senco_mrk" type="text" name="senco_mrk" placeholder="Markosufikso" title="Marko-sufikso: distingilo de aliaj sencoj de sama derivaĵo"/>
+          <input id="senco_mrk" type="text" name="senco_mrk" tabindex="1" placeholder="Markosufikso" title="Marko-sufikso: distingilo de aliaj sencoj de sama derivaĵo"/>
         </label>
         <label for="senco_dif">difino: 
           <textarea id="senco_dif" name="senco_dif" rows="3" cols="60" 
@@ -518,7 +529,8 @@
       </div>
     </dialog>      
       
-    <dialog id="traduko_dlg" title="Tradukoj">
+    <dialog id="traduko_dlg">
+      <h2>Tradukoj</h2>
       
       <p id="traduko_error" class="ui-state-error ui-corner-all"></p>
       
@@ -554,7 +566,8 @@
     </dialog>
       
            
-    <dialog id="sxablono_dlg" title="Enmeti per ŝablono">
+    <dialog id="sxablono_dlg">
+      <h2>Enmeti per ŝablono</h2>
       <p id="sxablono_error" class="ui-state-error ui-corner-all"></p>
       <form id="sxablono_form">              
         <label for="sxablono_elekto">ŝablonoj: </label>
@@ -568,12 +581,14 @@
     </dialog>  
       
       
-    <dialog id="rimarko_dlg" title="Enmeti rimarkon">
+    <dialog id="rimarko_dlg">
+      <h2>Enmeti rimarkon</h2>
       <p id="rimarko_error" class="ui-state-error ui-corner-all"></p>
       <form id="rimarko_form">              
 
         <label for="rimarko_rim">rimarko: </label><br/>
-        <textarea id="rimarko_rim" name="rimarko_rim" rows="3" cols="60" placeholder="Rimarko - vi povas uzi tildon (~)"></textarea>
+        <textarea id="rimarko_rim" name="rimarko_rim" rows="3" cols="60" tabindex="1"
+          placeholder="Rimarko - vi povas uzi tildon (~)"></textarea>
         <br/>
         
         <div>
@@ -592,7 +607,8 @@
     </dialog>    
       
     <!--
-    <dialog id="homonimo_dlg" title="Homonimoj sen interreferenco">
+    <dialog id="homonimo_dlg">
+      <h2>Homonimoj sen interreferenco</h2>
         <p id="homonimo_error" class="ui-state-error ui-corner-all">
           Kreado de la listo daŭras momenton...
         </p>
@@ -612,11 +628,13 @@
       </dialog>   
     -->       
       
-    <dialog id="error_dlg" title="Eraro">    
+    <dialog id="error_dlg">
+      <h2>Eraro</h2>    
       <p id="error_msg" class="ui-state-error ui-corner-all"></p>
     </dialog>
 
-    <dialog id="surmetita_dlg" title="Klarigoj">    
+    <dialog id="surmetita_dlg">
+      <h2>Klarigoj</h2>    
          <p id="surmetita_error" class="ui-state-error ui-corner-all"></p>
        <div id="surmetita"></div>
     </dialog>
