@@ -202,270 +202,274 @@
             
            
 <!--  ### dialogoj ### -->      
-      
-    <dialog id="shargi_dlg">
-      <h2>Ŝargi artikolon</h2>
-      <form id="shargi_form">
-        <p id="shargi_error" class="ui-state-error ui-corner-all"></p>
-        <table>
-          <tr style="vertical-align:top">
-            <td><p>Serĉo:</p></td>
-            <td>
-              <p><input type="text" id="shargi_sercho" name="shargi_sercho" tabindex="1" placeholder="Komenco de kapvorto" /></p>
-            </td>
-          </tr><tr>
-            <td>Dosiero:</td><td>
-              <input type="text" id="shargi_dosiero" name="shargi_dosiero" placeholder="Nomo de artikolo" />
-            </td>
-          </tr>  
-        </table>
-      </form>
-    </dialog>
+    
+  <dialog id="shargi_dlg">
+    <h2>Ŝargi artikolon</h2>
+    <form id="shargi_form">
+      <p id="shargi_error" class="ui-state-error ui-corner-all"></p>
+      <table>
+        <tr style="vertical-align:top">
+          <td><p>Serĉo:</p></td>
+          <td>
+            <p><input type="text" id="shargi_sercho" name="shargi_sercho" tabindex="1" placeholder="Komenco de kapvorto" /></p>
+          </td>
+        </tr><tr>
+          <td>Dosiero:</td><td>
+            <input type="text" id="shargi_dosiero" name="shargi_dosiero" placeholder="Nomo de artikolo" />
+          </td>
+        </tr>  
+      </table>
+    </form>
+  </dialog>
 
-    <dialog id="lastaj_dlg">
-      <h2>Lastaj redaktoj</h2>
-      <p id="lastaj_error" class="ui-state-error ui-corner-all"></p>          
-      <form id="lastaj_form"> <!--enctype="text/plain" > -->
-        <div id="lastaj_tabelo" class="dlg_tab_div">
-          <table class="dlg_tabelo" id="lastaj_table">
-            <thead><tr><th>Artikolo</th><th></th><th>Tempo (UTK)</th><th>Redakto</th></tr></thead>
-            <tbody id="lastaj_listo">
-            </tbody>
-          </table>
-        </div>
-        <br/>
-        <fieldset>
-          <legend>Detaloj</legend>
-          <div id="lastaj_detaloj">
-            <label for="lastaj_dosiero">dosiero: </label>
-            <input type="text" id="lastaj_dosiero" disabled name="lastaj_dosiero"/>
-            <button id="lastaj_rigardu" class="ui-button ui-widget ui-corner-all" title="Rigardu">&#x1F50D;&#xFE0E;</button>
-            <br/>
-            <label for="lastaj_mesagho">mesaĝo: </label><br/>
-            <textarea id="lastaj_mesagho" name="lastaj_mesagho" disabled rows="3" cols="60" readonly="readonly"></textarea>
-          </div> 
-          </fieldset>
-      </form>
-    </dialog>
-      
-    <dialog id="sendiservile_dlg">
-      <h2>Sendi al la redaktoservo</h2>
-        <p style="max-width: 30em">
-          <em>Submeti</em> tra gist.github.com estas la preferinda metodo, 
-          kiu evitas problemojn pro spamfiltriloj kaj
-          permesas listigi kaj rigardi viajn lastatempajn redaktojn. 
-          Se neatendite okazos problemoj pri submetado, vi povas
-          alternative <em>Sendi</em> retpoŝte.
-        </p>
-        <p id="sendiservile_error" class="ui-state-error ui-corner-all"></p>        
-        <form id="sendiservile_form" method="post" action="revo_sendo" enctype="multipart/formdata"> <!--enctype="text/plain" > -->
-          <input type="text" id="sendiservile_komento" size=30 name="shangho" tabindex="1" placeholder="Priskribo de la ŝanĝoj" />
-        </form>
-      </dialog>
-      
-    <dialog id="referenco_dlg">
-      <h2>Enmeti referencon</h2>
-      <p id="referenco_error" class="ui-state-error ui-corner-all"></p>
-      <form id="referenco_form">
-        <table>
-          <tr>
-            <td>
-              <label for="referenco_tipo">tipo</label>
+  <dialog id="lastaj_dlg">
+    <h2 class="faldebla">Lastaj redaktoj</h2>
+    <p id="lastaj_error" class="ui-state-error ui-corner-all"></p>          
+    <form class="faldebla" id="lastaj_form"> <!--enctype="text/plain" > -->
+      <div id="lastaj_tabelo" class="dlg_tab_div">
+        <table class="dlg_tabelo" id="lastaj_table">
+          <thead><tr><th>Artikolo</th><th></th><th>Tempo (UTK)</th><th>Redakto</th></tr></thead>
+          <tbody id="lastaj_listo">
+          </tbody>
+        </table>
+      </div>
+      <br/>
+      <fieldset>
+        <legend>Detaloj</legend>
+        <div id="lastaj_detaloj">
+          <label for="lastaj_dosiero">dosiero: </label>
+          <input type="text" id="lastaj_dosiero" disabled name="lastaj_dosiero"/>
+          <button id="lastaj_rigardu" class="ui-button ui-widget ui-corner-all" title="Rigardu">&#x1F50D;&#xFE0E;</button>
+          <br/>
+          <label for="lastaj_mesagho">mesaĝo: </label><br/>
+          <textarea id="lastaj_mesagho" name="lastaj_mesagho" disabled rows="3" cols="60" readonly="readonly"></textarea>
+        </div> 
+        </fieldset>
+    </form>
+  </dialog>
+    
+  <dialog id="sendiservile_dlg">
+    <h2>Sendi al la redaktoservo</h2>
+    <p style="max-width: 30em">
+      <em>Submeti</em> tra gist.github.com estas la preferinda metodo, 
+      kiu evitas problemojn pro spamfiltriloj kaj
+      permesas listigi kaj rigardi viajn lastatempajn redaktojn. 
+      Se neatendite okazos problemoj pri submetado, vi povas
+      alternative <em>Sendi</em> retpoŝte.
+    </p>
+    <p id="sendiservile_error" class="ui-state-error ui-corner-all"></p>        
+    <form id="sendiservile_form" method="post" action="revo_sendo" enctype="multipart/formdata"> <!--enctype="text/plain" > -->
+      <input type="text" id="sendiservile_komento" size=30 name="shangho" tabindex="1" placeholder="Priskribo de la ŝanĝoj" />
+    </form>
+  </dialog>
+    
+  <dialog id="referenco_dlg">
+    <h2 class="faldebla">Enmeti referencon</h2>
+    <p id="referenco_error" class="ui-state-error ui-corner-all"></p>
+    <form class="faldebla" id="referenco_form">
+      <table>
+        <tr>
+          <td>
+            <label for="referenco_tipo">tipo</label>
+          </td><td>
+            <select id="referenco_tipo" name="referenco_tipo">
+                <option value="nuda">nuda (sen tipo)</option>
+                <option value="vid">vidu</option>
+                <option disabled>────────────────────</option>
+                <option value="super">al supernocio</option>
+                <option value="sub">al subnocio</option>
+                <option value="malprt">al kies parto ĝi estas</option>
+                <option value="prt">al parto</option>
+                <option disabled>────────────────────</option>
+                <option value="dif">al sinonimo kun la difino</option>
+                <option value="sin">al sinonimo</option>
+                <option value="ant">al antonimo</option>
+                <option value="hom">al homonimo</option>
+                <option disabled>────────────────────</option>
+                <option value="lst">al listo de samkategoriaj vortoj</option>
+                <option value="ekz">al ekzemplo</option>
+            </select>
+          </td>
+        </tr><tr>  
+          <td>
+            <label for="referenco_listo">listo</label>
+          </td><td>
+            <input type="text" id="referenco_listo" name="referenco_listo" placeholder="Referencolisto" />
+          </td>
+        </tr><tr>
+          <td></td>
+          <td><input id="referenco_grp" name="referenco_grp" type="checkbox" />
+              <label for="referenco_grp">referenc-grupo</label>
+          </td>
+        </tr>
+      </table>
+        
+      <fieldset>
+        <legend>Referencocelo</legend>
+        <table  class="controlgroup-vertical">
+          <tr style="vertical-align:top">
+            <td>  
+              <label for="referenco_sercho">serĉo:</label>
             </td><td>
-              <select id="referenco_tipo" name="referenco_tipo">
-                  <option value="nuda">nuda (sen tipo)</option>
-                  <option value="vid">vidu</option>
-                  <option disabled>────────────────────</option>
-                  <option value="super">al supernocio</option>
-                  <option value="sub">al subnocio</option>
-                  <option value="malprt">al kies parto ĝi estas</option>
-                  <option value="prt">al parto</option>
-                  <option disabled>────────────────────</option>
-                  <option value="dif">al sinonimo kun la difino</option>
-                  <option value="sin">al sinonimo</option>
-                  <option value="ant">al antonimo</option>
-                  <option value="hom">al homonimo</option>
-                  <option disabled>────────────────────</option>
-                  <option value="lst">al listo de samkategoriaj vortoj</option>
-                  <option value="ekz">al ekzemplo</option>
-              </select>
+              <p><input type="text" id="referenco_sercho" name="referenco_sercho" tabindex="1" placeholder="Komenco de kapvorto" /></p>
+            </td>
+          </tr><!-- tr>
+            <td>&nbsp;</td><td></td>
+          </tr --><tr>
+            <td>
+              <label for="referenco_celo">celo:</label>
+            </td><td>  
+                <input type="text" id="referenco_celo" name="referenco_celo" placeholder="Celo de la referenco" />
             </td>
           </tr><tr>  
-            <td>
-              <label for="referenco_listo">listo</label>
+            <td>    
+              <label for="referenco_enhavo">teksto:</label>
             </td><td>
-              <input type="text" id="referenco_listo" name="referenco_listo" placeholder="Referencolisto" />
-            </td>
-          </tr><tr>
-            <td></td>
-            <td><input id="referenco_grp" name="referenco_grp" type="checkbox" />
-                <label for="referenco_grp">referenc-grupo</label>
+              <input type="text" id="referenco_enhavo" name="referenco_enhavo" placeholder="Teksto de la referenco" />
             </td>
           </tr>
         </table>
+      </fieldset>
+    </form>
+  </dialog> 
+  
+  <dialog id="ekzemplo_dlg">
+    <h2 class="faldebla">Enmeti ekzemplon</h2>
+    <p id="ekzemplo_error" class="ui-state-error ui-corner-all"></p>
           
-        <fieldset>
-          <legend>Referencocelo</legend>
-          <table  class="controlgroup-vertical">
-            <tr style="vertical-align:top">
-              <td>  
-                <label for="referenco_sercho">serĉo:</label>
-              </td><td>
-                <p><input type="text" id="referenco_sercho" name="referenco_sercho" tabindex="1" placeholder="Komenco de kapvorto" /></p>
-              </td>
-            </tr><!-- tr>
-              <td>&nbsp;</td><td></td>
-            </tr --><tr>
-              <td>
-                <label for="referenco_celo">celo:</label>
-              </td><td>  
-                  <input type="text" id="referenco_celo" name="referenco_celo" placeholder="Celo de la referenco" />
-              </td>
-            </tr><tr>  
-              <td>    
-                <label for="referenco_enhavo">teksto:</label>
-              </td><td>
-                <input type="text" id="referenco_enhavo" name="referenco_enhavo" placeholder="Teksto de la referenco" />
-              </td>
-            </tr>
-          </table>
-        </fieldset>
-      </form>
-    </dialog> 
-      
-    <dialog id="ekzemplo_dlg">
-      <h2>Enmeti ekzemplon</h2>
-      <p id="ekzemplo_error" class="ui-state-error ui-corner-all"></p>
-            
-        <label for="ekzemplo_frazo">citfrazo: </label><br/>
-        <textarea id="ekzemplo_frazo" name="ekzemplo_frazo" rows="3" cols="60" 
+    <div class="faldebla">
+      <label for="ekzemplo_frazo">citfrazo: </label><br/>
+      <textarea id="ekzemplo_frazo" name="ekzemplo_frazo" rows="3" cols="60" 
             tabindex="1"
             placeholder="Citita frazo por enmeti en la artikolon" 
             title="Citita frazo por enmeti en la artikolon"></textarea>            
-        <fieldset>
-            <legend>Fonto</legend>
-            <form id="ekzemplo_form">
-              <table  class="controlgroup-vertical">
-                <tr>
-                  <td>
-                    <label for="ekzemplo_bib">Bibliogr.</label>
-                  </td><td>
-                    <input type="text" id="ekzemplo_bib" name="ekzemplo_bib" size="40" placeholder="Bibliografia identigilo" />
-                  </td>   
-                </tr><tr>
-                  <td>
-                    <label for="ekzemplo_aut">Aŭtoro</label>
-                  </td><td>
-                    <input type="text" id="ekzemplo_aut" name="ekzemplo_aut" size="40" placeholder="Aŭtoro de la citita teksto" />
-                  </td>   
-                </tr><tr>
-                <td>
-                    <label for="ekzemplo_url">URL</label>
-                  </td><td>
-                    <input type="text" id="ekzemplo_url" name="ekzemplo_url" size="60" placeholder="URL de la teksto" />
-                  </td>   
-                </tr><tr>
-                <td>
-                    <label for="ekzemplo_vrk">Verko</label>
-                  </td><td>
-                    <input type="text" id="ekzemplo_vrk" name="ekzemplo_vrk" size="60" 
-                            placeholder="Verkonomo de la teksto (se mankas en la bibliografio)" />
-                  </td>   
-                </tr><tr>
-                <td>
-                    <label for="ekzemplo_lok">Loko</label>
-                  </td><td>
-                    <input type="text" id="ekzemplo_lok" name="ekzemplo_lok" size="40" placeholder="Loko de la citaĵo en la teksto" />
-                  </td>   
-                </tr>                
-            </table>
+      <fieldset>
+        <legend>Fonto</legend>
+        <form id="ekzemplo_form">
+          <table  class="controlgroup-vertical">
+            <tr>
+              <td>
+                <label for="ekzemplo_bib">Bibliogr.</label>
+              </td><td>
+                <input type="text" id="ekzemplo_bib" name="ekzemplo_bib" size="40" placeholder="Bibliografia identigilo" />
+              </td>   
+            </tr><tr>
+              <td>
+                <label for="ekzemplo_aut">Aŭtoro</label>
+              </td><td>
+                <input type="text" id="ekzemplo_aut" name="ekzemplo_aut" size="40" placeholder="Aŭtoro de la citita teksto" />
+              </td>   
+            </tr><tr>
+            <td>
+                <label for="ekzemplo_url">URL</label>
+              </td><td>
+                <input type="text" id="ekzemplo_url" name="ekzemplo_url" size="60" placeholder="URL de la teksto" />
+              </td>   
+            </tr><tr>
+            <td>
+                <label for="ekzemplo_vrk">Verko</label>
+              </td><td>
+                <input type="text" id="ekzemplo_vrk" name="ekzemplo_vrk" size="60" 
+                        placeholder="Verkonomo de la teksto (se mankas en la bibliografio)" />
+              </td>   
+            </tr><tr>
+            <td>
+                <label for="ekzemplo_lok">Loko</label>
+              </td><td>
+                <input type="text" id="ekzemplo_lok" name="ekzemplo_lok" size="40" placeholder="Loko de la citaĵo en la teksto" />
+              </td>   
+            </tr>                
+          </table>
         </form>
       </fieldset>
       <div id="ekzemplo_butonoj" class="butonoj">
         &#x2015; &#x2013; &middot; &#x2AFD; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
       </div>
-    </dialog>
+    </div>
+  </dialog>
 
-    <dialog id="bildo_dlg">
-      <h2>Enmeti bildon</h2>
-      <p id="bildo_error" class="ui-state-error ui-corner-all"></p>
-        
-        <table><tr valign="bottom">
+  <dialog id="bildo_dlg">
+    <h2 class="faldebla">Enmeti bildon</h2>
+    <p id="bildo_error" class="ui-state-error ui-corner-all"></p>
+      
+    <table class="faldebla">
+      <tr valign="bottom">
+        <td>
+          <label for="bildo_frazo">priskribo: </label><br/>
+          <textarea id="bildo_frazo" name="bildo_frazo" rows="3" cols="60" 
+            tabindex="1"
+            placeholder="Priskribo montrendan sub la bildo" 
+            title="Priskribo montrendan sub la bildo"></textarea>
+        </td><td>
+          <a id="bildeto_url" target="_new" href=""><img id="bildo_eta" src=""/></a>
+        </td>
+      </tr>
+  </table>
+  <fieldset class="faldebla">
+    <legend>Bildo</legend>
+    <form id="bildo_form">
+      <input type="hidden" id="bildo_fmt" name="bildo_fmt" value="0"/>
+      <table  class="controlgroup-vertical">
+        <tr>
           <td>
-            <label for="bildo_frazo">priskribo: </label><br/>
-            <textarea id="bildo_frazo" name="bildo_frazo" rows="3" cols="60" 
-              tabindex="1"
-              placeholder="Priskribo montrendan sub la bildo" 
-              title="Priskribo montrendan sub la bildo"></textarea>
+            <label for="bildo_url">Bildo (URL)</label>
           </td><td>
-            <a id="bildeto_url" target="_new" href=""><img id="bildo_eta" src=""/></a>
+            <input type="text" id="bildo_url" name="bildo_url" size="60" placeholder="Loko (URL) de la bildo" />
+          </td>   
+        </tr><tr>
+          <td>
+            <label for="bildo_fnt">Fontpaĝo (URL)</label>
+          </td><td>
+            <input type="text" id="bildo_fnt" name="bildo_fnt" size="60" placeholder="Fontpaĝo (URL) de la bildo" />
+          </td>   
+        </tr><tr>
+          <td>
+            <label for="bildo_aut">Aŭtoro</label>
+          </td><td>
+            <input type="text" id="bildo_aut" name="bildo_aut" size="40" placeholder="Aŭtoro de la bildo" />
+          </td>   
+        </tr><tr>
+        <td>
+            <label for="bildo_prm">Permesilo</label>
+          </td><td>
+            <input type="text" id="bildo_prm" name="bildo_prm" size="40" placeholder="Permesilo de la bildo" />
+          </td>   
+        </tr>  
+        <tr>
+          <td></td><td>
+            <p style="font-style: italic; font-size: 90%">
+              Bv. kontroli sur la bildo-paĝo la atribuon (aŭtoron) kaj apriorajn larĝecojn.<br/>
+              Aŭtomata elpreno ne fidinde funkcias.
+            </p>
           </td>
-        </tr></table>
-        <fieldset>
-          <legend>Bildo</legend>
-          <form id="bildo_form">
-            <input type="hidden" id="bildo_fmt" name="bildo_fmt" value="0"/>
-            <table  class="controlgroup-vertical">
-              <tr>
-                <td>
-                  <label for="bildo_url">Bildo (URL)</label>
-                </td><td>
-                  <input type="text" id="bildo_url" name="bildo_url" size="60" placeholder="Loko (URL) de la bildo" />
-                </td>   
-              </tr><tr>
-                <td>
-                  <label for="bildo_fnt">Fontpaĝo (URL)</label>
-                </td><td>
-                  <input type="text" id="bildo_fnt" name="bildo_fnt" size="60" placeholder="Fontpaĝo (URL) de la bildo" />
-                </td>   
-              </tr><tr>
-                <td>
-                  <label for="bildo_aut">Aŭtoro</label>
-                </td><td>
-                  <input type="text" id="bildo_aut" name="bildo_aut" size="40" placeholder="Aŭtoro de la bildo" />
-                </td>   
-              </tr><tr>
-              <td>
-                  <label for="bildo_prm">Permesilo</label>
-                </td><td>
-                  <input type="text" id="bildo_prm" name="bildo_prm" size="40" placeholder="Permesilo de la bildo" />
-                </td>   
-              </tr>  
-              <tr>
-                <td></td><td>
-                  <p style="font-style: italic; font-size: 90%">
-                    Bv. kontroli sur la bildo-paĝo la atribuon (aŭtoron) kaj apriorajn larĝecojn.<br/>
-                    Aŭtomata elpreno ne fidinde funkcias.
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <fieldset id="bildo_lrg">
-                      <legend>Larĝeco</legend>
-                      <label for="bildo_lrg_640">640p</label>
-                      <input type="radio" name="bildo_lrg" value="640" id="bildo_lrg_640">
-                      <label for="bildo_lrg_576">576p</label>
-                      <input type="radio" name="bildo_lrg" value="576" id="bildo_lrg_576">
-                      <label for="bildo_lrg_360">360p</label>
-                      <input type="radio" name="bildo_lrg" value="360" id="bildo_lrg_360">
-                      <label for="bildo_lrg_320">320p</label>
-                      <input type="radio" name="bildo_lrg" value="320" id="bildo_lrg_320" checked="checked">
-                      <label for="bildo_lrg_180">180p</label>
-                      <input type="radio" name="bildo_lrg" value="180" id="bildo_lrg_180">
-                    </fieldset>
-                    <span id="bildo_butonoj" class="butonoj" style="vertical-align: bottom; margin-left: 1.5em">
-                      &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
-                    </span>  
-                </td>
-              </tr>              
-          </table>
-        </form>
-      </fieldset>
-    </dialog>    
+        </tr>
+        <tr>
+          <td colspan="2">
+            <fieldset id="bildo_lrg">
+                <legend>Larĝeco</legend>
+                <label for="bildo_lrg_640">640p</label>
+                <input type="radio" name="bildo_lrg" value="640" id="bildo_lrg_640">
+                <label for="bildo_lrg_576">576p</label>
+                <input type="radio" name="bildo_lrg" value="576" id="bildo_lrg_576">
+                <label for="bildo_lrg_360">360p</label>
+                <input type="radio" name="bildo_lrg" value="360" id="bildo_lrg_360">
+                <label for="bildo_lrg_320">320p</label>
+                <input type="radio" name="bildo_lrg" value="320" id="bildo_lrg_320" checked="checked">
+                <label for="bildo_lrg_180">180p</label>
+                <input type="radio" name="bildo_lrg" value="180" id="bildo_lrg_180">
+              </fieldset>
+              <span id="bildo_butonoj" class="butonoj" style="vertical-align: bottom; margin-left: 1.5em">
+                &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
+              </span>  
+            </td>
+          </tr>              
+        </table>
+      </form>
+    </fieldset>
+  </dialog>    
       
   <dialog id="krei_dlg">
-      <h2>Krei artikolon</h2>
+    <h2>Krei artikolon</h2>
     <p id="krei_error" class="ui-state-error ui-corner-all"></p>
     <form id="krei_form" class="flex-form">              
       <label for="krei_dos">dosiernomo: 
@@ -491,153 +495,131 @@
       
       
   <dialog id="derivajho_dlg">
-      <h2>Enmeti derivaĵon</h2>
+    <h2 class="faldebla">Enmeti derivaĵon</h2>
     <p id="derivajho_error" class="ui-state-error ui-corner-all"></p>
-    <form id="derivajho_form" class="flex-form">              
-        <label for="derivajho_kap">kapvorto:
-          <input id="derivajho_kap" type="text" name="derivajho_kap" tabindex="1" placeholder="Kapvorto, uzu tildon (~)"/>
-        </label>
-        <label for="derivajho_listo">enigu post:
-          <select id="derivajho_listo" name="derivajho_listo">
-            <option value="kursoro">kursoro</option>
-          </select>
-        </label>
-        <label for="derivajho_dif">difino: 
-          <textarea id="derivajho_dif" name="derivajho_dif" rows="3" cols="60" 
-            placeholder="Difino - vi povas uzi tildon (~)"></textarea>
-        </label>
+    <form class="faldebla" id="derivajho_form" class="flex-form">              
+      <label for="derivajho_kap">kapvorto:
+        <input id="derivajho_kap" type="text" name="derivajho_kap" tabindex="1" placeholder="Kapvorto, uzu tildon (~)"/>
+      </label>
+      <label for="derivajho_listo">enigu post:
+        <select id="derivajho_listo" name="derivajho_listo">
+          <option value="kursoro">kursoro</option>
+        </select>
+      </label>
+      <label for="derivajho_dif">difino: 
+        <textarea id="derivajho_dif" name="derivajho_dif" rows="3" cols="60" 
+          placeholder="Difino - vi povas uzi tildon (~)"></textarea>
+      </label>
     </form>
-    <div id="derivajho_butonoj" class="butonoj">
+    <div class="faldebla" id="derivajho_butonoj" class="butonoj">
       &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
     </div>
   </dialog>
       
   <dialog id="senco_dlg">
-      <h2>Enmeti sencon</h2>
-      <p id="senco_error" class="ui-state-error ui-corner-all"></p>
-      <form id="senco_form" class="flex-form">              
-        <label for="senco_mrk">distingilo: 
-          <input id="senco_mrk" type="text" name="senco_mrk" tabindex="1" placeholder="Markosufikso" title="Marko-sufikso: distingilo de aliaj sencoj de sama derivaĵo"/>
-        </label>
-        <label for="senco_dif">difino: 
-          <textarea id="senco_dif" name="senco_dif" rows="3" cols="60" 
-            placeholder="Difino - vi povas uzi tildon (~)"></textarea>
-        </label>
-      </form>
-      <div id="senco_butonoj" class="butonoj">
-        &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
-      </div>
-    </dialog>      
-      
-    <dialog id="traduko_dlg">
-      <h2>Tradukoj</h2>
-      
-      <p id="traduko_error" class="ui-state-error ui-corner-all"></p>
-      
-      <div id="traduko_sidebar">
-          <ul id="traduko_menuo">
-            <!-- <li id="traduko_viaj" class="ui-widget-header"><div>viaj lingvoj</div></li> -->
-            <li id="traduko_aliaj">-</li>
-            <li><span>aliaj tradukoj</span><ul id="traduko_artikolaj"></ul></li>
-            <!-- <li class="ui-widget-header"><div>ĉiuj lingvoj</div></li> -->
-            <li>-</li>
-            <li><span>lingvoj a..b</span><ul id="traduko_chiuj_a_b"></ul></li>
-            <li><span>lingvoj c..g</span><ul id="traduko_chiuj_c_g"></ul></li>
-            <li><span>lingvoj h..j</span><ul id="traduko_chiuj_h_j"></ul></li>
-            <li><span>lingvoj k..l</span><ul id="traduko_chiuj_k_l"></ul></li>
-            <li><span>lingvoj m..o</span><ul id="traduko_chiuj_m_o"></ul></li>
-            <li><span>lingvoj p..s</span><ul id="traduko_chiuj_p_s"></ul></li>
-            <li><span>lingvoj t..z</span><ul id="traduko_chiuj_t_z"></ul></li>
-          </ul>
+    <h2 class="faldebla">Enmeti sencon</h2>
+    <p id="senco_error" class="ui-state-error ui-corner-all"></p>
+    <form class="faldebla" id="senco_form" class="flex-form">              
+      <label for="senco_mrk">distingilo: 
+        <input id="senco_mrk" type="text" name="senco_mrk" tabindex="1" placeholder="Markosufikso" title="Marko-sufikso: distingilo de aliaj sencoj de sama derivaĵo"/>
+      </label>
+      <label for="senco_dif">difino: 
+        <textarea id="senco_dif" name="senco_dif" rows="3" cols="60" 
+          placeholder="Difino - vi povas uzi tildon (~)"></textarea>
+      </label>
+    </form>
+    <div class="faldebla" id="senco_butonoj" class="butonoj">
+      &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
+    </div>
+  </dialog>      
+    
+  <dialog id="traduko_dlg">
+    <h2>Tradukoj</h2>
+    
+    <p id="traduko_error" class="ui-state-error ui-corner-all"></p>
+    
+    <div id="traduko_sidebar">
+        <ul id="traduko_menuo">
+          <!-- <li id="traduko_viaj" class="ui-widget-header"><div>viaj lingvoj</div></li> -->
+          <li id="traduko_aliaj">-</li>
+          <li><span>aliaj tradukoj</span><ul id="traduko_artikolaj"></ul></li>
+          <!-- <li class="ui-widget-header"><div>ĉiuj lingvoj</div></li> -->
+          <li>-</li>
+          <li><span>lingvoj a..b</span><ul id="traduko_chiuj_a_b"></ul></li>
+          <li><span>lingvoj c..g</span><ul id="traduko_chiuj_c_g"></ul></li>
+          <li><span>lingvoj h..j</span><ul id="traduko_chiuj_h_j"></ul></li>
+          <li><span>lingvoj k..l</span><ul id="traduko_chiuj_k_l"></ul></li>
+          <li><span>lingvoj m..o</span><ul id="traduko_chiuj_m_o"></ul></li>
+          <li><span>lingvoj p..s</span><ul id="traduko_chiuj_p_s"></ul></li>
+          <li><span>lingvoj t..z</span><ul id="traduko_chiuj_t_z"></ul></li>
+        </ul>
+        
+        <div id="traduko_butonoj" class="butonoj">
+        <div data-cmd="ind">&lt;ind&gt;</div>
+        <div data-cmd="()">(&hellip;)</div>
+        </div>
+    </div>
+    
+    <div id="traduko_tabelo" class="dlg_tab_div">
+      <table class="dlg_tabelo" id="traduko_table">
+        <thead><tr><th>eo</th><th><span id="traduko_lingvo"></span></th><th>pli</th></tr></thead>
+        <tbody id="traduko_tradukoj">
+        </tbody>
+      </table>
+    </div>
+  </dialog>
+    
           
-          <div id="traduko_butonoj" class="butonoj">
-          <div data-cmd="ind">&lt;ind&gt;</div>
-          <div data-cmd="()">(&hellip;)</div>
-          </div>
-      </div>
-      
-      <div id="traduko_tabelo" class="dlg_tab_div">
-        <table class="dlg_tabelo" id="traduko_table">
-          <thead><tr><th>eo</th><th><span id="traduko_lingvo"></span></th><th>pli</th></tr></thead>
-          <tbody id="traduko_tradukoj">
-          </tbody>
-        </table>
-      </div>
-    </dialog>
-      
-           
-    <dialog id="sxablono_dlg">
-      <h2>Enmeti per ŝablono</h2>
-      <p id="sxablono_error" class="ui-state-error ui-corner-all"></p>
-      <form id="sxablono_form">              
-        <label for="sxablono_elekto">ŝablonoj: </label>
-            <select name="sxablono_elekto" id="sxablono_elekto">
-              <option disabled selected>Elektu ŝablonon!</option>
-            </select><br/>
+  <dialog id="sxablono_dlg">
+    <h2 class="faldebla">Enmeti per ŝablono</h2>
+    <p id="sxablono_error" class="ui-state-error ui-corner-all"></p>
+    <form class="faldebla" id="sxablono_form">              
+      <label for="sxablono_elekto">ŝablonoj: </label>
+          <select name="sxablono_elekto" id="sxablono_elekto">
+            <option disabled selected>Elektu ŝablonon!</option>
+          </select><br/>
 <!--          <textarea id="sxablono_xml" name="sxablono_xml" rows="13" cols="80" readonly="readonly" placeholder="Elektu ŝablonon por antaŭrigardi ĝin"></textarea>
 -->
-          <table id="sxablono_xml"></table>
-      </form>
-    </dialog>  
-      
-      
-    <dialog id="rimarko_dlg">
-      <h2>Enmeti rimarkon</h2>
-      <p id="rimarko_error" class="ui-state-error ui-corner-all"></p>
-      <form id="rimarko_form">              
+        <table id="sxablono_xml"></table>
+    </form>
+  </dialog>  
+    
+    
+  <dialog id="rimarko_dlg">
+    <h2 class="faldebla">Enmeti rimarkon</h2>
+    <p id="rimarko_error" class="ui-state-error ui-corner-all"></p>
+    <form class="faldebla" id="rimarko_form">              
 
-        <label for="rimarko_rim">rimarko: </label><br/>
-        <textarea id="rimarko_rim" name="rimarko_rim" rows="3" cols="60" tabindex="1"
-          placeholder="Rimarko - vi povas uzi tildon (~)"></textarea>
-        <br/>
+      <label for="rimarko_rim">rimarko: </label><br/>
+      <textarea id="rimarko_rim" name="rimarko_rim" rows="3" cols="60" tabindex="1"
+        placeholder="Rimarko - vi povas uzi tildon (~)"></textarea>
+      <br/>
+      
+      <div>
+        <input id="rimarko_adm" name="rimarko_adm" type="checkbox" />
+        <label for="rimarko_adm">administra noto: &lt;adm&gt;...</label>
+      </div>              
+      <br/>
         
-        <div>
-          <input id="rimarko_adm" name="rimarko_adm" type="checkbox" />
-          <label for="rimarko_adm">administra noto: &lt;adm&gt;...</label>
-        </div>              
-        <br/>
-          
-        <label for="rimarko_aut">aŭtoro: </label><br/>
-        <input id="rimarko_aut" type="text" name="rimarko_aut" placeholder="Aŭtoro"/> 
-          
-      </form>
-      <div id="rimarko_butonoj" class="butonoj">
-        &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
-      </div>
-    </dialog>    
-      
-    <!--
-    <dialog id="homonimo_dlg">
-      <h2>Homonimoj sen interreferenco</h2>
-        <p id="homonimo_error" class="ui-state-error ui-corner-all">
-          Kreado de la listo daŭras momenton...
-        </p>
-        <form id="homonimo_form">
-            <div id="homonimo_tabelo" class="dlg_tab_div">
-              <table class="dlg_tabelo" id="homonimo_table">
-                <thead><tr><th>kapvorto</th><th>artikolo 1</th><th>artikolo 2</th></tr></thead>
-                <tbody id="homonimo_listo">
-                </tbody>
-              </table>
-            </div>
-            <div id="hom_dos_div">
-              <label for="homonimo_dos">dosiero: </label><br/>
-              <input id="homonimo_dos" name="homonimo_dos" placeholder="Dosiero (klaku supre)"/>  
-            </div> 
-        </form>
-      </dialog>   
-    -->       
-      
-    <dialog id="error_dlg">
-      <h2>Eraro</h2>    
-      <p id="error_msg" class="ui-state-error ui-corner-all"></p>
-    </dialog>
+      <label for="rimarko_aut">aŭtoro: </label><br/>
+      <input id="rimarko_aut" type="text" name="rimarko_aut" placeholder="Aŭtoro"/> 
+        
+    </form>
+    <div class="faldebla" id="rimarko_butonoj" class="butonoj">
+      &#x2015; &#x2013; &middot; &nbsp; &#x202f; tld [] () &#x201e;&#x201c; &sbquo;&#x2018; minuskloj kamelo [blank]
+    </div>
+  </dialog>    
+    
+  <dialog id="error_dlg">
+    <h2>Eraro</h2>    
+    <p id="error_msg" class="ui-state-error ui-corner-all"></p>
+  </dialog>
 
-    <dialog id="surmetita_dlg">
-      <h2>Klarigoj</h2>    
-         <p id="surmetita_error" class="ui-state-error ui-corner-all"></p>
-       <div id="surmetita"></div>
-    </dialog>
+  <dialog id="surmetita_dlg">
+    <h2>Klarigoj</h2>    
+        <p id="surmetita_error" class="ui-state-error ui-corner-all"></p>
+      <div id="surmetita"></div>
+  </dialog>
       
   </body>
 </html>
