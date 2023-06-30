@@ -286,7 +286,9 @@
           <td>
             <label for="referenco_listo">listo</label>
           </td><td>
-            <input type="text" id="referenco_listo" name="referenco_listo" placeholder="Referencolisto" />
+            <input type="search" id="referenco_listo" name="referenco_listo" 
+              placeholder="Referencolisto" list="referenco_listoj"/>
+            <datalist id="referenco_listoj"></datalist>
           </td>
         </tr><tr>
           <td></td>
@@ -303,7 +305,9 @@
             <td>  
               <label for="referenco_sercho">serĉo:</label>
             </td><td>
-              <p><input type="text" id="referenco_sercho" name="referenco_sercho" tabindex="1" placeholder="Komenco de kapvorto" /></p>
+              <p><input type="search" id="referenco_sercho" name="referenco_sercho" 
+                tabindex="1" placeholder="Komenco de kapvorto" list="referenco_proponoj"/></p>
+                <datalist id="referenco_proponoj"></datalist>
             </td>
           </tr><!-- tr>
             <td>&nbsp;</td><td></td>
@@ -343,7 +347,9 @@
               <td>
                 <label for="ekzemplo_bib">Bibliogr.</label>
               </td><td>
-                <input type="text" id="ekzemplo_bib" name="ekzemplo_bib" size="40" placeholder="Bibliografia identigilo" />
+                <input type="search" id="ekzemplo_bib" name="ekzemplo_bib" size="40" 
+                  list="ekzemplo_bibliogr" placeholder="Bibliografia identigilo" />
+                <datalist id="ekzemplo_bibliogr"></datalist>
               </td>   
             </tr><tr>
               <td>
