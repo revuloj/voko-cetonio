@@ -186,14 +186,14 @@ redaktilo_saluto(_Options) -->
 				input([type="image",id="facebook_login",src="../static/btn_facebook_signin.png",disabled=disabled,
 					alt="Saluto per Facebook",title="Salutu per Facebook-konto",value="Facebook",style="margin-left:1em"])])]),
 
-	      form([name="yahoo",id="yahoo",action="login",method="GET"],		    
-		   [input([type="hidden",name="server",value="yahoo"]),
-		    div([style="background-image: linear-gradient(90deg,lightgoldenrodyellow,transparent); padding: 1em"],
-			[ %p(['Se vi havas konton ĉe Yahoo:']),
-			 input([type="image",id="yahoo_login",src="../static/btn_yahoo_signin.png",onclick="javascript:{$('form#login').submit();}",disabled=disabled,
-				alt="Saluto per Yahoo",title="Salutu per Yahoo-konto",style="margin-left:1em"],[])
-			])]),
-	      
+%	      form([name="yahoo",id="yahoo",action="login",method="GET"],		    
+%		   [input([type="hidden",name="server",value="yahoo"]),
+%		    div([style="background-image: linear-gradient(90deg,lightgoldenrodyellow,transparent); padding: 1em"],
+%			[ %p(['Se vi havas konton ĉe Yahoo:']),
+%			 input([type="image",id="yahoo_login",src="../static/btn_yahoo_signin.png",onclick="javascript:{$('form#login').submit();}",disabled=disabled,
+%				alt="Saluto per Yahoo",title="Salutu per Yahoo-konto",style="margin-left:1em"],[])
+%			])]),
+    
 	      div([p(['Mi rekomendas informiĝi per ',a([href="../static/notoj-pri-versio.html"],['Notoj kaj konsiloj']),
 		     ' pri uzado de la redaktilo kaj konataj eraroj.']),
 		   p(['Aktuale estas jenaj antaŭkondiĉoj por povi saluti al la redaktilo:',
