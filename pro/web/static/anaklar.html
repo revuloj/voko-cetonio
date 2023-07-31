@@ -3,26 +3,30 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
     <style>
+      /*
       body {
         font-family: segoe ui,Arial,sans-serif;
         font-size: 1.1em; 
         background-color: #e5e3d5;
         margin: 2em;
       }
+      */
       li {
         margin-bottom: 0.2em
       }
       #klarigo_teksto {
         max-height: 80% !important; overflow: auto;
+        /*
         background-color: #fffdef;
-        border: 1px solid silver;
+        */
+        border: 1px solid silver;        
         padding: 0.5em
       }
       /* stiloj por analizo (vort-kontrolo) */
       .malstrikte { color: black }
       .neanalizebla { color:red; font-weight: bold}
       .dubebla { color: #bb2222 }
-      .verda { color: rgb(0, 68, 9) }
+      .verda { color: rgb(1, 108, 15) }
       .kuntirita { color: brown }
       .redakti {font-size: larger; color: black}
       .mlg {font-weight: bold}
@@ -37,54 +41,54 @@
     <p>
       La precipa celo de la analizo estas trovi evidentajn tajperarojn en artikolojn
       sed ankaŭ vortojn, kiuj estas uzataj en la artikoloj, sed mem mankas en
-      Revo. Cetre ĝi povas helpi ankaŭ trovi stilajn neglataĵojn, sed necesas iom kompreni
+      Revo. Cetere ĝi povas ankaŭ helpi trovi stilajn neglataĵojn. Sed necesas iom kompreni
       kiel ĝi funkcias, por taksi la rezultojn ĝuste.
     </p>
     <p>
       Formado de vortoj estas nesimpla afero, ĉar oni principe 
-      povas tutajn frazpartojn kondensigi en unuopan vorton. Pro forlaso
+      povas kondensigi tutajn frazpartojn en unuopan vorton. Pro forlaso
       de elementoj dum tiu transformado, nur per homa scio estas ebla rekonstrui
-      la originan frazstrukturon. Tion analizilo, kiu funkcias nur-gramatike ne kapablas.
+      la originan frazstrukturon. Tio al analizilo, kiu funkcias nur-gramatike, ne estas ebla.
       Tial ĝi ne povas decidi, ĉu ne bone analizita vorto estas erara aŭ nealizebla
       aŭ misanalizita pro limiteco de la uzata gramatiko, aŭ eble nomo aŭ fremdlingva vorto.
       Malgraŭ tia limiteco, ĝi helpas redukti homan kontrollegadon al kelkaj rimarkindaj lokoj.
       Trovita kontrolinda vorto ofte ne estas nepre korektinda aŭ aldoninda en Revo.
-      Necesas prijuĝokapablo de homo por decidi, ĉu kaj - se jes - kion fari.
+      Necesas prijuĝo de homo por decidi, ĉu ion kaj kion fari.
     </p>
     <p>
       Por prijuĝi, helpas kompreni, ke la vortanalizilo laboras laŭ la sekvaj
       du fazoj:
       <ol>
        <li>Tekstdismeta fazo: la teksto estas dividata je e-aj vortoj,
-	      numeroj, ne-vortaj signoj. Tio ankoraŭ ne funkcias perfekte, aparte, vortoj
+	      numeroj, ne-vortaj signoj. Tio ankoraŭ ne funkcias perfekte. Aparte, vortoj
         kun enaj krampoj aŭ ne-literaj signoj estas rekonitaj kiel pluraj
         vortetoj.
        </li>
        <li>
-         Vortanaliza fazo: La vortoj estas analizataj laŭ 
-         <a href="https://github.com/revuloj/vortanalizilo/blob/master/gra/vorto_gra.pl">gramatikaj 
+         Resinteza fazo: La vortoj estas analizataj laŭ 
+         <a target="_new" href="https://github.com/revuloj/voko-akrido/blob/master/pro/gra/vorto_gra.pl">gramatikaj 
          reguloj</a> de
          <ul> 
          <li>derivado (afiksoj, radikoj, finaĵoj, ekz. pra&middot;av&middot;in&middot;o)
-         <li>kunderivado de prepozitivo, ekz. "sen mono" -&gt; sen+mon&middot;a
-         <li>apudmetado: soldato-edzino, ruĝa-blanka-nigra
+         <li>kunderivado de prepozitivo, ekz. "sen mono" → sen+mon&middot;a
+         <li>apudmetado: amato-karulo, ruĝa-blanka-nigra
          <li>kunmetado, t.e. laŭ la 11a regulo de la Fundamenta Gramatiko:
                 vort-analiz&middot;o, lern&middot;ej&middot;o-task&middot;o kaj
          <li>kuntirado, (fando) ekz: dik~fingr&middot;o, bel~ten&middot;o, jun~aĝ&middot;o, hel~ruĝ&middot;a
          </ul>
-         La reguloj estas estas sufiĉe
-         striktaj, ekz. "in" estas aplikebla nur al bestoj (inklusive la
+         La reguloj estas sufiĉe striktaj, ekz. "in" estas aplikebla nur al bestoj (inklusive la
          homo).
          Tial esceptaj, neregulaj aŭ maloftaj vortkunmetoj eble ne analiziĝas.  
          Kelkaj tamen estas en
-         <a href="https://github.com/revuloj/vortanalizilo/blob/master/gra/esceptoj.pl">aparta
+         <a target="_new" href="
+         https://github.com/revuloj/voko-akrido/blob/master/pro/gra/esceptoj.pl">aparta
          listo</a>.
      </ol>
     </p>
     <p>
       Vortoj ne-esperantaj aŭ neregule formitaj, sed aperantaj en citaĵoj
       provizore estas registritaj
-      en <a class="verda" href="https://github.com/revuloj/vortanalizilo/blob/master/vrt/revo_verda_listo_provizora.txt">verda
+      en <a class="verda" target="_new" href="https://github.com/revuloj/voko-akrido/blob/master/pro/vrt/revo_verda_listo_provizora.txt">verda
       listo</a>.
     </p>
     <p>
@@ -96,7 +100,7 @@
       <ul>
         <li>Radiko aŭ vortelemento mankas en la vortaro. (Ekz. vortoj, kies
         unua derivaĵo ne estas rekonebla kiel substantivo, verbo, adjektivo aŭ
-        adverbo, ne transpreniĝas en la radikoliston de la anlizilo, ankaŭ vortoj markitaj
+        adverbo, ne transpreniĝas en la radikoliston de la anlizilo. Ankaŭ vortoj markitaj
         per EVI en la unua derivaĵo aŭ senco ne transpreniĝas en la
         vortaron. Se derivaĵo havas plurajn sencojn, la evitinda senco ne estu
         en la unua loko - la ordo en la Revo-artikolo estu ŝanĝota kaj la
@@ -111,10 +115,10 @@
         analizilo estas strikta pri tio. En citaĵo vi povas marki tian
         vorton per &lt;esc&gt; por ekskluzivi ĝin el la kontrolo.
         <li>La vorto enhavas ne-ean literon aŭ alian signon kaj do estas
-        traktata en partoj: Volap|ü|k, ĝeni[n]ta k.s.
+        traktata en partoj: Volap<u>ü</u>k, ĝeni[n]ta k.s.
         <li>Temas pri mallongigo, kiun la vortanalizilo ne komprenas, ekz. "ekz-e".
           Mi provas aldoni tiajn mallongigojn iom post iom al la analizilo.
-       <li>Verbo ne estas markita kiel transitiva, ekz. "abol/it/a".
+       <li>Verbo ne estas markita kiel transitiva, ekz. "abol&middot;it&middot;a".
        <li>Vorto ne estas rekonebla kiel besto en la Revo-artikolo (per
        referenco al (sub-)klaso de bestoj, sed uzas sufikson kiel "in".
        <li>Aŭ la vorto
