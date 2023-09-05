@@ -40,6 +40,6 @@ docker)
 signoj)
     ## signoj : kompilas la XML-unojn el la DTD al JSON kaj Prolog-agordo
     ##          kaj kopias la JSON-dosieron al ../voko-grundo/jsc/x/
-    cd pro && swipl -s loaddtd.pl -g dtd2json_entities -g dtd2pl_entities -g halt \
-    && cd .. && cp pro/voko_entities.js ../voko-grundo/jsc/x/
+    cd pro && swipl -s voko_dtd.pl -g dtd2json_entities -g dtd2pl_entities -g halt \
+    && cd .. && cp pro/voko_entities.ts ../voko-grundo/jsc/x/voko_entities.ts
 esac
