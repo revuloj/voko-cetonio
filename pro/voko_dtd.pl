@@ -1,5 +1,5 @@
 /* -*- Mode: Prolog -*- */
-:- module(loaddtd,[
+:- module(voko_dtd,[
         load_dtd/1, 
 	      load_entities/1,
 	      dtd2pl_entities/0,
@@ -13,7 +13,7 @@
 
 dtd('../dtd/vokoxml.dtd').
 prolog_entity_file('voko_entities.pl').
-json_entity_file('voko_entities.js'). 
+json_entity_file('voko_entities.ts'). 
 
 
 load_dtd(VokoDTD) :-
@@ -72,7 +72,7 @@ save_entities(FileName,EntityList) :-
     open(FileName,write,Out,[encoding(utf8)]),
     (
       writeln(Out,':-encoding(utf8).'),
-      writeln(Out,'% kreita per: swipl -s loaddtd.pl -g dtd2pl_entities -g halt'),
+      writeln(Out,'% kreita per: swipl -s voko_dtd.pl -g dtd2pl_entities -g halt'),
       with_output_to(Out,
         write_entities(EntityList))
     ),  
@@ -83,9 +83,8 @@ save_entities_json(FileName,EntityList) :-
   setup_call_cleanup(
     open(FileName,write,Out,[encoding(utf8)]),
     (
-      writeln(Out,'/* jshint esversion: 6 */'),
-      writeln(Out,'/* kreita per: swipl -s loaddtd.pl -g dtd2json_entities -g halt */'),
-      writeln(Out,'const voko_entities={'),
+      writeln(Out,'/* kreita per: swipl -s voko_dtd.pl -g dtd2json_entities -g halt */'),
+      writeln(Out,'export const voko_entities={'),
       json_write_entries(EntityList,Out),
       writeln(Out,'}')
     ),

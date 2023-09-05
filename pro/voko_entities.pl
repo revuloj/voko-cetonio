@@ -1,5 +1,5 @@
 :-encoding(utf8).
-% kreita per: swipl -s loaddtd.pl -g dtd2pl_entities -g halt
+% kreita per: swipl -s voko_dtd.pl -g dtd2pl_entities -g halt
 entity(amp,&).
 entity(lt,<).
 entity(gt,>).
@@ -98,8 +98,10 @@ entity(otilde,õ).
 entity(middot,·).
 entity('Abreve','Ă').
 entity(abreve,ă).
-entity('Tcedil','Ţ').
-entity(tcedil,ţ).
+entity('Tcomma','Ț').
+entity(tcomma,ț).
+entity('Scomma','Ș').
+entity(scomma,ș).
 entity('Alfa','Α').
 entity(alfa,α).
 entity(alfa_acute,ά).
