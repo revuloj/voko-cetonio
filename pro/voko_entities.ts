@@ -1,6 +1,5 @@
-/* jshint esversion: 6 */
-/* kreita per: swipl -s loaddtd.pl -g dtd2json_entities -g halt */
-const voko_entities={
+/* kreita per: swipl -s voko_dtd.pl -g dtd2json_entities -g halt */
+export const voko_entities={
 "amp":"&amp;",
 "lt":"&lt;",
 "gt":"&gt;",
@@ -99,8 +98,10 @@ const voko_entities={
 "middot":"·",
 "Abreve":"Ă",
 "abreve":"ă",
-"Tcedil":"Ţ",
-"tcedil":"ţ",
+"Tcomma":"Ț",
+"tcomma":"ț",
+"Scomma":"Ș",
+"scomma":"ș",
 "Alfa":"Α",
 "alfa":"α",
 "alfa_acute":"ά",
