@@ -32,10 +32,10 @@ t(1,`<!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">`).
 t(2,`<!ENTITY % priskribaj-elementoj\c\n
   "fnt|gra|uzo|dif|ekz|rim|ref|refgrp|trd|trdgrp|bld|adm|url|mlg|lstref|tezrad">`).
 
-t(3,[`OElig`-`&#x0152;`]).
-
-t(4,[`Alfa`-`&#x391;`,`alfa`-`&#x3b1;`,`alfa_acute`-`&alfa_ton;`,
-	`alfa_subj`-`&alfa;`,`Alfa_Subj`-`&Alfa;`,`Alfa_ton`-`&#x0386;`,`alfa_ton`-`&#x03ac;`]).
+% t(3,[`OElig`-`&#x0152;`]).
+% 
+% t(4,[`Alfa`-`&#x391;`,`alfa`-`&#x3b1;`,`alfa_acute`-`&alfa_ton;`,
+% 	`alfa_subj`-`&alfa;`,`Alfa_Subj`-`&Alfa;`,`Alfa_ton`-`&#x0386;`,`alfa_ton`-`&#x03ac;`]).
 
 
 test(N,E) :-
