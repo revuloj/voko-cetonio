@@ -84,7 +84,7 @@ hex_value_([],0,0).
 
 dec_value_([H|T],Fact,Val) :-
   dec_value_(T,F,V),
-  Val is H * F + V,
+  Val is (H-0'0) * F + V,
   Fact is F*10.
 
 dec_value_([],1,0).
