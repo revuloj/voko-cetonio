@@ -46,6 +46,7 @@ update-db)
     /usr/bin/swipl -s ${revodb_upd} -g "${revodb_goal}" -t "halt"
     /usr/bin/unzip -o ${tmp_dir}/revo-inx.db.tmp.zip -d ${tmp_dir}
     cp ${tmp_dir}/revo-inx.db ${sql_dir}/revo-inx.db
+    ls -l ${sql_dir}
     ;;
 redaktantoj)
     if [[ -z "$CGI_USER" ]]; then
