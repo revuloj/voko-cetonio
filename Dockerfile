@@ -30,7 +30,7 @@ ADD . ./
 
 
 
-#  voko-grundo-master/stl/* 
+# voko-grundo-master/stl/* 
 COPY --from=grundo build/ /home/cetonio/voko/
 
 # COPY --from=grundo build/dtd/ /home/cetonio/voko/dtd/
