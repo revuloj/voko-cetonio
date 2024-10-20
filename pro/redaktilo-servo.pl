@@ -315,7 +315,7 @@ revo_sendo(api,Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
 revo_sendo(email,Retadreso,Redakto,_Dosiero,Shangho_au_Nomo,Quoted) :-   
     % respondu kaj sendu
     active_sessions_header,
-    format('Content-type: text/html~n~n'),
+    % format('Content-type: text/html~n~n'),
     % FIXME: pli bone havu apartan funkcion por sendi novan artikolon?
     once((
         Redakto = redakto,
@@ -325,9 +325,12 @@ revo_sendo(email,Retadreso,Redakto,_Dosiero,Shangho_au_Nomo,Quoted) :-
         send_revo_aldono(Retadreso,Shangho_au_Nomo,Quoted)
         ;
         %format('Status: ~d~n~n',[401]),
-        throw(http_reply(html(['Neatendita eraro dum forsendo.\n'])))
+
+        reply_json(json([msg='Neatendita eraro dum forsendo.\n']),[status(500)])
+        % throw(http_reply(html(['Neatendita eraro dum forsendo.\n'])))
     )),
-    format('Bone. Sendita.').
+    reply_json(json([msg='Bone. Sendita.']),[status(200)]).
+    %format('Bone. Sendita.').
 
 
 % sintaks-kontrolo de la artikolo per Jing
