@@ -61,8 +61,8 @@ RUN chown cetonio etc \
 USER cetonio:users
 RUN mkdir -p tmp && mkdir -p sql
 
-# se ni volas uzi la gastigan reton por forsendi retpoŝton
-# ni bezonas la eblecon difini la servo-repordon tie ĉi,
+# se ni volas uzi la gastigan reton (network_mode: "host) por forsendi retpoŝton
+# ni bezonas la eblecon difini la servo-retpordon tie ĉi,
 # ĉar 
 #   network --driver host 
 # ne kunfunkcias kun
