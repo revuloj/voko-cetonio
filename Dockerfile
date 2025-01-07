@@ -56,7 +56,7 @@ RUN chown cetonio etc \
   && curl -LO https://raw.githubusercontent.com/revuloj/revo-fonto/master/cfg/klasoj.xml \
   && cd /home/cetonio \
   && xsltproc voko/xsl/bibxml.xsl voko/cfg/bibliogr.xml > voko/cfg/biblist.xml && \
-    xsltproc voko/xsl/cfg_klasoj.xsl voko/owl/voko.rdf > voko/cfg/klasoj.xml
+     xsltproc voko/xsl/cfg_klasoj.xsl voko/owl/voko.rdf > voko/cfg/klasoj.xml
 
 USER cetonio:users
 RUN mkdir -p tmp && mkdir -p sql
