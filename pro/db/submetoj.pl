@@ -2,9 +2,10 @@
 :- module(db_submetoj,[
 	      submeto_add/5,
 	      submeto_update/3,
+          submetoj_delete/0,          
           submeto_by_id/2,
           submetoj_by_state/2,
-          submetoj_by_email/2
+          submetoj_by_email/3
 	  ]).
 
 :- use_module(library(prosqlite)).
@@ -17,6 +18,8 @@
 revodb('/home/revo/tmp/inx_tmp/sql/submetoj.db').
 
 :- initialization(connect).
+
+konserv_tagoj(200). % 200 tagojn ni konservas, pli malnovajn forigas regule
 
 /***
 CREATE TABLE submeto (
@@ -55,6 +58,12 @@ submeto_update(Id,State,Result) :-
     debug(db(submetoj),'~q',[Upd]),
     sqlite_query(submetodb,Upd,_).
 
+submetoj_delete :-
+    konserv_tagoj(Tagoj),
+    format(atom(Del),'delete from submeto where sub_time < date(''now'', ''-~d days'');',[Tagoj]),
+    debug(db(submetoj),'~q',[Del]),
+    sqlite_query(submetodb,Del,_).
+
 /**** serĉoj en submeto-datumbazo ***/
 
 submeto_by_id(Id,Submeto) :-
@@ -67,8 +76,8 @@ submetoj_by_state(State,Listo) :-
     debug(db(submetoj),'~q',[Query]),
     sqlite_query(submetodb,Query,Listo).
 
-submetoj_by_email(Email,Listo) :-
-    format(atom(Query),'select sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname from submeto where sub_email=''~w'';',[Email]),    
+submetoj_by_email(Email,Listo,Limit) :-
+    format(atom(Query),'select sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_result from submeto where sub_email=''~w'' order by sub_time limit ~d;',[Email,Limit]),    
     debug(db(submetoj),'~q',[Query]),
     sqlite_query(submetodb,Query,Listo).
 

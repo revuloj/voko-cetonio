@@ -176,7 +176,7 @@ test_wikimedia_api(Sercho) :-
     ),
     atomic_list_concat(PIds,'|',PageIds),
     format('pageids: ~q~n',[PageIds]),
-    bildo_info_(PageIds).
+    bildo_info(PageIds).
 
 test_wikimedia_api_1(Paghoj) :-
-    bildo_info_(Paghoj).
+    bildo_info(Paghoj).
