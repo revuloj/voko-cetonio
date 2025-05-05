@@ -1,6 +1,7 @@
 /* -*- Mode: Prolog -*- */
 :- module(submeto_srv,
 	  [ 
+        submeto/5, % (Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted)
         subm_pluku/2, % (id)
         subm_rezulto/3, %Id, State, Result
         subm_statoj/1, % (email)
@@ -20,6 +21,11 @@ csv_escape(Str,Escaped) :-
     replace_atom(Esc1,'\r','\\r',Esc2),
     replace_atom(Esc2,'\t','\\t',Esc3),
     replace_atom(Esc3,'"','""',Escaped).
+
+
+submeto(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
+    atom_codes(Xml,Quoted),
+    submeto_add(Retadreso,Redakto,Shangho_au_Nomo,Dosiero,Xml).
 
 subm_listo_novaj(text) :-
     format('Content-type: text/plain; charset=utf-8~n~n'),

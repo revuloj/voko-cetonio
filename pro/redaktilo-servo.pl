@@ -286,7 +286,7 @@ revo_sendo(Request) :-
 			shangho(Shangho_au_Nomo, [length>1,length<500]),
 			redakto(Redakto, [oneof([redakto,aldono]),default(redakto)]),
             dosiero(Dosiero, [length>0,length<50]),
-            metodo(Metodo, [oneof([api,email]),default(api)]),
+            metodo(Metodo, [oneof([api,db,email]),default(db)]),
 			xml(Xml, [length>100,length<500000]) % plej granda aktuale 107kB (ten.xml)
         ]),
     once((
@@ -311,6 +311,20 @@ revo_sendo(api,Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
     %format('Content-type: application/json~n~n'),
     post_gist(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted).
     %format('Bone. Sendita.').
+
+
+% konservas artikolon senditan de la krozilo en la datumbazo (submetoj.db)
+revo_sendo(db,Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-   
+    % respondu kaj sendu
+    active_sessions_header,
+    %format('Content-type: application/json~n~n'),
+    once((
+        submeto(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted),
+        reply_json(json([msg='Bone. Submetita.']),[status(200)])
+        ;
+        reply_json(json([msg='Neatendita eraro dum submeto.\n']),[status(500)])
+    )).
+
 
 % forsendas artikolon senditan de la krozilo per retpoŝto
 revo_sendo(email,Retadreso,Redakto,_Dosiero,Shangho_au_Nomo,Quoted) :-   

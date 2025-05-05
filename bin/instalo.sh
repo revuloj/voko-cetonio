@@ -26,7 +26,7 @@ target="${1:-redaktantoj}"
 case $target in
 
 kreu-db)
-    echo "kreante iniciale la sqlite-datumbazojn..."
+    echo "kreante iniciale la sqlite-datumbazojn en ${sql_dir}..."
     #${sqlite3} ${sql_dir}/revo-inx.db -init ${sql_dir}/revo-skemo.sql
     if [[ -f ${sql_dir}/redaktantoj.db ]]; then
         echo "redaktantoj.db jam ekzistas!"
