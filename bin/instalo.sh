@@ -79,4 +79,7 @@ redaktantoj)
 #        # --externs https://code.jquery.com/jquery-3.2.1.min.js
 #        # --externs https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css
 #        # --externs https://code.jquery.com/ui/1.12.1/themes/south-street/jquery-ui.css
+#   ;;
+*)
+    echo "Celo ne konata! Donu kiel argumenton unu el kreu-db, update-db, redaktantoj"
 esac

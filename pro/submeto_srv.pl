@@ -4,13 +4,15 @@
         submeto/5, % (Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted)
         subm_pluku/2, % (id)
         subm_rezulto/3, %Id, State, Result
-        subm_statoj/1, % (email)
-        subm_malnovaj_for/0, % (tagoj)
+        subm_statoj/2, % (Format,Email), Format: json|html
+        subm_malnovaj_for/0, % (Tagoj)
         subm_listo_novaj/1 % text|html
 	  ]).
 
 %:- use_module(library(debug)).
 %:- use_module(library(http/html_write)).
+:- use_module(library(http/http_json)).
+:- use_module(library(http/json)).
 :- use_module(pro(db/submetoj)).
 :- use_module(pro(db/util)).
 
@@ -24,8 +26,9 @@ csv_escape(Str,Escaped) :-
 
 
 submeto(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
-    atom_codes(Xml,Quoted),
-    submeto_add(Retadreso,Redakto,Shangho_au_Nomo,Dosiero,Xml).
+    %atom_codes(Xml,Quoted),
+    hex_bytes(Hex,Quoted),
+    submeto_add(Retadreso,Redakto,Shangho_au_Nomo,Dosiero,Hex).
 
 subm_listo_novaj(text) :-
     format('Content-type: text/plain; charset=utf-8~n~n'),
@@ -81,25 +84,33 @@ subm_rezulto(Id, State, Result) :-
     submeto_update(Id,State,Result),
     writeln('1').
 
-subm_statoj(Email) :-
+subm_statoj(json,Email) :-
     subm_listo_max(Max),
-    format('Content-type: text/html; charset=urf-8~n~n'),    
-    write('<html><table>'),
-    forall(
-        submetoj_by_email(Email,Subm,Max),
-        (
-           % sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_result
-           % -> sub_id,sub_fname,sub_state,sub_time,sub_desc,sub_result
-           nth1(1,Subm,Id),
-           nth1(2,Subm,Time),
-           nth1(3,Subm,State),
-           nth1(6,Subm,Desc),
-           nth1(7,Subm,FName),
-           nth1(8,Subm,Result),
-           format('<tr><td>~w</td><td>~w</td><td>~w</td><td>~w</td><td>~w</td><td>~w</td></tr>',[Id,FName,State,Time,Desc,Result])
-        )
-    ),
-    write('</table></html>').
+    findall([Id,FName,State,Time,Desc,Result],
+        submetoj_by_email(Email,row(Id,Time,State,_Email,_Cmd,Desc,FName,Result),Max),
+        Submetoj),
+    reply_json(Submetoj).
+
+subm_statoj(html,Email) :-
+        subm_listo_max(Max),
+        format('Content-type: text/html; charset=urf-8~n~n'),    
+        write('<html><table>'),
+        forall(
+            submetoj_by_email(Email,Subm,Max),
+            (
+               % sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_result
+               % -> sub_id,sub_fname,sub_state,sub_time,sub_desc,sub_result
+               nth1(1,Subm,Id),
+               nth1(2,Subm,Time),
+               nth1(3,Subm,State),
+               nth1(6,Subm,Desc),
+               nth1(7,Subm,FName),
+               nth1(8,Subm,Result),
+               format('<tr><td>~w</td><td>~w</td><td>~w</td><td>~w</td><td>~w</td><td>~w</td></tr>',[Id,FName,State,Time,Desc,Result])
+            )
+        ),
+        write('</table></html>').
+    
 
 subm_malnovaj_for :-
     format('Content-type: text/plain; charset=utf-8~n~n'),

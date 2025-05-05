@@ -45,16 +45,16 @@ connect :-
 
 /**** skribo de submeto ****/
 
-submeto_add(Email,Cmd,Desc,FName,Content) :-
+submeto_add(Email,Cmd,Desc,FName,HexContent) :-
     replace_apos(Desc,Dsc),
-    replace_apos(Content,Cnt),
-    format(atom(Ins),'insert into submeto (sub_email,sub_cmd,sub_desc,sub_fname,sub_content) values ("~w","~w","~w","~w","~w");',[Email,Cmd,Dsc,FName,Cnt]),
+    %replace_apos(Content,Cnt),
+    format(atom(Ins),'insert into submeto (sub_email,sub_cmd,sub_desc,sub_fname,sub_content) values (''~w'',''~w'',''~w'',''~w'',x''~w'');',[Email,Cmd,Dsc,FName,HexContent]),
     debug(db(submetoj),'~q',[Ins]),
     sqlite_query(submetodb,Ins,row(1)).
 
 submeto_update(Id,State,Result) :-
     replace_apos(Result,Res),
-    format(atom(Upd),'update submeto set sub_state="~w", sub_result="~w" where sub_id="~w";',[Id,State,Res]),
+    format(atom(Upd),'update submeto set sub_state=''~w'', sub_result=''~w'' where sub_id=''~w'';',[Id,State,Res]),
     debug(db(submetoj),'~q',[Upd]),
     sqlite_query(submetodb,Upd,_).
 
