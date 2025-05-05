@@ -1,12 +1,18 @@
 #!/bin/bash
 
+# Tio ĉi lanĉas la retservon Cetonio loke (sen uzo de docker)
+# Por la oficiala aplikaĵo ni intertempe uzas docker-compose 
+# (vd. projekton revo-medioj), sed por testi loke / sencimigi 
+# tiu ĉi skripto povas esti ankoraŭ utila
+# Por haltigi vi povas uzi ./stop-server.sh
+#
 # ĉar tiu skripto estas ankaŭ lanĉata de radiko (root)
 # kiel servo, necesas iom da manipulado por eltrovi
 # la uzanton (ordinare revo aŭ revo-test)
 
 # eltrovu absolutan padon de tiu ĉi skripto
 script=$(readlink -f "$BASH_SOURCE")
-base=$(dirname "$script")
+base=$(dirname "$script")/..
 #base=/home/revo/voko/swi
 
 # eltrovu en kiu, hejmo ni estas
@@ -15,8 +21,7 @@ user=${suffix%%/*}
 
 # difinu pliajn variablojn üpr la http-demono
 
-plsrc=${base}/redaktilo-servo.pl
-goal=redaktilo_servo:daemon
+plsrc=${base}/pro/redaktilo-servo.pl
 #PL=/usr/bin/env swipl
 PL=/usr/bin/swipl
 pidfile=/var/lock/swi.redaktilo.${user}
@@ -32,6 +37,9 @@ if [ "$user" = "revo-test" ]
       port=8080
       syslog=redaktilo
 fi
+
+# por loka kuro (sen interago kun la kodo)
+goal=redaktilo_servo:daemon
 
 export LANGUAGE=eo
 export LANG=eo.UTF-8
