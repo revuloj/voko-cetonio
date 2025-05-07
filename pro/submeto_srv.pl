@@ -86,7 +86,22 @@ subm_rezulto(Id, State, Result) :-
 
 subm_statoj(json,Email) :-
     subm_listo_max(Max),
-    findall([Id,FName,State,Time,Desc,Result],
+
+   % {
+   %     "id":"32b209bbf7fb98bb6fcdc1da23a1c47a",
+   %     "desc":"redakto:+ekz-oj, bld",
+   %     "created":"2025-05-05T05:37:10Z",
+   %     "updated":"2025-05-05T06:40:19Z",
+   %     "name":"smeral.xml",
+   %     "html_url":"https://gist.github.com/reta-vortaro/32b209bbf7fb98bb6fcdc1da23a1c47a",
+   %     "xml_url":"https://gist.githubusercontent.com/reta-vortaro/32b209bbf7fb98bb6fcdc1da23a1c47a/raw/59cd9c6068865fd76c10556bd4e68cd7d11ef65a/smeral.xml",
+   %     "rezulto":"konfirmo",
+   %     "rez_url":"https://gist.githubusercontent.com/reta-vortaro/32b209bbf7fb98bb6fcdc1da23a1c47a/raw/d3fad56d910a6fe51e4045fa84aafbc8822253ef/konfirmo.json"
+   %   },
+
+    findall(_{
+        id: Id, desc: Desc, created: Time, updated: Time, 
+        name: FName, html_url: '', xml_url: '', rezulto: Result, rez_url: ''},
         submetoj_by_email(Email,row(Id,Time,State,_Email,_Cmd,Desc,FName,Result),Max),
         Submetoj),
     reply_json(Submetoj).

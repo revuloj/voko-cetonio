@@ -15,7 +15,7 @@ ARG VG_TAG=master
 ARG ZIP_SUFFIX=master
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    binutils xsltproc sqlite3 unzip curl && rm -rf /var/lib/apt/lists/* 
+    binutils xsltproc sqlite3 unzip curl whois && rm -rf /var/lib/apt/lists/* 
 
 # ne plu bezonata pro oauth2.pl: RUN swipl -g "pack_install(googleclient,[interactive(false)]),halt" -t "halt(1)"
 

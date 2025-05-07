@@ -20,6 +20,7 @@ revodb_goal=sqlrevo:download
 sqlite3=/usr/bin/sqlite3
 sql_dir=sql
 tmp_dir=tmp
+etc_dir=etc
 
 target="${1:-redaktantoj}"
 
@@ -63,6 +64,15 @@ redaktantoj)
     echo "aktualigante sql/redaktatoj.db..."
     /usr/bin/swipl -s ${redaktantoj_upd} -g "${redaktantoj_goal}" -t "halt"
     ;;
+subm-pwd)
+    if [ "$#" -ne 3 ]; then
+        echo "Necesas doni la uzantonomon kaj pasvorton kiel duan kaj trian argumenton!"
+        exit 1
+    else
+        set +x
+        echo "$2:$(mkpasswd $3)" > ${etc_dir}/passwd
+    fi
+    ;; 
 #js)
 #    # ne plu uzata maniero!!!
 #    # closure-compiler el Ubuntu estas tro malnova kaj ne subtenas ESMAScript6!
@@ -81,5 +91,5 @@ redaktantoj)
 #        # --externs https://code.jquery.com/ui/1.12.1/themes/south-street/jquery-ui.css
 #   ;;
 *)
-    echo "Celo ne konata! Donu kiel argumenton unu el kreu-db, update-db, redaktantoj"
+    echo "Celo ne konata! Donu kiel argumenton unu el kreu-db, update-db, redaktantoj, subm-pwd"
 esac

@@ -23,6 +23,7 @@
 :- use_module(library(settings)).
 :- use_module(library(xpath)).
 
+% vd cfg/http_agordo.pl
 :- multifile http:location/3.
 :- dynamic   http:location/3.
 
@@ -67,8 +68,6 @@ init :-
     % agordo:read_auth_cfg,
     http_agordo.
 
-		  
-
 
 /*** workaround bug in SWI 8.0.3 - exchanged Request / Request0 in append ***/
 %% :- abolish(http_dispatch:request_expansion/2).
@@ -80,12 +79,15 @@ init :-
 %% 	%debug(auth,'<< my_auth_exp ~q',[Request]).
 
 % redirect from / to /redaktilo/red, when behind a proxy, this is a task for the proxy
+
+%%%% alinomoj por http-padoj (http:location) vd cfg/http_agordo.pl
 :- http_handler('/', http_redirect(moved,root(red)),[]).
 :- http_handler(root(.), http_redirect(moved,root('red/')),[]).
 
 % uzas padon web...
 %%:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
 :- http_handler(red(.), reply_files, [prefix, authentication(page), id(landing)]).
+:- http_handler(subm(.), reply_files, [prefix, authentication(basic('etc/passwd')), id(submetoj)]).
 %% provizore provu sen saltuto...
 %%:- http_handler(red(.), reply_files, [prefix,id(landing)]).
 
@@ -109,7 +111,10 @@ init :-
 :- http_handler(red(bildo_info_2), bildo_info_2, [authentication(ajaxid)]).
 :- http_handler(red(analizo), analizo, [authentication(ajaxid)]).
 :- http_handler(red(analinioj), analinioj, [authentication(ajaxid)]).
-%:- http_handler(red(homonimoj_senref), homonimoj_senref, [authentication(ajaxid)]).
+
+% submetojn ni listigas, prenas kaj aktualigas el voko-afido
+% salutante per BA
+:- http_handler(subm('submeto.pl'),submeto_novaj,[]).
 
 :- http_handler(root(voko), serve_files_in_directory(cfg), [prefix]).
 :- http_handler(root(stl), serve_files_in_directory(stl), [prefix]).
@@ -562,6 +567,18 @@ homonimoj_senref(_Request) :-
     ;
     format('Status: ~d~n~n',[500]).
 */
+
+submeto_novaj(Request) :-
+    (   http_authenticate(basic('etc/passwd'), Request, Fields)
+    ->  true
+    ;   throw(http_reply(authorise(basic, 'submetoj')))
+    ),
+
+    http_parameters(Request,
+    [
+        format(Format, [oneof([text,html]),default(html)])
+    ]),
+    subm_listo_novaj(Format).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

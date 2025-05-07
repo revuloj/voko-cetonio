@@ -11,6 +11,7 @@
 :- use_module(pro(cfg/agordo)).
 
 http:location(red,root(red),[]).
+http:location(subm,root(subm),[]).
 http:location(static,root(static),[]).
 
 http_agordo :-
