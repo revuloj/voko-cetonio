@@ -46,19 +46,26 @@ subm_listo_novaj(html) :-
     forall(
         subm_listo_novaj_db([Id|Cetero]),
         (
+        %debug(submeto(novaj),'Id: ~q',[Id]),
         atomic_list_concat(['<a href="submeto.pl?id=',Id,'">',Id,'</a>'],Ref),
         atomic_list_concat([Ref|Cetero],';',Line),    
+        debug(submeto(novaj),'Line: ~q',[Line]),
         write(Line)
         )
     ),
     write('</html>').
 
 subm_listo_novaj_db(Listo) :-
-    submetoj_by_state('nov',Listo), 
+    submetoj_by_state('nov',Row), 
+    debug(submeto(novaj),'~q',[Row]),
+    Row =.. [_|L],
+    % sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname
     % protektu specialajn signojn en desc
-    nth1(6,Listo,Desc,Rest),
+    nth1(6,L,Desc,Rest),
+    %debug(submeto(novaj),'Desc: ~q',[Desc]),
     csv_escape(Desc,Esc),
     atomic_list_concat(['"',Esc,'"'],Quoted),
+    %debug(submeto(novaj),'Quoted: ~q',[Quoted]),
     nth1(6,Listo,Quoted,Rest).
 
 
@@ -102,7 +109,7 @@ subm_statoj(json,Email) :-
     findall(_{
         id: Id, desc: Desc, created: Time, updated: Time, 
         name: FName, html_url: '', xml_url: '', rezulto: Result, rez_url: ''},
-        submetoj_by_email(Email,row(Id,Time,State,_Email,_Cmd,Desc,FName,Result),Max),
+        submetoj_by_email(Email,row(Id, Time, State,_Email,_Cmd, Desc, FName, Result),Max),
         Submetoj),
     reply_json(Submetoj).
 
