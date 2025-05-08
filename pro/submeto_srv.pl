@@ -2,14 +2,14 @@
 :- module(submeto_srv,
 	  [ 
         submeto/5, % (Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted)
-        subm_pluku/2, % (id)
+        subm_pluku/2, % (Id,State)
         subm_rezulto/3, %Id, State, Result
         subm_statoj/2, % (Format,Email), Format: json|html
         subm_malnovaj_for/0, % (Tagoj)
         subm_listo_novaj/1 % text|html
 	  ]).
 
-%:- use_module(library(debug)).
+:- use_module(library(debug)).
 %:- use_module(library(http/html_write)).
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json)).
@@ -31,6 +31,7 @@ submeto(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
     submeto_add(Retadreso,Redakto,Shangho_au_Nomo,Dosiero,Hex).
 
 subm_listo_novaj(text) :-
+    debug(submeto(novaj),subm_listo_novaj,[]),
     format('Content-type: text/plain; charset=utf-8~n~n'),
     forall(
         subm_listo_novaj_db(Listo),
@@ -41,8 +42,9 @@ subm_listo_novaj(text) :-
     ).
 
 subm_listo_novaj(html) :-
+    debug(submeto(novaj),subm_listo_novaj,[]),
     format('Content-type: text/html; charset=urf-8~n~n'),
-    write('<html>'),
+    write('<html><pre>'),
     forall(
         subm_listo_novaj_db([Id|Cetero]),
         (
@@ -53,12 +55,12 @@ subm_listo_novaj(html) :-
         write(Line)
         )
     ),
-    write('</html>').
+    write('</pre></html>').
 
 subm_listo_novaj_db(Listo) :-
     submetoj_by_state('nov',Row), 
     debug(submeto(novaj),'~q',[Row]),
-    Row =.. [_|L],
+    Row =.. [row|L],
     % sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname
     % protektu specialajn signojn en desc
     nth1(6,L,Desc,Rest),
@@ -70,7 +72,9 @@ subm_listo_novaj_db(Listo) :-
 
 
 subm_pluku(Id,State) :-
-    submeto_by_id(Id,Subm),
+    debug(submeto(subm_pluku),subm_pluku,[]),
+    submeto_by_id(Id,Row),
+    Row =.. [row|Subm],
     %sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_content
     nth1(3,Subm,Email),
     nth1(7,Subm,Content),
@@ -87,13 +91,16 @@ subm_pluku(Id,State) :-
     )).
 
 subm_rezulto(Id, State, Result) :- 
+    debug(submeto(subm_rezulto),subm_rezulto,[]),
     format('Content-type: text/plain; charset=utf-8~n~n'),
     submeto_update(Id,State,Result),
     writeln('1').
 
 subm_statoj(json,Email) :-
+    debug(submeto(subm_statoj),subm_statoj,[]),
     subm_listo_max(Max),
 
+   %    debug(submeto(novaj),subm_listo_novaj),
    % {
    %     "id":"32b209bbf7fb98bb6fcdc1da23a1c47a",
    %     "desc":"redakto:+ekz-oj, bld",
@@ -114,12 +121,14 @@ subm_statoj(json,Email) :-
     reply_json(Submetoj).
 
 subm_statoj(html,Email) :-
+        debug(submeto(subm_statoj),subm_statoj,[]),
         subm_listo_max(Max),
         format('Content-type: text/html; charset=urf-8~n~n'),    
         write('<html><table>'),
         forall(
-            submetoj_by_email(Email,Subm,Max),
+            submetoj_by_email(Email,Row,Max),
             (
+               Row =.. [row|Subm],
                % sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_result
                % -> sub_id,sub_fname,sub_state,sub_time,sub_desc,sub_result
                nth1(1,Subm,Id),
@@ -135,6 +144,7 @@ subm_statoj(html,Email) :-
     
 
 subm_malnovaj_for :-
+    debug(submeto(subm_malnovaj_for),subm_malnovaj_for,[]),
     format('Content-type: text/plain; charset=utf-8~n~n'),
     submetoj_delete,
     writeln('1').

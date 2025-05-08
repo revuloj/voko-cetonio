@@ -89,7 +89,7 @@ init :-
 % uzas padon web...
 %%:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
 :- http_handler(red(.), reply_files, [prefix, authentication(page), id(landing)]).
-:- http_handler(subm(.), reply_files, [prefix, authentication(basic), id(submetoj)]).
+:- http_handler(adm(.), reply_files, [prefix, authentication(basic), id(admin)]).
 %% provizore provu sen saltuto...
 %%:- http_handler(red(.), reply_files, [prefix,id(landing)]).
 
@@ -116,7 +116,7 @@ init :-
 
 % submetojn ni listigas, prenas kaj aktualigas el voko-afido
 % salutante per BA
-:- http_handler(subm('submeto.pl'),submeto_novaj,[]).
+:- http_handler(adm('submeto.pl'),adm_submeto,[]).
 
 :- http_handler(root(voko), serve_files_in_directory(cfg), [prefix]).
 :- http_handler(root(stl), serve_files_in_directory(stl), [prefix]).
@@ -569,14 +569,38 @@ homonimoj_senref(_Request) :-
     format('Status: ~d~n~n',[500]).
 */
 
-submeto_novaj(Request) :-
+adm_submeto(Request) :-
     http_parameters(Request,
     [
-        format(Format, [oneof([text,html]),default(html)])
+       id(Id, [integer,optional(true)]),
+       state(State, [length=<5,optional(true)]),
+       result(Result, [length<255,optional(true)]),
+       email(Email, [length<255,optional(true)]),
+       forigo(Forigo, [default(0),optional(true)]),
+       format(Format, [oneof([text,html,json]),default(html),optional(true)])
     ]),
-    debug(redaktilo(request),'submeto_novaj format:~q',[Format]),
-    subm_listo_novaj(Format).
-
+    debug(redaktilo(adm_submeto),'id: ~q, state: ~q, result: ~q, format: ~q',[Id,State,Result,Format]),
+    % ni uzas la saman logikon de vokitaj funkcioj laŭ donitaj parametroj
+    % kiel en voko-araneo/cgi/admin/submeto.pl, tiel ke voko-afido funkcias
+    % kun ambaŭ servoj same
+    once((
+        nonvar(Id), nonvar(State), nonvar(Result),!,
+        subm_rezulto(Id,State,Result)
+        ;
+        nonvar(Id),!,
+        subm_pluku(Id,State)
+        ;
+        nonvar(Email),!,
+        subm_statoj(Format,Email)
+        ;
+        nonvar(Forigo), Forigo = 1,!,
+        subm_malnovaj_for
+        ;
+        subm_listo_novaj(Format)
+        ;
+        % nevalida kombino de parametroj
+        format('Status: ~d~n~n',[400])
+    )).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
