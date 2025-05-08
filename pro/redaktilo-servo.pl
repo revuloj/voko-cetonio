@@ -35,6 +35,8 @@ user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 %:- use_module(redaktilo).
 :- use_module(pro(auth/auth_page)).
 :- use_module(pro(auth/auth_ajax)).
+:- use_module(pro(auth/auth_basic)).
+
 % legu post redaktilo_auth, por difini oauth2:server_attribute (multifile)
 :- use_module(pro(cfg/agordo)).
 :- use_module(pro(cfg/http_agordo)).
@@ -87,7 +89,7 @@ init :-
 % uzas padon web...
 %%:- http_handler(red(.), reply_files, [prefix, authentication(local), authentication(oauth), id(landing)]).
 :- http_handler(red(.), reply_files, [prefix, authentication(page), id(landing)]).
-:- http_handler(subm(.), reply_files, [prefix, authentication(basic('etc/passwd')), id(submetoj)]).
+:- http_handler(subm(.), reply_files, [prefix, authentication(basic), id(submetoj)]).
 %% provizore provu sen saltuto...
 %%:- http_handler(red(.), reply_files, [prefix,id(landing)]).
 
@@ -166,8 +168,7 @@ entry_no_cache(_).
 
 reply_files(Request) :-
     % evitu reveni al saluto-paĝo ĉiam denove
-%%%    entry_no_cache(Request),
-   
+%%%    entry_no_cache(Request),   
     debug(redaktilo(request),'handler reply_files',[]),
     http_reply_from_files(web(.), [indexes(['redaktilo.html'])], Request),
     debug(redaktilo(request),'<< reply_files',[]).
@@ -569,15 +570,11 @@ homonimoj_senref(_Request) :-
 */
 
 submeto_novaj(Request) :-
-    (   http_authenticate(basic('etc/passwd'), Request, Fields)
-    ->  true
-    ;   throw(http_reply(authorise(basic, 'submetoj')))
-    ),
-
     http_parameters(Request,
     [
         format(Format, [oneof([text,html]),default(html)])
     ]),
+    debug(redaktilo(request),'submeto_novaj format:~q',[Format]),
     subm_listo_novaj(Format).
 
 
