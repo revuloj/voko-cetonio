@@ -44,6 +44,7 @@ user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 :- use_module(pro(sercho)).
 :- use_module(pro(sendo)).
 :- use_module(pro(gist)).
+:- use_module(pro(redaktanto_srv)).
 :- use_module(pro(submeto_srv)).
 :- use_module(pro(db/revo)).
 :- use_module(pro(db/redaktantoj)).
@@ -114,9 +115,10 @@ init :-
 :- http_handler(red(analizo), analizo, [authentication(ajaxid)]).
 :- http_handler(red(analinioj), analinioj, [authentication(ajaxid)]).
 
-% submetojn ni listigas, prenas kaj aktualigas el voko-afido
+% redaktantojn, submetojn ni listigas, prenas, aktualigas el voko-afido
 % salutante per BA
 :- http_handler(adm('submeto.pl'),adm_submeto,[]).
+:- http_handler(adm('redaktantoj-json.pl'),adm_redaktantoj,[]).
 
 :- http_handler(root(voko), serve_files_in_directory(cfg), [prefix]).
 :- http_handler(root(stl), serve_files_in_directory(stl), [prefix]).
@@ -568,6 +570,20 @@ homonimoj_senref(_Request) :-
     ;
     format('Status: ~d~n~n',[500]).
 */
+
+
+adm_redaktantoj(Request) :-
+    % postulu uzanton "submeto"
+    member(user(submeto),Request),
+    debug(redaktilo(adm_redaktantoj),'redaktantoj-json',[]),
+    % ni uzas la saman logikon de vokitaj funkcioj laŭ donitaj parametroj
+    % kiel en voko-araneo/cgi/admin/submeto.pl, tiel ke voko-afido funkcias
+    % kun ambaŭ servoj same
+    once((
+        redk_listo(json)    
+        ;
+        format('Status: ~d~n~n',[500])
+    )).
 
 adm_submeto(Request) :-
     % postulu uzanton "submeto"

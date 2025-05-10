@@ -2,6 +2,7 @@
 :- module(db_redaktantoj,[
 	      editor_by_subid/3,
 	      editor_by_email/2,
+          editor_list/1,
 	      editor_add/2,
 	      editor_update/2,
           editor_update_subid/3,
@@ -99,6 +100,10 @@ editor_emails(RedId,Emails) :-
 	    sqlite_query(kontodb,Query,row(_,No,Email)),
 	    Emails).
 
+editor_list(Editor) :-
+    format(atom(Query),'select 1000 + row_number() over (order by r.red_id) as id, r.nomo as nomo, group_concat(p.retposhto,'','') as retadresoj from redaktanto r left join retposhto p on r.red_id = p.red_id group by r.red_id,r.nomo',[]),
+    debug(db(redaktantoj),'~q',[Query]),
+    sqlite_query(kontodb,Query,Editor).
 
 /**** aktualigoj de redaktanto-datumbazo ***/
 
