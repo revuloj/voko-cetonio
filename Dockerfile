@@ -38,9 +38,9 @@ COPY --from=grundo build/ /home/cetonio/voko/
 
 # eble ni pli bone dividu kiujn CSS-dosierojn ni bezonas en kiu ujo?
 # COPY --from=grundo build/stl/ /home/cetonio/voko/stl/
-COPY --from=grundo build/stl/ /home/cetonio/pro/web/static/
+COPY --from=grundo build/stl/ /home/cetonio/web/static/
 # COPY --from=grundo build/jsc/ /home/cetonio/voko/jsc/
-COPY --from=grundo build/rsj/ /home/cetonio/pro/web/static/
+COPY --from=grundo build/rsj/ /home/cetonio/web/static/
 
 # tio ŝajnas momente superflua, ĉar identa kun voko-grundo-master/xsl (supre)
 # sed ĝi povas devii iom se master != ${VERSION}
