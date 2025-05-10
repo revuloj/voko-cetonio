@@ -15,8 +15,6 @@
 :- use_module(pro(cfg/agordo)).
 :- use_module(pro(param_checks)).
 
-%revodb('/home/revo/tmp/inx_tmp/sql/revo.db').
-
 :- initialization(connect).
 
 /***

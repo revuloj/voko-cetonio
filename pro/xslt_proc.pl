@@ -101,12 +101,6 @@ xsltproc_status(10,'Procedo haltigita pro netranssaltebla eraro').
 xsltproc_status(11,'Ne eblis skribi la rezulton').
 xsltproc_status(N,'Nekonata stato redonita de xsltproc') :- N>11.
 
-
-test6 :-
-    VokoXsl = '/home/revo/voko/xsl/revohtml1.xsl', 
-    atom_codes('<?xml version="1.0"?><vortaro>Eĥo</vortaro>',Quoted), 
-    xslt_proc(VokoXsl,Quoted,current_output).
-
 xslt_proc(XsltFile,XmlCodes,HtmlCodes) :-
     setup_call_cleanup(
 

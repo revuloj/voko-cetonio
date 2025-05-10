@@ -22,8 +22,9 @@
 
 http:authenticate(basic,Request,[user(User)]) :- basic_auth(Request,User).
 
-basic_auth(Request,Fields) :-
-    (   http_authenticate(basic('etc/passwd'), Request, Fields)
-    ->  true
+basic_auth(Request,User) :-
+    agordo:get_path(root_dir,passwd,Passwd),
+    (   http_authenticate(basic(Passwd), Request, [User|_])
+    ->  true % (debug(auth,'~q',[User]), true)
     ;   throw(http_reply(authorise(basic, 'submetoj')))
     ).    

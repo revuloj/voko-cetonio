@@ -570,6 +570,9 @@ homonimoj_senref(_Request) :-
 */
 
 adm_submeto(Request) :-
+    % postulu uzanton "submeto"
+    member(user(submeto),Request),
+    % koletku la HTTP-parametrojn
     http_parameters(Request,
     [
        id(Id, [integer,optional(true)]),

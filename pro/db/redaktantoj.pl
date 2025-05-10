@@ -15,8 +15,6 @@
 :- use_module(pro(param_checks)).
 :- use_module(pro(db/util)).
 
-%revodb('/home/revo/tmp/inx_tmp/sql/revo.db').
-
 :- initialization(connect).
 
 /***

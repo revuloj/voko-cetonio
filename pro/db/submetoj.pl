@@ -14,9 +14,6 @@
 :- use_module(pro(param_checks)).
 :- use_module(pro(db/util)).
 
-% provizore por testi...
-revodb('/home/revo/tmp/inx_tmp/sql/submetoj.db').
-
 :- initialization(connect).
 
 konserv_tagoj(200). % 200 tagojn ni konservas, pli malnovajn forigas regule
