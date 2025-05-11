@@ -8,7 +8,7 @@ set -e
 redaktantoj_url=https://reta-vortaro.de/cgi-bin/admin/redaktantoj.pl
 redaktantoj_trg=${HOME}/etc/redaktantoj
 # Prolog-skripto por aktualigi redaktantojn
-redaktantoj_upd=pro/redaktantoj_upd.pl
+redaktanto_srv=pro/redaktanto_srv.pl
 redaktantoj_goal=redaktantoj:update_redaktantoj
 # por vidi SQL-komandojn:
 #redaktantoj_dbg='debug(db(redaktantoj)),redaktantoj:update_redaktantoj.'
@@ -62,7 +62,7 @@ redaktantoj)
     echo "${redaktantoj_trg} <- ${redaktantoj_url}"
     /usr/bin/curl -fu ${CGI_USER}:${CGI_PWD} -o ${redaktantoj_trg} ${redaktantoj_url}
     echo "aktualigante sql/redaktatoj.db..."
-    /usr/bin/swipl -s ${redaktantoj_upd} -g "${redaktantoj_goal}" -t "halt"
+    /usr/bin/swipl -s ${redaktanto_srv} -g "${redaktantoj_goal}" -t "halt"
     ;;
 subm-pwd)
     if [ "$#" -ne 2 ]; then

@@ -117,7 +117,7 @@ subm_statoj(json,Email) :-
         id: Id, desc: CmdDesc, created: Time, updated: Time, 
         name: FName, html_url: '', xml_url: '', rezulto: Result, rez_url: ''},
         (
-          submetoj_by_email(Email,row(Id, Time, State,_Email, Cmd, Desc, FName, Result),Max),
+          submetoj_by_email(Email,row(Id, Time, _State,_Email, Cmd, Desc, FName, Result),Max),
           atomic_list_concat([Cmd,Desc],':',CmdDesc)
         ),
         Submetoj),

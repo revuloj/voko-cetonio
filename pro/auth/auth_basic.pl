@@ -24,9 +24,9 @@ http:authenticate(basic,Request,[user(User)]) :- basic_auth(Request,User).
 
 basic_auth(Request,User) :-
     agordo:get_path(root_dir,passwd,Passwd),
-    exists_file(Passwd) -> true
+    (exists_file(Passwd) -> true
     % mankas la pasvort-dosiero (vd bin/instalo.sh subm-pwd)
-    ; throw(http_reply(server_error('baza salutado ne agordita!'))),
+    ; throw(http_reply(server_error('baza salutado ne agordita!')))),
     % kontrolu la pasvorton
     (   http_authenticate(basic(Passwd), Request, [User|_])
     ->  true % (debug(auth,'~q',[User]), true)

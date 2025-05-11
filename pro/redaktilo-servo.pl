@@ -46,6 +46,7 @@ user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 :- use_module(pro(gist)).
 :- use_module(pro(redaktanto_srv)).
 :- use_module(pro(submeto_srv)).
+
 :- use_module(pro(db/revo)).
 :- use_module(pro(db/redaktantoj)).
 :- use_module(pro(xml_quote)).
