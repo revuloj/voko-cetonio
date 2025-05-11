@@ -6,6 +6,8 @@
 
 :- use_module(library(dcg/basics)).
 :- use_module(library(debug)).
+:- use_module(library(http/http_json)).
+:- use_module(library(http/json)).
 
 user:file_search_path(pro, './pro'). % aŭ: current_prolog_flag(home, Home). ...
 :- use_module(pro(db/redaktantoj)).
