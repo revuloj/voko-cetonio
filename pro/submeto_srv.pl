@@ -33,6 +33,7 @@ submeto(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
 subm_listo_novaj(text) :-
     debug(submeto(novaj),subm_listo_novaj,[]),
     format('Content-type: text/plain; charset=utf-8~n~n'),
+    format('id;state;time;cmd;desc;fname~n'),
     forall(
         subm_listo_novaj_db(Listo),
         (
@@ -45,6 +46,7 @@ subm_listo_novaj(html) :-
     debug(submeto(novaj),subm_listo_novaj,[]),
     format('Content-type: text/html; charset=urf-8~n~n'),
     write('<html><pre>'),
+    format('id;state;time;cmd;desc;fname~n'),
     forall(
         subm_listo_novaj_db([Id|Cetero]),
         (
