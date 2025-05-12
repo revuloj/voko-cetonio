@@ -71,6 +71,6 @@ cd ${base}
 
 exec ${PL} -f "${plsrc}" -g "${goal}" -t 'halt(1)' -p agordo=${etc} -- \
     --port=${port} --pidfile=${pidfile} \
-    --user=${user} --group=${user} --workers=${workers} 
+    --user=${user} --group=${user} --workers=${workers}
 
 
