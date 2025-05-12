@@ -39,7 +39,7 @@ subm_listo_novaj(text) :-
         subm_listo_novaj_db(Listo),
         (
             atomic_list_concat(Listo,';',Line),
-            write(Line)
+            writeln(Line)
         )
     ).
 
@@ -56,7 +56,7 @@ subm_listo_novaj(html) :-
         atomic_list_concat(['<a href="submeto.pl?id=',Id,'">',Id,'</a>'],Ref),
         atomic_list_concat([Ref|Cetero],';',Line),    
         debug(submeto(novaj),'Line: ~q',[Line]),
-        write(Line)
+        writeln(Line)
         )
     ),
     write('</pre></html>').

@@ -51,7 +51,7 @@ submeto_add(Email,Cmd,Desc,FName,HexContent) :-
 
 submeto_update(Id,State,Result) :-
     replace_apos(Result,Res),
-    format(atom(Upd),'update submeto set sub_state=''~w'', sub_result=''~w'' where sub_id=''~w'';',[Id,State,Res]),
+    format(atom(Upd),'update submeto set sub_state=''~w'', sub_result=''~w'' where sub_id=''~w'';',[State,Res,Id]),
     debug(db(submetoj),'~q',[Upd]),
     sqlite_query(submetodb,Upd,_).
 
