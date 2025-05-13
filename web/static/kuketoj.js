@@ -27,8 +27,4 @@ function enableImgButtons() {
     fb.style.opacity='1.0';
     fb.disabled = false;
     fb.style.filter='alpha(opacity=100)';
-    var yho = document.getElementById('yahoo_login');
-    yho.style.opacity='1.0';
-    yho.style.filter='alpha(opacity=100)';
-    yho.disabled = false;
 }
