@@ -25,11 +25,13 @@ csv_escape(Str,Escaped) :-
     replace_atom(Esc3,'"','""',Escaped).
 
 
+% provizu submeton, t.e. redaktitan artikolon kaj konservu en la datumbazo
 submeto(Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted) :-
     %atom_codes(Xml,Quoted),
     hex_bytes(Hex,Quoted),
     submeto_add(Retadreso,Redakto,Shangho_au_Nomo,Dosiero,Hex).
 
+% redonas la liston de novaj submetoj
 subm_listo_novaj(text) :-
     debug(submeto(novaj),subm_listo_novaj,[]),
     format('Content-type: text/plain; charset=utf-8~n~n'),
@@ -74,7 +76,9 @@ subm_listo_novaj_db(Listo) :-
     %debug(submeto(novaj),'Quoted: ~q',[Quoted]),
     nth1(6,Listo,Quoted,Rest).
 
-
+% redonas unuopan submeton laŭ ĝia Id
+% se redaktoservo volas trakrti ĝin, eblas doni
+% State='trakt' por dume bloki ĝin
 subm_pluku(Id,State) :-
     debug(submeto(subm_pluku),subm_pluku,[]),
     submeto_by_id(Id,Row),
@@ -94,12 +98,15 @@ subm_pluku(Id,State) :-
         true
     )).
 
+% metas la rezulton de traktado kune kun nova stato 'arkiv' (konfirmo de bona trakto)
+% aŭ 'erar' - (sintaks-, versikonflikt-)eraro dum kontrolo
 subm_rezulto(Id, State, Result) :- 
     debug(submeto(subm_rezulto),subm_rezulto,[]),
     format('Content-type: text/plain; charset=utf-8~n~n'),
     submeto_update(Id,State,Result),
     writeln('1').
 
+% redonas la statojn de la submetoj por unuopa redaktanto laŭ ties retadreso
 subm_statoj(json,Email) :-
     debug(submeto(subm_statoj),subm_statoj,[]),
     subm_listo_max(Max),
@@ -118,10 +125,10 @@ subm_statoj(json,Email) :-
    %   },
 
     findall(_{
-        id: Id, desc: CmdDesc, created: Time, updated: Time, 
-        name: FName, html_url: '', xml_url: '', rezulto: Result, rez_url: ''},
+        id: Id, desc: CmdDesc, time: Time, 
+        fname: FName, xml_url: '', result: Result, state: State},
         (
-          submetoj_by_email(Email,row(Id, Time, _State,_Email, Cmd, Desc, FName, Result),Max),
+          submetoj_by_email(Email,row(Id, Time, State,_Email, Cmd, Desc, FName, Result),Max),
           atomic_list_concat([Cmd,Desc],':',CmdDesc)
         ),
         Submetoj),

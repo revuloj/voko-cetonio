@@ -65,13 +65,9 @@ redaktantoj)
     /usr/bin/swipl -s ${redaktanto_srv} -g "${redaktantoj_goal}" -t "halt"
     ;;
 subm-pwd)
-    if [ "$#" -ne 2 ]; then
-        echo "Necesas doni pasvorton kiel duan argumenton!"
-        exit 1
-    else
-        set +x
-        echo "submeto:$(mkpasswd -5 $2)" > ${etc_dir}/cetonio_passwd
-    fi
+    echo "Krei konton por 'submeto' - traktado de submetoj!"
+    set +x
+    echo "submeto:$(mkpasswd -s -5 $2)" > ${etc_dir}/cetonio_passwd
     ;; 
 #js)
 #    # ne plu uzata maniero!!!

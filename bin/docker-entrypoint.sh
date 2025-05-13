@@ -22,4 +22,10 @@ if [ "$1" = 'swipl' ]; then
         #swipl -s pro/redaktantoj.pl -g "redaktantoj:update_redaktantoj,halt" -t "halt(1)"
     fi
 fi
+
+# ni bezonas passwd relative al /home/cetonio
+if [ ! -e /home/cetonio/etc/passwd ]; then
+  ln -s /run/secrets/voko-cetonio.passwd /home/cetonio/etc/cetonio_passwd
+fi
+
 exec "$@"
