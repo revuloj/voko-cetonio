@@ -74,7 +74,7 @@ submetoj_by_state(State,Listo) :-
     sqlite_query(submetodb,Query,Listo).
 
 submetoj_by_email(Email,Listo,Limit) :-
-    format(atom(Query),'select sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_result from submeto where sub_email=''~w'' order by sub_time limit ~d;',[Email,Limit]),    
+    format(atom(Query),'select sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_result from submeto where sub_email=''~w'' order by sub_time desc limit ~d;',[Email,Limit]),    
     debug(db(submetoj),'~q',[Query]),
     sqlite_query(submetodb,Query,Listo).
 
