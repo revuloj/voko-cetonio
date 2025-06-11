@@ -105,6 +105,7 @@ init :-
 :- http_handler(red(revo_sercho), revo_sercho, [authentication(ajaxid)]).
 :- http_handler(red(revo_kontrolo), revo_kontrolo, [authentication(ajaxid)]).
 :- http_handler(red(revo_rigardo), revo_rigardo, [authentication(ajaxid)]).
+:- http_handler(red(submeto_rigardo), submeto_rigardo, [authentication(ajaxid)]).
 %:- http_handler(red(revo_bibliogr), revo_bibliogr, []).
 :- http_handler(red(citajho_sercho), citajho_sercho, [authentication(ajaxid)]).
 :- http_handler(red(kunteksto), kunteksto, [authentication(ajaxid)]).
@@ -437,6 +438,26 @@ revo_rigardo(Request) :-
             write(Msg)
         )
     ).
+
+/**
+ * Montru la tekston de submetita artikolo
+ */
+submeto_rigardo(Request) :-
+    debug(redaktilo(request),'~q',[Request]),
+    % koletku la HTTP-parametrojn
+    http_parameters(Request,
+    [
+       id(Id, [integer])
+    ]),
+    % ni uzas la saman logikon de vokitaj funkcioj laŭ donitaj parametroj
+    % kiel en voko-araneo/cgi/admin/submeto.pl, tiel ke voko-afido funkcias
+    % kun ambaŭ servoj same
+    once((
+        subm_montru(Id)
+        ;
+        % nevalida parametro aŭ alia eraro
+        format('Status: ~d~n~n',[400])
+    )).
 
 citajho_sercho(Request) :-
     http_parameters(Request,

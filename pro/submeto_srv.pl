@@ -2,6 +2,7 @@
 :- module(submeto_srv,
 	  [ 
         submeto/5, % (Retadreso,Redakto,Dosiero,Shangho_au_Nomo,Quoted)
+        subm_montru/1, % (Id)
         subm_pluku/2, % (Id,State)
         subm_rezulto/3, %Id, State, Result
         subm_statoj/2, % (Format,Email), Format: json|html
@@ -76,11 +77,21 @@ subm_listo_novaj_db(Listo) :-
     %debug(submeto(novaj),'Quoted: ~q',[Quoted]),
     nth1(6,Listo,Quoted,Rest).
 
+
+subm_montru(Id) :-
+    debug(submeto(subm_montru),'subm_montru ~q',[Id]),
+    submeto_by_id(Id,Row),
+    Row =.. [row|Subm],
+    %sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_content
+    nth1(7,Subm,Content),
+    format('Content-type: text/plain; charset=utf-8~n~n'),
+    write(Content).    
+
 % redonas unuopan submeton laŭ ĝia Id
-% se redaktoservo volas trakrti ĝin, eblas doni
+% se redaktoservo volas trakti ĝin, eblas doni
 % State='trakt' por dume bloki ĝin
 subm_pluku(Id,State) :-
-    debug(submeto(subm_pluku),subm_pluku,[]),
+    debug(submeto(subm_pluku),'subm_pluku ~q ~q',[Id,State]),
     submeto_by_id(Id,Row),
     Row =.. [row|Subm],
     %sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_content
