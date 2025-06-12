@@ -9,16 +9,16 @@
 
 target="${1:-docker}"
 
-HTML=pro/web/redaktilo.html
-HTML2=pro/web/static/*.html
-CSS=pro/web/static/*.css
+HTML=web/redaktilo.html
+HTML2=web/static/*.html
+CSS=web/static/*.css
 
 case $target in
 
 docker)
     ## docker : kopias retpaĝojn el web/ al la procezujo
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
-    todir=/home/cetonio/pro
+    todir=/home/cetonio
 
     echo "${HTML} -> ${cetonio_id}:${todir}/web"
     docker cp ${HTML} ${cetonio_id}:${todir}/web
