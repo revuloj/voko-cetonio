@@ -615,7 +615,7 @@ adm_submeto(Request) :-
     [
        id(Id, [integer,optional(true)]),
        state(State, [length=<5,optional(true)]),
-       result(Result, [length<255,optional(true)]),
+       result(Result, [length<4096,optional(true)]),
        email(Email, [length<255,optional(true)]),
        forigo(Forigo, [default(0),optional(true)]),
        format(Format, [oneof([text,html,json]),default(html),optional(true)])
