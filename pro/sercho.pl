@@ -24,6 +24,7 @@ sercho(vikipedio,Sercho) :- !,
     close(Stream),
     debug(sercho(what),'<<< VIKIPEDIO: ~w',[Sercho]).
 
+/*
 sercho(anaso,Sercho) :- !,
     debug(sercho(what),'>>> ANASO: ~w',[Sercho]),
     uri_encoded(query_value,Sercho,SerchoEnc),
@@ -36,7 +37,7 @@ sercho(anaso,Sercho) :- !,
     copy_stream_data(Stream,current_output),
     close(Stream),
     debug(sercho(what),'<<< ANASO: ~w',[Sercho]).
-
+*/
 
 cikado(Pado,Parametroj) :-
     agordo:get_url(cikado,Url),

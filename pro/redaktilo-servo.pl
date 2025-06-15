@@ -463,7 +463,7 @@ citajho_sercho(Request) :-
     http_parameters(Request,
     [
 	    sercho(Sercho, [length>1,length<500]),
-	    kie(Kie, [oneof([vikipedio,anaso,klasikaj,postaj,vrk,jar])]),
+	    kie(Kie, [oneof([vikipedio,klasikaj,postaj,vrk,jar])]),
 	    jar_de(JarDe, [optional(true),between(1887,2030)]),
 	    jar_ghis(JarGhis, [optional(true),between(1887,2030)]),
         vrk(Vrkj, [optional(true),length<500])
