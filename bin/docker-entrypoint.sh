@@ -23,8 +23,8 @@ if [ "$1" = 'swipl' ]; then
     fi
 fi
 
-# ni bezonas passwd relative al /home/cetonio
-if [ ! -e /home/cetonio/etc/passwd ]; then
+# ni bezonas cetonio_passwd relative al /home/cetonio
+if [ ! -e /home/cetonio/etc/cetonio_passwd ]; then
   ln -s /run/secrets/voko-cetonio.passwd /home/cetonio/etc/cetonio_passwd
 fi
 
