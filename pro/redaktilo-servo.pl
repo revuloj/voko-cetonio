@@ -611,7 +611,7 @@ adm_submeto(Request) :-
     % postulu uzanton "submeto"
     member(user(submeto),Request),
 
-    debug(redaktilo(adm_submeto),'SUBM req ~q',[Request]),
+    % debug(redaktilo(adm_submeto),'SUBM req ~q',[Request]),
 
     % koletku la HTTP-parametrojn
     http_parameters(Request,
@@ -631,12 +631,12 @@ adm_submeto(Request) :-
     once((
         nonvar(Id), nonvar(State), nonvar(Result),!,
 
-        % korektu problemon kun utf8
+        % korektu problemon kun rekono de parametro Result kiel utf8
         atom_codes(Result,Utf8),
         phrase(utf8_codes(RCode), Utf8),
         atom_codes(Res2,RCode),
 
-        debug(redaktilo(adm_submeto),'result-kodo: ~q ~q',[Res2,RCode]),
+        % debug(redaktilo(adm_submeto),'result-kodo: ~q ~q',[Res2,RCode]),
     
         subm_rezulto(Id,State,Res2)
         ;
