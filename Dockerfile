@@ -72,5 +72,5 @@ ENTRYPOINT ["./bin/docker-entrypoint.sh"]
 
 CMD swipl -s pro/redaktilo-servo.pl -g "redaktilo_servo:daemon" -t halt \
     -p agordo=etc -- --workers=10 --port=${CETONIO_PORT} --no-fork \
-    --debug="'http(request)'" --output=/home/cetonio/cetonio.log # --debug="'http(request)'"
+    --debug="'http(request)'" --debug="'redaktilo(adm_submeto)'"
 

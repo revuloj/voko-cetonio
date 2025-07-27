@@ -621,11 +621,17 @@ adm_submeto(Request) :-
        format(Format, [oneof([text,html,json]),default(html),optional(true)])
     ]),
     debug(redaktilo(adm_submeto),'id: ~q, state: ~q, result: ~q, format: ~q',[Id,State,Result,Format]),
+
     % ni uzas la saman logikon de vokitaj funkcioj laŭ donitaj parametroj
     % kiel en voko-araneo/cgi/admin/submeto.pl, tiel ke voko-afido funkcias
     % kun ambaŭ servoj same
     once((
         nonvar(Id), nonvar(State), nonvar(Result),!,
+
+        % analizu problemon kun utf8
+        phrase(utf8_codes(RCode), Result),
+        debug(redaktilo(adm_submeto),'result-kodo:',[RCode]),
+    
         subm_rezulto(Id,State,Result)
         ;
         nonvar(Id),!,
