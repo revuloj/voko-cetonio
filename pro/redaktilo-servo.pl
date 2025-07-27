@@ -632,10 +632,12 @@ adm_submeto(Request) :-
         nonvar(Id), nonvar(State), nonvar(Result),!,
 
         % korektu problemon kun rekono de parametro Result kiel utf8
-        atom_codes(Result,Utf8),
-        phrase(utf8_codes(RCode), Utf8),
-        atom_codes(Res2,RCode),
-
+        % application/x-www-form-urlencoded
+        % sed post ŝanĝo al multipart/form-data
+        % en la Perl-kliento, ni ne plu bezonas tion
+        % atom_codes(Result,Utf8),
+        % phrase(utf8_codes(RCode), Utf8),
+        % atom_codes(Res2,RCode),
         % debug(redaktilo(adm_submeto),'result-kodo: ~q ~q',[Res2,RCode]),
     
         subm_rezulto(Id,State,Res2)
