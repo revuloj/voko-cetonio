@@ -632,8 +632,8 @@ adm_submeto(Request) :-
         nonvar(Id), nonvar(State), nonvar(Result),!,
 
         % analizu problemon kun utf8
-        atom_string(Result,RStr),
-        phrase(utf8_codes(RCode), RStr),
+        atom_codes(Result,Utf8),
+        phrase(utf8_codes(RCode), Utf8),
         debug(redaktilo(adm_submeto),'result-kodo:',[RCode]),
     
         subm_rezulto(Id,State,Result)
