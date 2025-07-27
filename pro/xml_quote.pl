@@ -129,11 +129,11 @@ quote_at_start([First|Tail],QuHead,Tail,[],_,_) :-
     quote_char_code(First,QuHead).
 
 quote_char_code(Code,[Code]) :-
-    Code=<255,!.
+    Code<128,!.
 
 quote_char_code(Code,Entity) :-
-    Code>255,
-    format(codes(Entity),'&#~d;',[Code]).
+    Code>=128,
+    format(codes(Entity),'&#x~16r;',[Code]).
 
 
 /** malrapida pro uzo de atomoj anstataŭ listoj
@@ -182,12 +182,12 @@ quote_char('"','&quot;'):-!.
 
 quote_char(Chr,Chr) :-
   char_code(Chr,Code),
-  Code=<255,!.
+  Code<128,!.
 
 quote_char(Chr,Entity) :-
   char_code(Chr,Code),
-  Code>255,
-  format(atom(Entity),'&#~d;',[Code]).
+  Code>=128,
+  format(atom(Entity),'&#x~16r;',[Code]).
 
 
 entity_pairs(Goal,Pairs) :-
