@@ -133,7 +133,7 @@ quote_char_code(Code,[Code]) :-
 
 quote_char_code(Code,Entity) :-
     Code>=128,
-    format(codes(Entity),'&#x~16r;',[Code]).
+    format(codes(Entity),'&#x~16R;',[Code]).
 
 
 /** malrapida pro uzo de atomoj anstataŭ listoj
@@ -187,7 +187,7 @@ quote_char(Chr,Chr) :-
 quote_char(Chr,Entity) :-
   char_code(Chr,Code),
   Code>=128,
-  format(atom(Entity),'&#x~16r;',[Code]).
+  format(atom(Entity),'&#x~16R;',[Code]).
 
 
 entity_pairs(Goal,Pairs) :-
