@@ -631,12 +631,14 @@ adm_submeto(Request) :-
     once((
         nonvar(Id), nonvar(State), nonvar(Result),!,
 
-        % analizu problemon kun utf8
+        % korektu problemon kun utf8
         atom_codes(Result,Utf8),
         phrase(utf8_codes(RCode), Utf8),
-        debug(redaktilo(adm_submeto),'result-kodo:',[RCode]),
+        atom_codes(Res2,RCode),
+
+        debug(redaktilo(adm_submeto),'result-kodo: ~q ~q',[Res2,RCode]),
     
-        subm_rezulto(Id,State,Result)
+        subm_rezulto(Id,State,Res2)
         ;
         nonvar(Id),!,
         subm_pluku(Id,State)
