@@ -640,7 +640,7 @@ adm_submeto(Request) :-
         % atom_codes(Res2,RCode),
         % debug(redaktilo(adm_submeto),'result-kodo: ~q ~q',[Res2,RCode]),
     
-        subm_rezulto(Id,State,Res2)
+        subm_rezulto(Id,State,Result)
         ;
         nonvar(Id),!,
         subm_pluku(Id,State)
