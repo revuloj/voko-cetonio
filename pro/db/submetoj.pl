@@ -76,6 +76,18 @@ submetoj_by_state(State,Listo) :-
 submetoj_by_email(Email,Listo,Limit) :-
     format(atom(Query),'select sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname,sub_result from submeto where sub_email=''~w'' order by sub_time desc limit ~d;',[Email,Limit]),    
     debug(db(submetoj),'~q',[Query]),
-    sqlite_query(submetodb,Query,Listo).
+    sqlite_query(submetodb,Query,L),
+    % ni ial bezonas korekti la UTF-8-kodon de sub_result
+    % ĝi misinterpretiĝas kiel ASCII / latin1, eble ĉar ĝi estas difinita kiel TEXT, sed ne VARCHAR(?)
+    L =.. [row,Fields],
+    append(F,R,Fields),
+    utf_fix(R,RFixed),
+    append(F,RFixed,FixedFields),
+    Listo =.. [row,FixedFields].
+
+utf_fix(AIn,AOut) :-
+    atom_codes(AIn,Utf8),
+    phrase(utf8_codes(RCode), Utf8),
+    atom_codes(AOut,RCode).  
 
 
