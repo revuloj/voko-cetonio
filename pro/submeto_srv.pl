@@ -48,7 +48,7 @@ subm_listo_novaj(text) :-
 
 subm_listo_novaj(html) :-
     debug(submeto(novaj),subm_listo_novaj,[]),
-    format('Content-type: text/html; charset=urf-8~n~n'),
+    format('Content-type: text/html; charset=utf-8~n~n'),
     write('<html><pre>'),
     % sub_id,sub_time,sub_state,sub_email,sub_cmd,sub_desc,sub_fname
     format('id;time;state;email;cmd;desc;fname~n'),
@@ -148,7 +148,7 @@ subm_statoj(json,Email) :-
 subm_statoj(html,Email) :-
         debug(submeto(subm_statoj),subm_statoj,[]),
         subm_listo_max(Max),
-        format('Content-type: text/html; charset=urf-8~n~n'),    
+        format('Content-type: text/html; charset=utf-8~n~n'),    
         write('<html><table>'),
         forall(
             submetoj_by_email(Email,Row,Max),
