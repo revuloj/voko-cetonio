@@ -79,11 +79,11 @@ submetoj_by_email(Email,Listo,Limit) :-
     sqlite_query(submetodb,Query,L),
     % ni ial bezonas korekti la UTF-8-kodon de sub_result
     % ĝi misinterpretiĝas kiel ASCII / latin1, eble ĉar ĝi estas difinita kiel TEXT, sed ne VARCHAR(?)
-    L =.. [row,Fields],
-    append(F,R,Fields),
+    L =.. [row|Fields],
+    append(F,[R],Fields),
     utf_fix(R,RFixed),
-    append(F,RFixed,FixedFields),
-    Listo =.. [row,FixedFields].
+    append(F,[RFixed],FixedFields),
+    Listo =.. [row|FixedFields].
 
 utf_fix(AIn,AOut) :-
     atom_codes(AIn,Utf8),
