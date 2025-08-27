@@ -66,6 +66,9 @@ redaktantoj)
     ;;
 subm-pwd)
     echo "Krei konton por 'submeto' - traktado de submetoj!"
+    echo "La pasvorto estu la dua argumento. Por skribi persistan"
+    echo "pasvorton en medio por docker-compose anstataŭe uzu"
+    echo "revo-medioj/cetoniujo-c/bin/cc-pwd"
     set +x
     echo "submeto:$(mkpasswd -s -5 $2)" > ${etc_dir}/cetonio_passwd
     ;; 
