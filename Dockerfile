@@ -47,7 +47,7 @@ COPY --from=grundo build/rsj/ /home/cetonio/web/static/
 #COPY --from=grundo build/xsl/ /home/cetonio/voko/xsl/
 
 RUN chown cetonio etc \
-#  && curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip \
+#  &&  curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_TAG}.zip \
 #  # && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/xsl/* voko-grundo-${ZIP_SUFFIX}/dtd/* \ 
 #  && unzip ${VG_TAG}.zip voko-grundo-${ZIP_SUFFIX}/cfg/* voko-grundo-${ZIP_SUFFIX}/smb/*.gif voko-grundo-${ZIP_SUFFIX}/owl/voko.rdf \
 #  && rm ${VG_TAG}.zip && mv voko-grundo-${ZIP_SUFFIX} voko \
