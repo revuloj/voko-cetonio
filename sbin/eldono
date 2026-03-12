@@ -13,12 +13,12 @@
 # Ni ankaŭ supozas, ke nova eldono okazas en git-branĉo kun la sama nomo
 # Ĉe publikigo marku la kodstaton per etikedo (git-tag) v${eldono}.
 # Dum la realigo vi povas ŝovi la etikedon ĉiam per celo "etikedo".
-eldono=2o
+eldono=2p
 
 # ni komprenas preparo 
 target="${1:-helpo}"
 
-PAGE=pro/web/redaktilo.html
+PAGE=web/redaktilo.html
 
 case $target in
 preparo)
