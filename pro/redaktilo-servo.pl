@@ -284,7 +284,6 @@ revo_lastaj_redaktoj(Request) :-
     % respondu kaj sendu
     active_sessions_header,
     subm_statoj(json,Retadreso).
-    %get_gists(Retadreso).
 
 
 % forsendas artikolon senditan de la krozilo per unu el du metodoj:
