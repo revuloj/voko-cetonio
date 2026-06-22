@@ -2,6 +2,9 @@
 :- module(redaktilo_servo,
 	  [ server/1			% +Port
 	  ]).
+    
+% debug http-500 errors providing a stack trace inthe reply
+:- use_module(library(http/http_error)).
 
 :- use_module(library(debug)).
 :- use_module(library(http/thread_httpd)).
@@ -555,12 +558,12 @@ analinioj(Request) :-
     uri_components(Url1,uri_components(Scheme,Auth,Path,'',_)),
     debug(redaktilo(analinioj),'url ~q',[Url1]),
 
-    http_post(Url1, json(JSON), Reply, []),
+    %http_post(Url1, json(JSON), Reply, []),
+    http_post(Url1, json(JSON), Reply, [status_code(Status)]),
     debug(redaktilo(analinioj),'ANA reply ~q',[Reply]),
 
     % la rezultojn el la proxy-konekto plusendu al la retumilo
-    reply_json(Reply).
-
+    reply_json(Reply,[status(Status)]).
 
 analizo(Request) :-
     http_parameters(Request,
