@@ -29,7 +29,6 @@ ADD . ./
 #COPY --from=builder --chown=root:root voko-grundo-master/ /home/cetonio/voko/
 
 
-
 # voko-grundo-master/stl/* 
 COPY --from=grundo build/ /home/cetonio/voko/
 
