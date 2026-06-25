@@ -5,7 +5,9 @@
     
 % sencimigi erarojn http-500 provizante stakliston en la respondo
 % vd. http://www.swi-prolog.org/pldoc/man?section=http-debug
-:- use_module(library(http/http_error)).
+% malŝaltu en normala kurado por ne doni ideojn al enrompistoj
+% :- use_module(library(http/http_error)).
+% :- use_module(library(http/http_log)).
 
 :- use_module(library(debug)).
 :- use_module(library(http/thread_httpd)).
