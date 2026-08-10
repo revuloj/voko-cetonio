@@ -1,7 +1,7 @@
 #### staĝo 1: certigu, ke vi antaŭe kompilis voko-grundo aŭ ŝargis de Github kiel pakaĵo
 ARG VERSION=latest
 FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} as grundo 
-  # ni bezonos la enhavon de voko-grundo build poste por kopii jsc, stl, dok
+   # ni bezonos la enhavon de voko-grundo build poste por kopii jsc, stl, dok
 
 
 ##### staĝo 2: Nun ni kreos la propran procesumon por la redaktilo...
@@ -63,7 +63,7 @@ RUN mkdir -p tmp && mkdir -p sql
 # se ni volas uzi la gastigan reton (network_mode: "host) por forsendi retpoŝton
 # ni bezonas la eblecon difini la servo-retpordon tie ĉi,
 # ĉar 
-#   network --driver host 
+#  network --driver host 
 # ne kunfunkcias kun
 #   run --publish gastiga:interna
 ENV CETONIO_PORT=8080
