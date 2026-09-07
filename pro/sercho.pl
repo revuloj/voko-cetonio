@@ -18,7 +18,8 @@ sercho(vikipedio,Sercho) :- !,
     UrlBase = 'https://eo.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=50&prop=extracts&exintro&explaintext&exsentences=1&exlimit=max',
     format(atom(Url),'~w&gsrsearch=~w',[UrlBase,SerchoEnc]),
     % Url= 'http://eo.wikipedia.org/w/api.php?action=query&list=search&format=json&indexpageids=true&prop=info&inprop=url&srsearch=homo&srnamespace=0&srprop=snippet&srlimit=16',
-    time(http_open(Url,Stream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(Url,Stream,[user_agent(UserAgent)]),
     format('Content-type: application/json~n~n'),
     copy_stream_data(Stream,current_output),
     close(Stream),
@@ -30,7 +31,8 @@ sercho(anaso,Sercho) :- !,
     uri_encoded(query_value,Sercho,SerchoEnc),
     UrlBase = 'https://duckduckgo.com/lite?ia=web&dl=eo',
     format(atom(Url),'~w&q=~w+kaj+la',[UrlBase,SerchoEnc]),
-    time(http_open(Url,Stream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(Url,Stream,[user_agent(UserAgent)]),
     format('Content-type: text/html~n~n'),
     set_stream(Stream,encoding(utf8)),
     set_stream(current_output,encoding(utf8)),
@@ -46,7 +48,8 @@ cikado(Pado,Parametroj) :-
     uri_query_components(Search,Parametroj),
     uri_components(Url1,uri_components(Scheme,Auth,UrlPath,Search,_)),
     debug(redaktilo(cikado),'url ~q',[Url1]),
-    http_open(Url1,Stream,[header(content_type,ContentType)]),
+    cetonio_user_agent(UserAgent),
+    http_open(Url1,Stream,[header(content_type,ContentType),user_agent(UserAgent)]),
     format('Content-type: ~w~n~n',[ContentType]),
     set_stream(Stream,encoding(utf8)),
     set_stream(current_output,encoding(utf8)),
@@ -63,7 +66,8 @@ cikado(Pado,Parametroj) :-
 %     https://commons.wikimedia.org/wiki/Commons:Attribution_Generator
 % /w/api.php?action=query&format=json&list=search&srsearch=korvo&srnamespace=0%7C-2&srlimit=20&srinfo=totalhits%7Csuggestion%7Crewrittenquery&srprop=size%7Cwordcount%7Ctimestamp%7Csnippet
 
-wikimedia_pagho_limo(50).
+wikimedia_pagho_limo(25).
+cetonio_user_agent('Cetonio/2.0 (https://github.com/revuloj/voko-cetonio)').
 
 bildo_sercho(Sercho,JList) :-        
     uri_encoded(query_value,Sercho,SerchoEnc),
@@ -72,7 +76,8 @@ bildo_sercho(Sercho,JList) :-
     wikimedia_pagho_limo(Max),
     % namespaces 0,6,14, see https://commons.wikimedia.org/wiki/Help:Namespaces
     format(atom(Url),'~w&list=search&srnamespace=0%7C6%7C14&srlimit=~d&srprop=snippet&srsearch=~w',[UrlBase,Max,SerchoEnc]),
-    time(http_open(Url,Stream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(Url,Stream,[user_agent(UserAgent)]),
     json_read(Stream,json(JList)),
     close(Stream),
     debug(wikimedia(search),'Url: ~w~n',[Url]),
@@ -87,7 +92,8 @@ member(continue=json(Continue),JList) ->
     % estas pli por legi.., faru novan demandon
     wikiapi_continuation_params(Continue,ContParEnc),
     atom_concat(Url,ContParEnc,CUrl),
-    time(http_open(CUrl,CStream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(CUrl,CStream,[user_agent(UserAgent)]),
     % copy_stream_data(CStream,current_output)
     json_read(CStream,json(CJList)),
     close(CStream),    
@@ -111,7 +117,8 @@ bildo_info(Paghoj) :-
     % unue faru serĉon 
     % namespaces 0,6,14, see https://commons.wikimedia.org/wiki/Help:Namespaces
     format(atom(Url),'~w&prop=imageinfo%7Cpageimages%7Cimages%7Cinfo&inprop=url&piprop=thumbnail%7Cname%7Coriginal&pithumbsize=120&iiprop=extmetadata&pageids=~w',[UrlBase,PaghojEnc]),
-    time(http_open(Url,Stream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(Url,Stream,[user_agent(UserAgent)]),
     json_read(Stream,json(JList)),!,
     close(Stream),
     debug(wikimedia(info),'Url: ~w~n',[Url]),
@@ -126,7 +133,8 @@ member(continue=json(Continue),JList) ->
     wikiapi_continuation_params(Continue,ContParEnc),
     ContParEnc \= '',
     atom_concat(Url,ContParEnc,CUrl),
-    time(http_open(CUrl,CStream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(CUrl,CStream,[user_agent(UserAgent)]),
     % copy_stream_data(CStream,current_output)
     json_read(CStream,json(CJList)),
     close(CStream),
@@ -142,7 +150,8 @@ bildo_info_2(Dosiero) :-
     uri_encoded(query_value,Dosiero,DosieroEnc),
     UrlBase = 'https://commons.wikimedia.org/w/api.php?action=query&format=json',
     format(atom(Url),'~w&prop=imageinfo%7Cpageimages%7Cinfo&inprop=url&piprop=thumbnail%7Cname%7Coriginal&pithumbsize=120&iiprop=extmetadata&titles=~w',[UrlBase,DosieroEnc]),
-    time(http_open(Url,Stream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(Url,Stream,[user_agent(UserAgent)]),
     json_read(Stream,json(JList)),
     close(Stream),
     debug(wikimedia(info),'Url: ~w~n',[Url]),!,
@@ -155,7 +164,8 @@ bildeto_info(Dosieroj) :-
     uri_encoded(query_value,Dosieroj,DosierojEnc),
     UrlBase = 'https://commons.wikimedia.org/w/api.php?action=query&format=json',
     format(atom(Url),'~w&prop=pageimages&piprop=thumbnail%7Cname%7Coriginal&pithumbsize=120&titles=~w',[UrlBase,DosierojEnc]),
-    time(http_open(Url,Stream,[])),
+    cetonio_user_agent(UserAgent),
+    http_open(Url,Stream,[user_agent(UserAgent)]),
     json_read(Stream,json(JList)),
     close(Stream),
     debug(wikimedia(info),'Url: ~w~n',[Url]),!,

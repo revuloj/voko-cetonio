@@ -507,7 +507,6 @@ verko_listo(Request) :-
     ]),
     cikado(verkaro,[kiu(Kiu)]).
 
-
 bildo_sercho(Request) :-       
     http_parameters(Request,
     [
@@ -526,6 +525,7 @@ bildo_info(Request) :-
         kie(_, [oneof([vikimedio])]) 
     ]),
     debug(sercho(what),'<<< VIKIMEDIO: ~w',[Paghoj]),
+    sleep(0.2), % evitu 429 - too many requests
     format('Content-type: application/json~n~n'),
     sercho:bildo_info(Paghoj).
 
@@ -536,6 +536,7 @@ bildo_info_2(Request) :-
         kie(_, [oneof([vikimedio])]) 
     ]),
     debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosiero]),
+    sleep(0.2), % evitu 429 - too many requests
     format('Content-type: application/json~n~n'),
     sercho:bildo_info_2(Dosiero).
 
@@ -546,6 +547,7 @@ bildeto_info(Request) :-
         kie(_, [oneof([vikimedio])]) 
     ]),
     debug(sercho(what),'<<< VIKIMEDIO: ~w',[Dosieroj]),
+    sleep(0.2), % evitu 429 - too many requests
     format('Content-type: application/json~n~n'),
     sercho:bildeto_info(Dosieroj).    
 

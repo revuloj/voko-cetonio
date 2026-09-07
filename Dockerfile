@@ -1,6 +1,6 @@
 #### staĝo 1: certigu, ke vi antaŭe kompilis voko-grundo aŭ ŝargis de Github kiel pakaĵo
 ARG VERSION=latest
-FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} as grundo 
+FROM ghcr.io/revuloj/voko-grundo/voko-grundo:${VERSION} AS grundo 
    # ni bezonos la enhavon de voko-grundo build poste por kopii jsc, stl, dok
 
 
